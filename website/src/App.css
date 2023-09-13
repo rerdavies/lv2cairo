@@ -1,0 +1,64 @@
+
+*{
+    min-width: 0px;
+}
+
+.preformat_fileName {
+    font-family: 'Liberation Mono','Consolas','Courier New', 'Andale Mono', 'Courier','monospace';
+    font-size: 10pt;
+    font-weight: bold;
+    margin-left: 28px;
+    margin-bottom: 4px;
+
+}
+.code_fragment {
+    font-family: 'Liberation Mono','Consolas','Courier New', 'Andale Mono', 'Courier','monospace';
+    font-size: 11pt;
+
+}
+.code {
+    font-family: 'Liberation Mono','Consolas','Courier New', 'Andale Mono', 'Courier','monospace';
+    font-size: 11pt;
+    font-weight: bold;
+    background-color: #ddddd2;
+
+}
+
+li {
+    margin-bottom: 0.75em;
+}
+.license_text {
+    font-family:'Times New Roman', Times, serif;
+    font-size: 9pt;
+}
+
+.nav_bar {
+    background: #302030;
+    color: white;
+}
+
+.page_frame {
+    position: absolute;
+    left: 0; top: 0; right:0; bottom: 0;
+    padding: 24px 16px;
+    background: white;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.page_column {
+    margin-left: 0px;
+    margin-right: 0px;
+    position: relative;
+}
+@media only screen and (min-width: 600px) {
+    .page_column {
+        max-width: 600px;
+        margin-left: 20%;
+        width: 60%;
+        position: relative;
+    }
+
+}
+
+

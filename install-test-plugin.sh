@@ -1,0 +1,1 @@
+cmake --build build --target INSTALL_TEST_PLUGIN 

@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="409.5px"
+   height="348px"
+   viewBox="0 0 409.5 348"
+   font-family="Piboto,Roboto,Arial,Helvetica,Swiss,sans"
+   enable-background="new 0 0 409.5 348"
+   xml:space="preserve"
+   sodipodi:docname="architecture.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs849" /><sodipodi:namedview
+   id="namedview847"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   showgrid="false"
+   inkscape:zoom="2.1896552"
+   inkscape:cx="150.93701"
+   inkscape:cy="174.45669"
+   inkscape:window-width="1920"
+   inkscape:window-height="965"
+   inkscape:window-x="1440"
+   inkscape:window-y="27"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" />
+<filter
+   id="AI_GaussianBlur_4"
+   x="-0.010690423"
+   y="-0.020168067"
+   width="1.0213808"
+   height="1.0403361">
+	<feGaussianBlur
+   stdDeviation="2"
+   id="feGaussianBlur702" />
+</filter>
+
+<linearGradient
+   id="SVGID_1_"
+   gradientUnits="userSpaceOnUse"
+   x1="114.3521"
+   y1="14.4531"
+   x2="290.2329"
+   y2="319.0877">
+	<stop
+   offset="0"
+   style="stop-color:#E1E1E1"
+   id="stop707" />
+	<stop
+   offset="0.9624"
+   style="stop-color:#A8A8A8"
+   id="stop709" />
+</linearGradient>
+
+<rect
+   style="fill:#d3d3d3;fill-opacity:1;stroke:#7f7f7f;stroke-width:1.07717;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+   id="rect1457"
+   width="370.39557"
+   height="190.60672"
+   x="20.978216"
+   y="71.647491"
+   ry="6" /><rect
+   x="40"
+   y="204.5"
+   fill="#FFFFFF"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   width="167"
+   height="35"
+   id="rect714" /><text
+   transform="translate(49.349715,217.93735)"
+   id="text744-6"
+   style="white-space:pre;inline-size:190.803;display:inline"
+   xml:space="preserve"><tspan
+     x="0"
+     y="0"
+     id="tspan12087"><tspan
+       style="font-size:13px"
+       id="tspan12085">Lv2UI
+</tspan></tspan><tspan
+     x="0"
+     y="15.349246"
+     id="tspan12091"><tspan
+       style="font-size:10.6667px"
+       id="tspan12089">Lv2 user interface plugin base</tspan></tspan></text>
+
+<rect
+   x="90"
+   y="96.5"
+   fill="#FFFFFF"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   width="133"
+   height="35"
+   id="rect722" />
+<rect
+   x="119.08282"
+   y="148.58282"
+   fill="#ffffff"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   width="141.98035"
+   height="34.834351"
+   id="rect724"
+   style="stroke-width:1.16565" />
+<text
+   transform="matrix(1 0 0 1 177.271 31.5254)"
+   id="text730"><tspan
+     x="0"
+     y="0"
+     fill="#808080"
+     font-size="13"
+     id="tspan726">X11/Cairo </tspan><tspan
+     x="0"
+     y="12"
+     fill="#808080"
+     font-size="10"
+     id="tspan728">Graphics rendering</tspan></text>
+<rect
+   x="168"
+   y="16.5"
+   fill="none"
+   stroke="#999999"
+   stroke-miterlimit="10"
+   width="167"
+   height="35"
+   id="rect732" />
+
+<text
+   transform="translate(128.271,161.5254)"
+   id="text744"
+   style="white-space:pre;inline-size:190.803"
+   xml:space="preserve"><tspan
+     x="0"
+     y="0"
+     id="tspan12095"><tspan
+       style="font-size:13px"
+       id="tspan12093">Lv2PortViewFactory
+</tspan></tspan><tspan
+     x="0"
+     y="15.349246"
+     id="tspan12099"><tspan
+       style="font-size:10.6667px"
+       id="tspan12097">Lv2 port controls</tspan></tspan></text><text
+   transform="translate(98.074707,109.80487)"
+   id="text744-3"
+   style="white-space:pre;inline-size:190.803;display:inline"
+   xml:space="preserve"><tspan
+     x="0"
+     y="0"
+     id="tspan12103"><tspan
+       style="font-size:13px"
+       id="tspan12101">LVTK
+</tspan></tspan><tspan
+     x="0"
+     y="15.349246"
+     id="tspan12107"><tspan
+       style="font-size:10.6667px"
+       id="tspan12105">Widgets and layout</tspan></tspan></text>
+<text
+   transform="matrix(1 0 0 1 177.0049 323.667)"
+   fill="#808080"
+   font-size="13"
+   id="text746">Lv2 Host </text>
+<g
+   id="g750">
+	<path
+   fill="none"
+   d="M171,240"
+   id="path748" />
+</g>
+<g
+   id="g754">
+	<path
+   fill="none"
+   d="M171,298"
+   id="path752" />
+</g>
+<rect
+   x="217"
+   y="204.5"
+   fill="#FFFFFF"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   width="167"
+   height="35"
+   id="rect756" />
+<g
+   id="g766">
+	<g
+   id="g764">
+		<line
+   fill="none"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   x1="127"
+   y1="301"
+   x2="127"
+   y2="246"
+   id="line758" />
+		<g
+   id="g762">
+			<path
+   d="M127,240c1.054,2.84,2.852,6.363,4.756,8.547l-4.756-1.72l-4.755,1.72C124.149,246.363,125.947,242.84,127,240z"
+   id="path760" />
+		</g>
+	</g>
+</g>
+<g
+   id="g776">
+	<g
+   id="g774">
+		<line
+   fill="none"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   x1="111"
+   y1="205"
+   x2="111"
+   y2="138"
+   id="line768" />
+		<g
+   id="g772">
+			<path
+   d="M111,131.5c1.054,2.84,2.852,6.363,4.756,8.547l-4.756-1.72l-4.755,1.72C108.149,137.863,109.947,134.34,111,131.5z"
+   id="path770" />
+		</g>
+	</g>
+</g>
+<g
+   id="g786">
+	<g
+   id="g784">
+		<line
+   fill="none"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   x1="197"
+   y1="97"
+   x2="197"
+   y2="58"
+   id="line778" />
+		<g
+   id="g782">
+			<path
+   d="M197,51.5c1.054,2.84,2.852,6.363,4.756,8.547L197,58.327l-4.755,1.72C194.149,57.863,195.947,54.34,197,51.5z"
+   id="path780" />
+		</g>
+	</g>
+</g>
+<g
+   id="g796">
+	<g
+   id="g794">
+		<line
+   fill="none"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   x1="177"
+   y1="205"
+   x2="177"
+   y2="190"
+   id="line788" />
+		<g
+   id="g792">
+			<path
+   d="M177,183.5c1.054,2.84,2.852,6.363,4.756,8.547l-4.756-1.72l-4.755,1.72C174.149,189.863,175.947,186.34,177,183.5z"
+   id="path790" />
+		</g>
+	</g>
+</g>
+<g
+   id="g806">
+	<g
+   id="g804">
+		<line
+   fill="none"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   x1="174"
+   y1="148"
+   x2="174"
+   y2="138"
+   id="line798" />
+		<g
+   id="g802">
+			<path
+   d="M174,131.5c1.054,2.84,2.852,6.363,4.756,8.547l-4.756-1.72l-4.755,1.72C171.149,137.863,172.947,134.34,174,131.5z"
+   id="path800" />
+		</g>
+	</g>
+</g>
+<text
+   transform="translate(273.8496,89)"
+   font-size="14px"
+   id="text808">LVTK Library</text>
+
+<g
+   id="g824">
+	<g
+   id="g822">
+		<line
+   fill="none"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   x1="292"
+   y1="301"
+   x2="292"
+   y2="246"
+   id="line816" />
+		<g
+   id="g820">
+			<path
+   d="M292,240c1.054,2.84,2.852,6.363,4.756,8.547l-4.756-1.72l-4.755,1.72C289.149,246.363,290.947,242.84,292,240z"
+   id="path818" />
+		</g>
+	</g>
+</g>
+<rect
+   x="39"
+   y="300.5"
+   fill="none"
+   stroke="#B3B3B3"
+   stroke-miterlimit="10"
+   width="331"
+   height="35"
+   id="rect826" />
+<text
+   transform="matrix(1 0 0 1 45.271 31.5254)"
+   id="text832"><tspan
+     x="0"
+     y="0"
+     fill="#808080"
+     font-size="13"
+     id="tspan828">X11</tspan><tspan
+     x="0"
+     y="12"
+     fill="#808080"
+     font-size="10"
+     id="tspan830">Windows, mouse, keybd</tspan></text>
+<rect
+   x="40"
+   y="16.5"
+   fill="none"
+   stroke="#999999"
+   stroke-miterlimit="10"
+   width="119"
+   height="35"
+   id="rect834" /><text
+   transform="translate(222.71875,217.93735)"
+   id="text744-6-7"
+   style="white-space:pre;inline-size:190.803;display:inline"
+   xml:space="preserve"><tspan
+     x="0"
+     y="0"
+     id="tspan12111"><tspan
+       style="font-size:13px"
+       id="tspan12109">Lv2Plugin
+</tspan></tspan><tspan
+     x="0"
+     y="15.349246"
+     id="tspan12115"><tspan
+       style="font-size:10.6667px"
+       id="tspan12113">Lv2 audio iplugin base</tspan></tspan></text>
+<g
+   id="g844">
+	<g
+   id="g842">
+		<line
+   fill="none"
+   stroke="#000000"
+   stroke-miterlimit="10"
+   x1="71"
+   y1="205"
+   x2="71"
+   y2="60"
+   id="line836" />
+		<g
+   id="g840">
+			<path
+   d="M71,54.333c1.054,2.84,2.852,6.363,4.756,8.547L71,61.16l-4.755,1.72C68.149,60.696,69.947,57.172,71,54.333z"
+   id="path838" />
+		</g>
+	</g>
+</g>
+</svg>

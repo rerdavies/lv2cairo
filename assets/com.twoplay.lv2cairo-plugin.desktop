@@ -1,0 +1,19 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Categories=Audio
+Comment[en_CA]=
+Comment=LV2 audio plugin
+NoDisplay=true
+Exec=/not-applicable
+GenericName[en_CA]=Lv2 Plugin
+GenericName=Lv2 Plugin
+Icon=com.twoplay.lv2cairo.plugin
+MimeType=
+Name[en_CA]=Lv2 Plugin
+Name=Lv2 Plugin
+Path=/usr/lib/lv2
+StartupNotify=false
+Terminal=false
+TerminalOptions=
+Type=Application
+Version=1.0

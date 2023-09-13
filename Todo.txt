@@ -1,0 +1,29 @@
+    CairoDropShadow dropShadowSettings;
+    dropShadowSettings.variant = CairoDropShadowVariant::DropShadow;
+    dropShadowSettings.opacity = 0.75;
+    dropShadowSettings.radius = 8;
+    dropShadowSettings.xOffset = 0;
+    dropShadowSettings.yOffset = 2;
+
+    auto dropShadow = CairoDropShadowElement::Create();
+
+    dropShadow->DropShadow(dropShadowSettings);
+
+
+_KDE_NET_WM_DESKTOP_FILE
+_GTK_APPLICATION_ID
+
+- Weight style element.
+- Table
+- rename to "Switch"
+- Tab focus for dials.
+- Tab focus for switches.
+- cab type length off by 4 pixels on Control test page.
+- Check windowscale with PNG and transparency.
+- File
+- Files.
+
+
+naviehandle:
+0x0000000004a0087c
+
