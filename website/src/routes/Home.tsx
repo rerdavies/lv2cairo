@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import ArchitectureDiagram from '../ArchitectureDiagram';
 import { Link} from "react-router-dom";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { Code, Heading, Subheading, FigureCaption,SmallPrint, Page, P, Ul } from './documentation/StandardFormats';
+import { FigureCaption,SmallPrint, P, Ul } from './documentation/StandardFormats';
 import { Lv2cVersion, Lv2cVersionNotice } from '../VersionInfo';
 
 

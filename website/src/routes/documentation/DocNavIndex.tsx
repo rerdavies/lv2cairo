@@ -87,21 +87,21 @@ export function GetDocIndex(): NavPage {
     return docIndex;
 }
 
-function getRoutes(navPage: NavPage,routes: JSX.Element[])
-{
-    routes.push(navPage.Route());
-    for (let i = 0; i < navPage.children.length; ++i)
-    {
-        getRoutes(navPage.children[i],routes);
-    }
+// function getRoutes(navPage: NavPage,routes: JSX.Element[])
+// {
+//     routes.push(navPage.Route());
+//     for (let i = 0; i < navPage.children.length; ++i)
+//     {
+//         getRoutes(navPage.children[i],routes);
+//     }
 
-}
-export function GetRoutes()
-{
-    let routes: JSX.Element[] = [];
-    getRoutes(docIndex,routes);
-    return routes;
-}
+// }
+// export function GetRoutes()
+// {
+//     let routes: JSX.Element[] = [];
+//     getRoutes(docIndex,routes);
+//     return routes;
+// }
 function buildNav(location: string, navPage: NavPage) {
     if (navPage.route === location) {
         return {

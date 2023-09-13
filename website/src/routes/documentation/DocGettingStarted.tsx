@@ -1,6 +1,3 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { useLocation} from "react-router-dom";
 import { Page,Heading, Code, P, Subheading, Ul } from './StandardFormats';
 import { PreformatedText } from '../../CodeFragment';
 
