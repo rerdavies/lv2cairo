@@ -31,7 +31,7 @@ const Home = () => {
                     interfaces, using Cairo/X11 as a graphics backend.</P>
                     <table>
                     <tr><td>
-                        <img src="/img/SamplePlugin.png" style={{width: "80%", marginLeft: 24, marginTop: 4, marginRight: 24, marginBottom: 12 }} />
+                        <img src="img/SamplePlugin.png" style={{width: "80%", marginLeft: 24, marginTop: 4, marginRight: 24, marginBottom: 12 }} />
                     </td></tr>
                     <tr><td>
                         <FigureCaption>
@@ -63,7 +63,7 @@ const Home = () => {
                     LVTK can automatically generate serviceable custom user interfaces directly
                     from  <span className={"code"}> manifest.tll</span> files. At the same time, LVTK makes it easy to customize your UI plugin interface as well.
                 </P>
-                <img src="/img/Customization.png" style={{width: "60%",float: "right", marginLeft: 16, marginRight: 24}} />
+                <img src="img/Customization.png" style={{width: "60%",float: "right", marginLeft: 16, marginRight: 24}} />
                 <Typography paragraph style={{textAlign: "right", color: "#606060",fontSize: "0.9em", paddingTop: 24, paddingRight: 16}}>
                     Customize with styles,<br/>themes, or new  SVG<br/> and PNG elements.
 
