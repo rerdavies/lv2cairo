@@ -66,6 +66,7 @@ target_include_directories(CatchTest PRIVATE
 target_link_libraries(CatchTest lvtk lvtk_ui)
 
 
+add_test (NAME CatchTest COMMAND CatchTest)
 
 
 
