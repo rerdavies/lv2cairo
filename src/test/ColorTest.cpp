@@ -69,10 +69,14 @@ static void TestLvtkColorBlending()
         for (double blend = 0; blend <= 1.0; blend += 1.0/8)
         {
             LvtkColor result = LvtkColor::Blend(blend,c0,c1);
-            REQUIRE(true ==  ApproxEqual(result.A(),blend));
-            REQUIRE(true ==  ApproxEqual(result.R(),c1.R()));
-            REQUIRE(true ==  ApproxEqual(result.G(),c1.G()));
-            REQUIRE(true ==  ApproxEqual(result.B(),c1.B()));
+            LvtkLinearColor lcResult { result };
+            REQUIRE(true ==  ApproxEqual(lcResult.a,blend));
+            if (blend != 0)
+            {
+                REQUIRE(true ==  ApproxEqual(result.R(),c1.R()));
+                REQUIRE(true ==  ApproxEqual(result.G(),c1.G()));
+                REQUIRE(true ==  ApproxEqual(result.B(),c1.B()));
+            }
         }
     }
     {
@@ -84,7 +88,9 @@ static void TestLvtkColorBlending()
             if (blend != 0)
             {
                 LvtkColor result = LvtkColor::Blend(blend,c0,c1);
-                REQUIRE(true ==  ApproxEqual(result.A(),blend));
+                LvtkLinearColor lcResult { result };
+
+                REQUIRE(true ==  ApproxEqual(lcResult.a,blend));
                 REQUIRE(true ==  ApproxEqual(result.R(),c1.R()));
                 REQUIRE(true ==  ApproxEqual(result.G(),c1.G()));
                 REQUIRE(true ==  ApproxEqual(result.B(),c1.B()));
