@@ -24,7 +24,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt install libcairo2-dev libpangomm-1.4-dev catch2 librsvg2-dev lv2-dev liblilv-dev
+        sudo apt install libcairo2-dev libpangomm-1.4-dev catch2 librsvg2-dev lv2-dev liblilv-dev libxrandr-dev
         ls -la /usr/include/pango-*
         ls -la /usr/include/pangomm-*
 
