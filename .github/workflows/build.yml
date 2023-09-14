@@ -24,14 +24,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt install libcairo2-dev
-        sudo apt install libpangocairo-1.0-0
-        sudo apt install cmake
-        sudo apt install ninja-build #optional
-        sudo apt install catch2
-        sudo apt install librsvg2-dev
-        sudo apt install lv2-dev
-        sudo apt install liblilv-dev
+        sudo apt install libcairo2-dev libpangocairo-1.0-0 catch2 librsvg2-dev lv2-dev liblilv-dev
+        ls -la /usr/include/pango-*
+        ls -la /usr/include/pangomm-*
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
