@@ -1,18 +1,3 @@
-    CairoDropShadow dropShadowSettings;
-    dropShadowSettings.variant = CairoDropShadowVariant::DropShadow;
-    dropShadowSettings.opacity = 0.75;
-    dropShadowSettings.radius = 8;
-    dropShadowSettings.xOffset = 0;
-    dropShadowSettings.yOffset = 2;
-
-    auto dropShadow = CairoDropShadowElement::Create();
-
-    dropShadow->DropShadow(dropShadowSettings);
-
-
-_KDE_NET_WM_DESKTOP_FILE
-_GTK_APPLICATION_ID
-
 - Weight style element.
 - Table
 - rename to "Switch"
@@ -24,6 +9,16 @@ _GTK_APPLICATION_ID
 - Files.
 
 
-naviehandle:
-0x0000000004a0087c
 
+Dependencies:
+
+```
+sudo apt install libcairo2-dev
+sudo apt install libpangocairo-1.0-0 (LGPL)
+sudo apt install cmake
+sudo apt install ninja-build (optional)
+sudo apt install catch2
+sudo apt install librsvg2-dev
+sudo apt install lv2-dev
+sudo apt install liblilv-dev
+```
