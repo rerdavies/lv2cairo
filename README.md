@@ -1,6 +1,7 @@
 # LVTK
 
-0.0.0-prerelease
+[![Build](https://github.com/rerdavies/lvtk/actions/workflows/build.yml/badge.svg)](https://github.com/rerdavies/lvtk/actions/workflows/build.yml)  
+0.0.0-prerelease 
 
 Pre-release. APIs are not currently stable.
 
