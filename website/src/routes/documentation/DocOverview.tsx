@@ -13,7 +13,7 @@ function DocOverview() {
             <Typography variant="h3" paragraph>Overview</Typography>
 
             <P>
-                The purpose of this section is to provide a quick tour of the major features of the LVTK library. Each of the topics in this section is
+                The purpose of this section is to provide a quick tour of the major features of the LVtk library. Each of the topics in this section is
                 dealt with again in more substantial detail in the developer's guide.
             </P>
             <P>
@@ -27,16 +27,16 @@ function DocOverview() {
             </P>
 
             {/**************************************** */}
-            <Typography variant="h6" paragraph>What is LVTK?</Typography>
+            <Typography variant="h6" paragraph>What is LVtk?</Typography>
 
             <P>
-                <i>LVTK</i> is a C++ class library for building LV2 plugins with custom user interfaces, using Cairo/X11 as a graphics backend.</P>
+                <i>LVtk</i> is a C++ class library for building LV2 plugins with custom user interfaces, using Cairo/X11 as a graphics backend.</P>
 
             <ArchitectureDiagram />
-            <P><i>LVTK</i>LVTK provides the folowing features:
+            <P><i>LVtk</i>LVtk provides the folowing features:
             </P>
             <Ul>
-                    <li><i>LVTK</i> elements provide a set of widgets with layout, styling and theming that render user interfaces on a Cairo/X11 surface.
+                    <li><i>LVtk</i> elements provide a set of widgets with layout, styling and theming that render user interfaces on a Cairo/X11 surface.
                     </li>
                     <li>The <i>Lv2ControlView</i> element provides out-of-the-box rendering of LV2 ports (control variables for an LV2 plugin) for
                         most standard port variants: dials, dropdown listboxes, toggles, on/off switches, VU meters, LEDs, status text, and port groups.
@@ -47,7 +47,7 @@ function DocOverview() {
             </Ul>
             <P>
                 The audio plugin and UI plugin implementations are completely independent. If you have an existing
-                LV2 audio plugin (or prefer to use another library), LVTK is still an entirely suitable choice for building a user interface for your plugin.
+                LV2 audio plugin (or prefer to use another library), LVtk is still an entirely suitable choice for building a user interface for your plugin.
             </P>
 
             {/****************************************************/}
@@ -66,7 +66,7 @@ function DocOverview() {
             <P>
                 Lv2UI needs a description of the ports on the LV2 audio plugin. This information
                 is generated using a command-line utility, <span className={"code"}>generate_lvtk_plugin_info</span>, which is provided as
-                part of the LVTK package.
+                part of the LVtk package.
             </P>
             <P>
                 Lv2UI will render a serviceable user interface for an LV2 UI plugin without 
@@ -77,7 +77,7 @@ function DocOverview() {
                 <li>A theming and styling system allows easy customization of rendered UI components.</li>
                 <li>A class factory system allows more ambitious replacements of default UI components, or 
                     integration of custom UI components.</li>
-                <li>Or plugins can elect to render a fully-custom visual tree using LVTK elements.
+                <li>Or plugins can elect to render a fully-custom visual tree using LVtk elements.
                 </li>
             </Ul>
             {/****************************************************/}
@@ -99,10 +99,10 @@ function DocOverview() {
             </P>
 
             {/****************************************************/}
-            <Typography variant="h6" paragraph>LVTK Elements</Typography>
+            <Typography variant="h6" paragraph>LVtk Elements</Typography>
 
             <P>
-                The LVTK Elements library provides graphical layout and rendering on 
+                The LVtk Elements library provides graphical layout and rendering on 
                 X11/Cairo surfaces.
             </P>
             <P>LvtkElements are similar in concept to HTML elements.
@@ -138,8 +138,8 @@ LvtkElement::ptr Render() {
                 There are a few things that are worth pointing out in this code fragment.
             </P>
             <P>
-                All LVTK elements inherit from the  <span className="code">LvtkElement</span> class. The lifetime of
-                LVTK Elements is managed using <span className="code">std::shared_ptr&lt;&gt;</span> pointers. Each element
+                All LVtk elements inherit from the  <span className="code">LvtkElement</span> class. The lifetime of
+                LVtk Elements is managed using <span className="code">std::shared_ptr&lt;&gt;</span> pointers. Each element
                 has a <span className="code">Create</span> method that returns
                 a <span className="code">shared_ptr</span>. <span className="code">LvtkVerticalStackElement::Create()</span>, for example, has a return type
                 of <span className="code">LvtkVerticalStackElement::ptr</span>, which is equivalent to <span className="code">std::shared_ptr&lt;Lv2kVerticalStackElement&gt;</span>.
@@ -151,7 +151,7 @@ LvtkElement::ptr Render() {
                 the <span className="code">LvtkTypographyElement</span>.
             </P>
             <P>
-                LVTK's layout system borrows from the HTML box model. Each element has a margin,
+                LVtk's layout system borrows from the HTML box model. Each element has a margin,
                 border, and padding that are used to calculate layout. Child elements are placed entirely within the client area
                  of a LvtkElement (the area left over after
                 margins, border width and padding are removed). The same is true when drawing: when drawing in an LvtkElement's OnDraw method, the point (0,0) is located 
@@ -382,7 +382,7 @@ BindingSite<double> sourceProperty { 1.0};
             </P>``
             <P>
 
-                The <span className="code">generate_lvtk_plugin_info</span> executable is generated by the LVTK project build procedure. The SamplePlugin project
+                The <span className="code">generate_lvtk_plugin_info</span> executable is generated by the LVtk project build procedure. The SamplePlugin project
                 demonstrates how to automate the build procedure for the Lv2PluginInfo file in a CMake project.
             </P>
             <P>

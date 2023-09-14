@@ -4,7 +4,8 @@ import ArchitectureDiagram from '../ArchitectureDiagram';
 import { Link} from "react-router-dom";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { FigureCaption,SmallPrint, P, Ul } from './documentation/StandardFormats';
-import { Lv2cVersion, Lv2cVersionNotice } from '../VersionInfo';
+import { Lv2cCopyrightText, Lv2cVersion, Lv2cVersionNotice } from '../VersionInfo';
+import { LVtk } from './documentation/StandardFormats';
 
 
 const Home = () => {
@@ -18,7 +19,7 @@ const Home = () => {
                         display: floatLogo? undefined: "none"}} />
 
                 <Typography variant="h2" sx={{ marginBottom: 4 }}>
-                    <b>LVTK</b>
+                    <span style={{fontWeight: 900, color: "#505050"}}>LVtk</span>
                 </Typography>
                 <SmallPrint>
                     { Lv2cVersion() }
@@ -27,24 +28,24 @@ const Home = () => {
                     { Lv2cVersionNotice() }
                 </SmallPrint>
                 <P>
-                    <i>LVTK</i> is a C++ class library for building LV2 plugins with custom user 
+                    <LVtk/> is a C++ class library for building LV2 plugins with custom user 
                     interfaces, using Cairo/X11 as a graphics backend.</P>
                     <table>
                     <tr><td>
-                        <img src="img/SamplePlugin.png" style={{width: "80%", marginLeft: 24, marginTop: 4, marginRight: 24, marginBottom: 12 }} />
+                        <img src="img/SamplePlugin.png" style={{width: "80%", marginLeft: 24, marginTop: 4, marginRight: 24, marginBottom: 4 }} />
                     </td></tr>
                     <tr><td>
                         <FigureCaption>
-                            User interface generated from a manifest.tll file.
+                            Fig 1: User interface generated from a manifest.tll file.
                         </FigureCaption>
                     </td></tr>
                 </table>
 
                 <ArchitectureDiagram/>
-                <P><i>LVTK</i> provides the folowing features:
+                <P><LVtk/> provides the folowing features:
                 </P>
                 <Ul>
-                    <li><Typography><i>LVTK</i> elements provide a set of widgets with layout, styling and theming that render user interfaces on a Cairo/X11 surface.</Typography> </li>
+                    <li><Typography>The <i>Lvtk</i> Element library provide a set of controls and widgets with layout, styling and theming that render user interfaces on a Cairo/X11 surface.</Typography> </li>
                     <li><Typography>The <i>Lv2UI</i> class is a base-class for implementing LV2 UI plugins.
                     </Typography></li>
                     <li><Typography>The <i>Lv2Plugin</i> class is a base-class for implementing LV2 audio plugins.</Typography></li>
@@ -56,12 +57,12 @@ const Home = () => {
                 </Ul>
                 <P>
                     The audio plugin and UI plugin implementations are completely independent. If you have an existing
-                    LV2 audio plugin (or prefer to use another library), LVTK is still an entirely suitable choice for building a user interface for your plugin.
+                    LV2 audio plugin (or prefer to use another library), <LVtk/> is still an entirely suitable choice for building a user interface for your plugin.
                 </P>
 
                 <P>
-                    LVTK can automatically generate serviceable custom user interfaces directly
-                    from  <span className={"code"}> manifest.tll</span> files. At the same time, LVTK makes it easy to customize your UI plugin interface as well.
+                    <LVtk/> can automatically generate serviceable custom user interfaces directly
+                    from  <span className={"code"}> manifest.tll</span> files. At the same time, LVtk makes it easy to customize your UI plugin interface as well.
                 </P>
                 <img src="img/Customization.png" style={{width: "60%",float: "right", marginLeft: 16, marginRight: 24}} />
                 <Typography paragraph style={{textAlign: "right", color: "#606060",fontSize: "0.9em", paddingTop: 24, paddingRight: 16}}>
@@ -93,9 +94,9 @@ const Home = () => {
                 <div style={{height: 24}} />
                 <div style={{height: 1, background:"#606060",marginTop: 16, marginBottom: 16}} />
                 <Typography paragraph style={{fontSize: "0.8em"}}>
-                    LVTK is provided under the terms of 
+                    LVtk is provided under the terms of 
                     an <Link to="/license">MIT license</Link>.
-                    <br/>Copyright © 2023, Robin Davies. 
+                    <br/>{Lv2cCopyrightText()}
                 </Typography>
 
 

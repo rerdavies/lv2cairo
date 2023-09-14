@@ -24,7 +24,7 @@ function ArchitectureDiagram() {
                 <img src="img/architecture.svg" style={{width: 409.5, height: 348 }} />
             </Box>
             <Typography variant="caption" paragraph sx={{ textAlign: "center", marginTop: 1 }}>
-                LVTK Architecture
+                LVtk Architecture
             </Typography>
         </Box >
     );

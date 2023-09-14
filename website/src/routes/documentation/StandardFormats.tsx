@@ -11,6 +11,11 @@ export function Code(props: React.PropsWithChildren<{}>)
     return (<span className="code">{props.children}</span>);
 }
 
+export function LVtk() // branded LVtk name.
+{
+    return (<span style={{fontWeight: 700}}>LVtk</span>);
+}
+
 export function Heading(props: React.PropsWithChildren<{}>)
 {
     return (<Typography variant="h3" paragraph>{props.children}</Typography>);

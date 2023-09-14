@@ -8,7 +8,7 @@ function DocNoMatch() {
     const location = useLocation();
     return (
         <Box className={"page_column"}>
-            <Typography variant="h3">LVTK</Typography>
+            <Typography variant="h3">LVtk</Typography>
             <Typography variant="h6" paragraph>The Documentation</Typography>
 
             <Typography paragraph>Page not found. <span className={"code"}>{location.pathname}</span></Typography>

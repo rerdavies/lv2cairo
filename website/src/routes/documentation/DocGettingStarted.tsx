@@ -16,7 +16,7 @@ function DocGettingStarted() {
                 <li>The Template Project</li>                
             </Ul>
         <Subheading>Getting the source</Subheading>
-        <P>The source code for LVTK is available at <br/>
+        <P>The source code for LVtk is available at <br/>
         <Code>
             <a href={"https://github.com/rerdavies/lvtk"}>
             https://github.com/rerdavies/lvtk
@@ -25,7 +25,7 @@ function DocGettingStarted() {
         </P>
         
         <Subheading>Dependencies</Subheading>
-        <P>LVTK requires the following packages to be installed.</P>
+        <P>LVtk requires the following packages to be installed.</P>
 
         {PreformatedText(`
 sudo apt install libcairo2-dev
@@ -39,9 +39,9 @@ sudo apt install liblilv-dev
 `)}
 
     <Subheading>Build Procedure</Subheading>
-    <P>LVTK was built using Visual Studio Code. If you open the folder in Visual Studio code, with CPP and CMake extensions installed, 
+    <P>LVtk was built using Visual Studio Code. If you open the folder in Visual Studio code, with CPP and CMake extensions installed, 
     </P>
-    <P>If you prefer not to use Visual Studio Code, you can use the following commands to build LVTK.</P>
+    <P>If you prefer not to use Visual Studio Code, you can use the following commands to build LVtk.</P>
 
     <P>To configure the build procedure:</P>
     {PreformatedText(`

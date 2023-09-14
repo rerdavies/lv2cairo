@@ -22,11 +22,11 @@ function BuildingAnLv2UiPlugin() {
             <P>
                 To do all of this, Lv2UI needs a description of the ports on the LV2 audio plugin. This information
                 is generated using a command-line utility, <span className={"code"}>generate_lvtk_plugin_info</span>, which is built as
-                part of the LVTK build procedure. If you are building the project yourself, <span className={"code"}>generate_lvtk_plugin_info</span>
+                part of the LVtk build procedure. If you are building the project yourself, <span className={"code"}>generate_lvtk_plugin_info</span>
                 can be found in the <span className={"code"}>build/src/</span>
             </P>
             <P>
-                The test plugin, included in the LVTK project generates the neccessary file using the following command.
+                The test plugin, included in the LVtk project generates the neccessary file using the following command.
             </P>
             {PreformatedText(
                 `
@@ -107,7 +107,7 @@ set(LV2_UI_SO_NAME $\{LV2_SO_NAME}_ui)`)}
 <https://rerdavies.github.io/lvtk/test_plugin>
   a lv2:Plugin ,
     lv2:UtilityPlugin ;
-    doap:name "LVTK Demo Plugin" 
+    doap:name "LVtk Demo Plugin" 
     ;
     # VVVVV    Declare that the plugin has a UI   VVVVV
     ui:ui <https://rerdavies.github.io/lvtk/test_plugin-ui>;  
@@ -152,7 +152,7 @@ SamplePlugin::SamplePlugin()
 }
 `)}
             <P>
-                The rest of this documentation set deals with things you might need to know if you want to customize the user interface that LVTK has generated.
+                The rest of this documentation set deals with things you might need to know if you want to customize the user interface that LVtk has generated.
             </P>
 
         </Box>

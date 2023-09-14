@@ -7,10 +7,10 @@ function License() {
         <Box className={"page_frame"}>
             <Box className={"page_column"}>
                 <Typography variant="h3" sx={{ marginBottom: 4 }}>
-                    LVTK License
+                    LVtk License
                 </Typography>
                 <Typography paragraph sx={{ marginBottom: 5 }}>
-                    The LVTK library is licensed under the following terms.
+                    The LVtk library is licensed under the following terms.
                 </Typography>
                 <Box style={{ marginLeft: "24px" }}>
                     <Box className={"license-text"}>

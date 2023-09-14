@@ -23,7 +23,7 @@ const Navbar = () => {
                     <Typography variant="h6" component="div" sx={{marginLeft: 1}}
                         onClick={() => navigate("/")}>
 
-                        LVTK
+                        LVtk
                     </Typography>
                 </ButtonBase>
                 <ButtonBase sx={buttonStyle}>
