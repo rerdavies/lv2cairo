@@ -217,7 +217,7 @@ namespace lvtk::ui
 
         if (viewType == Lv2PortViewType::Dropdown )
         {
-            if (value >= 0 && value < this->portInfo.scale_points().size() )
+            if (value >= 0 && value < (int64_t)(this->portInfo.scale_points().size()) )
             {
                 this->PortValue(this->portInfo.scale_points()[value].value());
             }
