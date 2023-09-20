@@ -135,12 +135,3 @@ LvtkElement::ptr PngTestPage::CreatePageView(LvtkTheme::ptr theme)
     return (main);
 }
 
-LvtkPngElement &LvtkPngElement::ImageAlignment(LvtkImageAlignment value)
-{
-    ImageAlignmentProperty.set(value);
-    return *this;
-}
-LvtkImageAlignment LvtkPngElement::ImageAlignment() const
-{
-    return ImageAlignmentProperty.get();
-}

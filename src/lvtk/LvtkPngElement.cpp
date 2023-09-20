@@ -271,3 +271,13 @@ LvtkPngElement::LvtkPngElement()
     SourceProperty.SetElement(this, &LvtkPngElement::OnSourceChanged);
     ImageAlignmentProperty.SetElement(this, LvtkBindingFlags::InvalidateOnChanged);
 }
+
+LvtkPngElement &LvtkPngElement::ImageAlignment(LvtkImageAlignment value)
+{
+    ImageAlignmentProperty.set(value);
+    return *this;
+}
+LvtkImageAlignment LvtkPngElement::ImageAlignment() const
+{
+    return ImageAlignmentProperty.get();
+}

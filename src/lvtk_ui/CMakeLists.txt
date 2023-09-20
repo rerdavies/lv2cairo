@@ -17,7 +17,7 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 
-add_library(lvtk_ui
+add_library(lvtk_ui STATIC
     include/lvtk_ui/Lv2ControlConstants.hpp
     include/lvtk_ui/Lv2PortViewFactory.hpp
     include/lvtk_ui/Lv2PluginType.hpp
@@ -51,7 +51,7 @@ add_library(lvtk_ui
 set(LV2CAIRO_UI_INCLUDE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include" )
 
 target_include_directories(lvtk_ui PUBLIC 
-    ${LV2CAIRO_UI_INCLUDE_DIRECTORY}
+    ${an}
     ${LILV_0_INCLUDE_DIRS}
 
 )

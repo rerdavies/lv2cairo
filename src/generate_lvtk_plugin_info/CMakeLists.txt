@@ -35,5 +35,6 @@ target_link_libraries(generate_lvtk_plugin_info PRIVATE
 
     ${LILV_0_LIBRARIES}
     lvtk_ui
+    lvtk
 )
 

@@ -9,6 +9,7 @@ find_package(X11)
 
 
 add_executable(lvtk_demo  
+
     LvtkTestMain.cpp
     TestPage.hpp
     PaletteTestPage.cpp PaletteTestPage.hpp
@@ -45,7 +46,9 @@ target_include_directories(lvtk_demo PRIVATE
     ${Lvtk_INCLUDE_DIRS}
 )
 
-target_link_libraries(lvtk_demo lvtk lvtk_ui)
+target_link_libraries(lvtk_demo 
+    lvtk lvtk_ui
+)
 
 add_executable(CatchTest 
     MaterialColorTest.cpp
@@ -61,6 +64,7 @@ add_executable(CatchTest
 
 target_include_directories(CatchTest PRIVATE
     ${Lvtk_INCLUDE_DIRS}
+    lvtk_ui lvtk
 )
 
 target_link_libraries(CatchTest lvtk lvtk_ui)
