@@ -51,7 +51,7 @@ add_library(lvtk_ui STATIC
 set(LV2CAIRO_UI_INCLUDE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include" )
 
 target_include_directories(lvtk_ui PUBLIC 
-    ${an}
+    ${LV2CAIRO_UI_INCLUDE_DIRECTORY}
     ${LILV_0_INCLUDE_DIRS}
 
 )
