@@ -40,7 +40,7 @@ namespace lvtk
         using ptr = std::shared_ptr<LvtkPngElement>;
 
         static ptr Create() { return std::make_shared<LvtkPngElement>(); }
-
+ 
         LvtkPngElement();
 
         LvtkBindingProperty<std::string> SourceProperty;

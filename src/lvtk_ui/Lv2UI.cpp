@@ -222,11 +222,13 @@ bool Lv2UI::instantiate(
     }
     InitUrids();
 
+    bool parentWindowFound = false;
     for (int i = 0; features[i] != nullptr; ++i)
     {
         std::cout << "Feature: " << features[i]->URI << std::endl;
         if (!strcmp(features[i]->URI, LV2_UI__parent))
         {
+            parentWindowFound = true;
             this->parentWindow = features[i]->data;
         }
         else if (!strcmp(features[i]->URI, LV2_UI__resize))
@@ -234,7 +236,7 @@ bool Lv2UI::instantiate(
             resize = (LV2UI_Resize *)features[i]->data;
         }
     }
-    if (!parentWindow)
+    if (!parentWindowFound)
     {
         LogError("Parent window not found.");
         return false;

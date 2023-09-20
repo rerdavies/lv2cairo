@@ -60,10 +60,9 @@ target_include_directories(lvtk_ui PUBLIC
 #     ${Lvtk_INCLUDE_DIRS}
 # )
 
-target_link_libraries(lvtk_ui lvtk
+target_link_libraries(lvtk_ui 
+    lvtk 
     ${LILV_0_LIBRARIES}
 
 )
-
-
 

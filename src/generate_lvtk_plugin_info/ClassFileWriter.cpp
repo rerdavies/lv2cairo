@@ -379,7 +379,7 @@ void ClassFileWriter::Write(const PiPedalUI&piPedalUI)
         WriteCArray(piPedalUI.fileProperties(),true);
         WriteCArray(piPedalUI.frequencyPlots(),true);
         // not currently used.
-        // WriteCArray(piPedalUI.portNotifications(),true);
+        WriteCArray(piPedalUI.portNotifications(),false);
 
 
     }

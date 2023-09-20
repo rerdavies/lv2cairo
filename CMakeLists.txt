@@ -18,6 +18,8 @@ set(CMAKE_CXX_STANDARD 20 CACHE STRING "Default C++ standard")
 # Include sub-projects.
 add_subdirectory ("src")
 
+export(TARGETS lvtk lvtk_ui NAMESPACE Lvtk FILE FindLvtk.cmake)
+
 # set(CPACK_GENERATOR "DEB")
 # set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Robin Davies <rerdavies at gmail.com>") # required
 # set(CPACK_PACKAGE_VENDOR "Robin Davies")

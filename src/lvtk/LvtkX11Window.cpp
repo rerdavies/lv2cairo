@@ -478,10 +478,18 @@ void LvtkX11Window::CreateWindow(
 
     if (parameters.positioning != LvtkWindowPositioning::ChildWindow)
     {
+        // normal window path.
         parentWindow = this->x11RootWindow;
         this->x11ParentWindow = parentWindow;
     } else {
+        // plugin UI window.
         this->x11ParentWindow = parentWindow;
+        if (parentWindow == 0)
+        {
+            // plugin UI window, test case.
+            this->x11ParentWindow = x11RootWindow;
+            this->x11ParentWindow = x11RootWindow;
+        }
     }
     
     XSizeHints *sizeHints = (XSizeHints *)GenerateNormalHints(parameters);

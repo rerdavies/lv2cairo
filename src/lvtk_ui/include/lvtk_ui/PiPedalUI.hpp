@@ -192,9 +192,9 @@ namespace lvtk::ui {
         friend class LilvPiPedalUI;
     public:
         PiPedalUI() { }       
-        PiPedalUI(
-            std::vector<UiFileProperty> &&fileProperties,
-            std::vector<UiFrequencyPlot> &&frequencyPlots);
+        // PiPedalUI(
+        //     std::vector<UiFileProperty> &&fileProperties,
+        //     std::vector<UiFrequencyPlot> &&frequencyPlots);
         PiPedalUI(
             std::vector<UiFileProperty> &&fileProperties,
             std::vector<UiFrequencyPlot> &&frequencyPlots,

@@ -31,6 +31,14 @@ UiFileProperty::UiFileProperty(const std::string &name, const std::string &patch
     directory_ = (directory);
 }
 
+// PiPedalUI::PiPedalUI(
+//     std::vector<UiFileProperty> &&fileProperties,
+//     std::vector<UiFrequencyPlot> &&frequencyPlots)
+// {
+//     this->fileProperties_ = std::move(fileProperties);
+//     this->frequencyPlots_ = std::move(frequencyPlots);
+// }
+
 PiPedalUI::PiPedalUI(
     std::vector<UiFileProperty> &&fileProperties,
     std::vector<UiFrequencyPlot> &&frequencyPlots,
@@ -42,13 +50,6 @@ PiPedalUI::PiPedalUI(
     this->portNotifications_ = std::move(portNotifications);
 }
 
-PiPedalUI::PiPedalUI(
-    std::vector<UiFileProperty> &&fileProperties,
-    std::vector<UiFrequencyPlot> &&frequencyPlots)
-{
-    this->fileProperties_ = std::move(fileProperties);
-    this->frequencyPlots_ = std::move(frequencyPlots);
-}
 PiPedalUI::PiPedalUI(
     std::vector<UiFileProperty> &&fileProperties)
 {

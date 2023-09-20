@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { PreformatedText } from "../../CodeFragment";
-import { P, Ul } from './StandardFormats';
+import { P, Subheading, Ul } from './StandardFormats';
 
 
 
@@ -151,10 +151,32 @@ SamplePlugin::SamplePlugin()
     this->Theme(theme);
 }
 `)}
+            <Subheading>
+                Linker Options
+            </Subheading>
             <P>
-                The rest of this documentation set deals with things you might need to know if you want to customize the user interface that LVtk has generated.
+                On Linux, Cairo/X11 libraries do not support being unloaded after they have been loaded. 
+                (This is pretty much a universal  problem with LV2 UI plugins, regardless of which graphics backend they uses). 
+                The UI plugin must  therefore be marked with the linker 'nodelete' option, in order to prevent LV2 host from unloading
+                the UI plugin, and -- consequently -- the UI framework libraries.</P>
+            <P>This is performed by the following line in the CMakeList.txt file of the sample 
+                plugin:
             </P>
-
+            {PreformatedText(
+                `
+target_link_options(lvtk_test_plugin PRIVATE
+    "-Wl,-z,nodelete "
+)
+`))
+            <P>The UI Plugin must statically link the liblvtk.a and liblvkt_ui.a libraries. In the sample plugin CMakeList.txt file, this is
+                performed by the following cmake commands:
+                {PreformatedText(
+                `
+target_link_libraries(
+    ToobAmpUI PRIVATE lvtk_ui
+)
+`))
+            <P>cmake will automatically link dependent libraries required by lvtk_ui</P>
         </Box>
     );
 }
