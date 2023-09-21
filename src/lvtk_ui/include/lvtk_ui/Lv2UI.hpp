@@ -87,6 +87,7 @@ namespace lvtk::ui
 
 
         virtual LvtkContainerElement::ptr Render();
+        virtual LvtkContainerElement::ptr RenderControls();
 
         Lv2UI&SetControlValue(const std::string&key, double value);
         double GetControlValue(const std::string&key) const;
@@ -105,6 +106,8 @@ namespace lvtk::ui
             LvtkBindingProperty<double>&rightValue,const Lv2PortInfo&rightPortInfo
             );
 
+        virtual void OnPatchPropertyReceived(LV2_URID type, const void*data);
+        
     private:
         IcuString::Ptr icuInstance; // lifetime managment for Icu libraries.
         float scaleFactor = 1.0;
@@ -134,6 +137,13 @@ namespace lvtk::ui
             LV2_URID log__Warning;
             LV2_URID log__Trace;
             LV2_URID atom__Float;
+            LV2_URID atom__eventTransfer;
+            LV2_URID atom__Object;
+            LV2_URID atom__Resource;
+            LV2_URID atom__Blank;
+            LV2_URID patch__Set;
+            LV2_URID patch__property;
+            LV2_URID patch__value;
         };
         Urids urids;
         // LV2 callback handlers.

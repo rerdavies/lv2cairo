@@ -549,8 +549,8 @@ LvtkSize LvtkFlexGridElement::Arrange(LvtkSize available, LvtkDrawingContext &co
                 {
                     if (nChildren != 0)
                     {
-                        columnExtra = extra / nChildren;
-                        left = columnExtra/2;
+                        columnExtra = extra / (nChildren+1);
+                        left = columnExtra;
                     } 
                     break;
                 default:
@@ -670,8 +670,8 @@ LvtkSize LvtkFlexGridElement::Arrange(LvtkSize available, LvtkDrawingContext &co
                 {
                     if (nChildren != 0)
                     {
-                        rowExtra = extra / nChildren;
-                        top = rowExtra/2;
+                        rowExtra = extra / (nChildren+1);
+                        top = rowExtra;
                     } 
                     break;
                 }

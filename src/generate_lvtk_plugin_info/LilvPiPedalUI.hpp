@@ -49,6 +49,8 @@
 #define PIPEDAL_UI__xLog PIPEDAL_UI_PREFIX "xLog"
 #define PIPEDAL_UI__yTop PIPEDAL_UI_PREFIX "yTop"
 #define PIPEDAL_UI__yBottom PIPEDAL_UI_PREFIX "yBottom"
+#define PIPEDAL_UI__yDb PIPEDAL_UI_PREFIX "yDb"
+
 #define PIPEDAL_UI__width PIPEDAL_UI_PREFIX "width"
 
 

@@ -134,7 +134,7 @@ namespace lvtk::ui {
         UiFileProperty() { }
         UiFileProperty(UiFileProperty_Init && values)
         {
-            (UiFileProperty_Init&)(*this) = std::move(values);
+            *(UiFileProperty_Init*)(this) = std::move(values);
         }
         UiFileProperty(const std::string&name, const std::string&patchProperty,const std::string &directory);
 
@@ -164,14 +164,15 @@ namespace lvtk::ui {
         float yTop_ = 5;
         float yBottom_ = -30;
         bool xLog_ = true;
+        bool yDb_ = true;
         float width_ = 60;
     };
     class UiFrequencyPlot: private UiFrequencyPlot_Init  {
         friend class LilvUiFrequencyPlot;
     public:
         UiFrequencyPlot() { }
-        UiFrequencyPlot(const UiFrequencyPlot_Init&&init) { 
-            (UiFrequencyPlot&)(*this) = std::move(init);
+        UiFrequencyPlot(const UiFrequencyPlot_Init&init) { 
+            *((UiFrequencyPlot_Init*)(this)) = init;
         }
 
         const std::string &patchProperty() const { return patchProperty_; }
@@ -182,6 +183,7 @@ namespace lvtk::ui {
         bool xLog() const { return xLog_; }
         float yTop() const { return yTop_; }
         float yBottom() const { return yBottom_; }
+        bool yDb() const { return yDb_; }
         float width() const { return width_; }
 
     public:

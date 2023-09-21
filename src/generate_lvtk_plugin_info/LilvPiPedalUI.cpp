@@ -367,12 +367,14 @@ LilvUiFrequencyPlot::LilvUiFrequencyPlot(LilvWorld*pWorld, const LilvNode*node,
     AutoLilvNode pipedalUI__yBottom = lilv_new_uri(pWorld, PIPEDAL_UI__yBottom);
     AutoLilvNode pipedalUI__xLog = lilv_new_uri(pWorld, PIPEDAL_UI__xLog);
     AutoLilvNode pipedalUI__width = lilv_new_uri(pWorld, PIPEDAL_UI__width);
+    AutoLilvNode pipedalUI__yDb = lilv_new_uri(pWorld, PIPEDAL_UI__yDb);
 
-    this->xLeft_ = GetFloat(pWorld,node,/*lvuri*/pipedalUI__xLeft,100);
+    this->xLeft_ = GetFloat(pWorld,node,/*lvuri*/pipedalUI__xLeft,30);
     this->xRight_ = GetFloat(pWorld,node,/*lvuri*/pipedalUI__xRight,22000);
     this->yTop_ = GetFloat(pWorld,node,/*lvuri*/pipedalUI__yTop,5);
     this->yBottom_ = GetFloat(pWorld,node,/*lvuri*/pipedalUI__yBottom,-35);
-    this->xLog_ = GetFloat(pWorld,node,/*lvuri*/pipedalUI__xLog,-35);
+    this->xLog_ = GetFloat(pWorld,node,/*lvuri*/pipedalUI__xLog,1) != 0;
+    this->yDb_ = GetFloat(pWorld,node,/*lvuri*/pipedalUI__yDb,1) != 0;
     this->width_ = GetFloat(pWorld,node,/*lvuri*/pipedalUI__width,60);
 }
 

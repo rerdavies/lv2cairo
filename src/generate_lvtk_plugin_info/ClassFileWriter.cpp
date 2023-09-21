@@ -418,6 +418,7 @@ void ClassFileWriter::WriteC(const UiFrequencyPlot&frequencyPlot)
         WRITE_UI_FREQUENCYPLOT_PROPERTY(frequencyPlot,yTop)
         WRITE_UI_FREQUENCYPLOT_PROPERTY(frequencyPlot,yBottom)
         WRITE_UI_FREQUENCYPLOT_PROPERTY(frequencyPlot,xLog)
+        WRITE_UI_FREQUENCYPLOT_PROPERTY(frequencyPlot,yDb)
         WRITE_UI_FREQUENCYPLOT_PROPERTY(frequencyPlot,width)
     }
     Unindent();

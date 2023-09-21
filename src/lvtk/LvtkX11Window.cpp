@@ -938,8 +938,16 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
         logDebug(xEvent.xcrossing.window, "EnterNotify");
         break;
     case LeaveNotify:
+    {
         logDebug(xEvent.xcrossing.window, "LeaveNotify");
-        break;
+        LvtkWindow::ptr window = GetLvtkWindow(xEvent.xcrossing.window);
+
+        if (window)
+        {
+            window->MouseLeave(WindowHandle(xEvent.xcrossing.window));
+        }
+    }
+    break;
     case ResizeRequest:
     {
         logDebug(xEvent.xresizerequest.window, SS("ResizeRequest " << xEvent.xresizerequest.width << "," << xEvent.xresizerequest.height));

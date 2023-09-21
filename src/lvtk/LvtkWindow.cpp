@@ -59,7 +59,6 @@ namespace lvtk
 
 }
 
-
 LvtkWindow::LvtkWindow()
 {
     this->theme = std::make_shared<LvtkTheme>(true);
@@ -133,7 +132,7 @@ void LvtkWindow::Draw()
         context.clip();
         //
         try
-        {   
+        {
 
             context.check_status();
 
@@ -148,7 +147,7 @@ void LvtkWindow::Draw()
             context.pop_group_to_source();
 
             context.check_status();
-            auto t = context.get_operator();            
+            auto t = context.get_operator();
             context.set_operator(cairo_operator_t::CAIRO_OPERATOR_SOURCE);
             context.rectangle(displayRect);
             context.fill();
@@ -199,12 +198,11 @@ void LvtkWindow::CloseRootWindow()
     Close();
     if (this->nativeWindow)
     {
-        auto t = this->nativeWindow; 
+        auto t = this->nativeWindow;
         this->nativeWindow = nullptr;
         delete t; // also deletes this!
-        return; // this may no longer be valid.
+        return;   // this may no longer be valid.
     }
-
 }
 void LvtkWindow::OnClosing()
 {
@@ -220,10 +218,10 @@ void LvtkWindow::CreateChildWindow(
     this->windowParameters.settingsObject = parent->Settings();
 
     this->windowParameters.Load();
-    LvtkCreateWindowParameters scaledParameters = Scale(windowParameters,windowScale);
+    LvtkCreateWindowParameters scaledParameters = Scale(windowParameters, windowScale);
     this->nativeWindow = new LvtkX11Window(SelfPointer(), scaledParameters);
     this->windowParameters.positioning = scaledParameters.positioning;
-    this->windowParameters.location = scaledParameters.location/windowScale;
+    this->windowParameters.location = scaledParameters.location / windowScale;
 
     this->nativeWindow->WindowTitle(this->windowTitle);
 
@@ -246,10 +244,10 @@ void LvtkWindow::CreateWindow(
     {
         settings = this->windowParameters.settingsObject;
     }
-    LvtkCreateWindowParameters scaledParameters = Scale(windowParameters,windowScale);
+    LvtkCreateWindowParameters scaledParameters = Scale(windowParameters, windowScale);
     this->nativeWindow = new LvtkX11Window(SelfPointer(), hParent, scaledParameters);
     this->windowParameters.positioning = scaledParameters.positioning;
-    this->windowParameters.location = scaledParameters.location/windowScale;
+    this->windowParameters.location = scaledParameters.location / windowScale;
 
     if (this->rootElement)
     {
@@ -271,7 +269,7 @@ bool LvtkWindow::PumpMessages(bool block)
         {
             return true;
         }
-        bool result =  nativeWindow->AnimationLoop();
+        bool result = nativeWindow->AnimationLoop();
         if (Quitting())
         {
             auto t = this->nativeWindow;
@@ -372,6 +370,13 @@ void LvtkWindow::MouseMove(WindowHandle h, int64_t x, int64_t y, ModifierState s
     this->lastMouseEventArgs = event;
     OnMouseMove(event);
 }
+void LvtkWindow::MouseLeave(WindowHandle h)
+{
+    if (this->GetRootElement() != nullptr)
+    {
+        GetRootElement()->UpdateMouseOver(LvtkPoint(-1000,-1000));
+    }
+}
 
 void LvtkWindow::PostQuit()
 {
@@ -421,7 +426,7 @@ void LvtkWindow::Layout()
 
         LvtkRectangle clientRect = LvtkRectangle(0, 0, size.Width(), size.Height());
         rootElement->Layout(clientRect);
-        rootElement->FinalizeLayout(clientRect,clientRect);
+        rootElement->FinalizeLayout(clientRect, clientRect);
         rootElement->OnLayoutComplete();
     }
     OnLayoutComplete();
@@ -479,13 +484,13 @@ void LvtkWindow::OnSizeChanged(const LvtkSize &size)
 
 void LvtkWindow::OnX11SizeChanged(LvtkSize size)
 {
-    if (damageList.Width() != size.Width()|| damageList.Height() != size.Height())
+    if (damageList.Width() != size.Width() || damageList.Height() != size.Height())
     {
         damageList.SetSize(
             (int64_t)std::ceil(size.Width()),
             (int64_t)std::ceil(size.Height()));
     }
-    Size(size/windowScale);
+    Size(size / windowScale);
 }
 bool LvtkWindow::Focus(LvtkElement *element)
 {
@@ -508,11 +513,11 @@ bool LvtkWindow::Focus(LvtkElement *element)
     }
     return true;
 }
-LvtkElement *LvtkWindow::FocusedElement() 
+LvtkElement *LvtkWindow::FocusedElement()
 {
     return this->focusElement;
 }
-const LvtkElement *LvtkWindow::FocusedElement() const 
+const LvtkElement *LvtkWindow::FocusedElement() const
 {
     return this->focusElement;
 }
@@ -620,17 +625,16 @@ void LvtkWindow::Animate()
     if (delayCallbacks.size() != 0)
     {
 
-
         while (true)
         {
             // TODO: horrendously inefficient. Rewrite this for correct O.
-            // The challenge is that the iterator gets inalidated if any of 
+            // The challenge is that the iterator gets inalidated if any of
             // the callbacks post a new Delayed item.
             // Also a challenge with the mutex.
             bool hasCallback = false;
             DelayCallback callback;
             {
-                std::lock_guard guard { delayCallbacksMutex};
+                std::lock_guard guard{delayCallbacksMutex};
                 for (auto &delayEntry : delayCallbacks)
                 {
                     if (delayEntry.second.time <= now)
@@ -669,7 +673,7 @@ AnimationHandle LvtkWindow::PostDelayed(std::chrono::milliseconds delay, const D
         animation_clock_t::now() + std::chrono::duration_cast<animation_clock_t::duration>(delay),
         callback};
     {
-        std::lock_guard guard { delayCallbacksMutex};
+        std::lock_guard guard{delayCallbacksMutex};
         delayCallbacks[h] = std::move(delayRecord);
     }
     return h;
@@ -681,14 +685,14 @@ AnimationHandle LvtkWindow::PostDelayed(std::chrono::milliseconds delay, DelayCa
         animation_clock_t::now() + duration_cast<animation_clock_t::duration>(delay),
         std::move(callback)};
     {
-        std::lock_guard guard { delayCallbacksMutex};
+        std::lock_guard guard{delayCallbacksMutex};
         delayCallbacks[h] = std::move(delayRecord);
     }
     return h;
 }
 bool LvtkWindow::CancelPostDelayed(AnimationHandle handle)
 {
-    std::lock_guard guard { delayCallbacksMutex};
+    std::lock_guard guard{delayCallbacksMutex};
 
     auto f = delayCallbacks.find(handle);
     if (f != delayCallbacks.end())
@@ -794,7 +798,6 @@ void LvtkWindow::SetResourceDirectories(const std::vector<std::filesystem::path>
     resourceDirectories = paths;
 }
 
-
 bool LvtkWindow::OnX11KeycodeDown(LvtkKeyboardEventArgs &eventArgs)
 {
     if (this->focusElement)
@@ -813,14 +816,12 @@ bool LvtkWindow::OnX11KeycodeUp(LvtkKeyboardEventArgs &eventArgs)
     {
         eventArgs.target = this->focusElement;
         if (this->focusElement->OnKeycodeUp(eventArgs))
-        {       
+        {
             return true;
         }
     }
     return false;
-
 }
-
 
 bool LvtkWindow::OnKeyDown(LvtkKeyboardEventArgs &eventArgs)
 {
@@ -1105,7 +1106,7 @@ static void Visit(LvtkElement::ptr element, FocusNavigationSelector &selector)
         for (auto &child : pContainer->LayoutChildren())
         {
             Visit(child, selector);
-        }   
+        }
     }
     if (element->WantsFocus())
     {
@@ -1319,7 +1320,7 @@ void LvtkCreateWindowParameters::Save()
 
 void LvtkWindow::OnX11ConfigurationChanged(
     LvtkWindowPositioning positioning,
-    LvtkWindowState windowState, 
+    LvtkWindowState windowState,
     LvtkPoint location,
     LvtkSize size)
 {
@@ -1329,14 +1330,17 @@ void LvtkWindow::OnX11ConfigurationChanged(
         {
             windowParameters.state = LvtkWindowState::Maximized;
             windowParameters.Save();
-        } else if (windowState == LvtkWindowState::Normal)
+        }
+        else if (windowState == LvtkWindowState::Normal)
         {
             windowParameters.state = LvtkWindowState::Normal;
-            windowParameters.positioning = positioning ;
+            windowParameters.positioning = positioning;
             windowParameters.location = location / windowScale;
             windowParameters.size = size / windowScale;
             windowParameters.Save();
-        } else {
+        }
+        else
+        {
             // minimized.
             // don't record anyrhing.
         }
@@ -1357,18 +1361,16 @@ void LvtkWindow::RemoveModalDisable()
     --modalDisableCount;
 }
 
-
 void LvtkWindow::MessageBox(LvtkMessageDialogType dialogType, const std::string &title, const std::string &text)
 {
-    LvtkMessageDialog::ptr dlg = LvtkMessageDialog::Create(dialogType,title,text);
+    LvtkMessageDialog::ptr dlg = LvtkMessageDialog::Create(dialogType, title, text);
     dlg->Show(this);
 }
 
 void LvtkWindow::OnLayoutComplete()
 {
-
 }
-void LvtkWindow::SetStringProperty(const std::string&key, const std::string&value)
+void LvtkWindow::SetStringProperty(const std::string &key, const std::string &value)
 {
     // if (!this->nativeWindow)
     // {
@@ -1377,22 +1379,18 @@ void LvtkWindow::SetStringProperty(const std::string&key, const std::string&valu
     // nativeWindow->SetStringProperty(key,value);
 }
 
-
-std::optional<std::string>  LvtkWindow::GetStringProperty(const std::string&key)
+std::optional<std::string> LvtkWindow::GetStringProperty(const std::string &key)
 {
     return std::optional<std::string>();
-
 }
-
 
 void LvtkWindow::Resize(int width, int height)
 {
     if (this->nativeWindow)
     {
-        this->nativeWindow->Resize(width,height);
+        this->nativeWindow->Resize(width, height);
     }
 }
-
 
 WindowHandle LvtkWindow::Handle() const
 {

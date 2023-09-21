@@ -31,10 +31,12 @@
 #include "lv2/atom/util.h"
 #include "lv2/core/lv2.h"
 #include "lv2/core/lv2_util.h"
+#include "lv2/patch/patch.h"
 #include "lv2/log/log.h"
 #include "lv2/midi/midi.h"
 #include "lv2/port-groups/port-groups.h"
 #include "lv2/urid/urid.h"
+#include "lv2/atom/atom.h"
 #include "lv2/options/options.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -108,7 +110,7 @@ Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, LvtkSize defaultWindowSi
 
 Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, const LvtkCreateWindowParameters &createWindowParameters)
     : pluginInfo(pluginInfo), createWindowParameters(createWindowParameters),
-        icuInstance(lvtk::IcuString::Instance()) // lifetime managment for Icu libraries.
+      icuInstance(lvtk::IcuString::Instance()) // lifetime managment for Icu libraries.
 {
     this->createWindowParameters.positioning = LvtkWindowPositioning::ChildWindow;
 
@@ -150,7 +152,7 @@ Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, const LvtkCreateWindowPa
     this->Theme(LvtkTheme::Create(true));
     this->portViewFactory = Lv2PortViewFactory::Create();
 }
- 
+
 Lv2UI::~Lv2UI()
 {
     if (cairoWindow)
@@ -190,14 +192,14 @@ bool Lv2UI::instantiate(
     this->controller = controller;
     this->widget = widget;
 
-    LV2_Options_Option* options = nullptr;
+    LV2_Options_Option *options = nullptr;
     const char *missing = lv2_features_query(
         features,
         LV2_LOG__log, &this->log, false,
         LV2_URID__map, &this->map, true,
         LV2_URID__unmap, &this->unmap, false,
         LV2_UI__requestValue, &this->requestValue, false,
-        LV2_OPTIONS__options,&options,false,
+        LV2_OPTIONS__options, &options, false,
         NULL);
     if (missing)
     {
@@ -207,15 +209,15 @@ bool Lv2UI::instantiate(
     LV2_URID lv2ui_scaleFactor = this->GetUrid(LV2_UI__scaleFactor);
     if (options)
     {
-        for (LV2_Options_Option*p = options; p->key != 0; ++p)
+        for (LV2_Options_Option *p = options; p->key != 0; ++p)
         {
             std::string option = this->UridToString(p->key);
-//            std::cout << "Option: " << option << std::endl;
+            //            std::cout << "Option: " << option << std::endl;
             if (p->subject == lv2ui_scaleFactor)
             {
                 if (p->type == this->urids.atom__Float)
                 {
-                    this->scaleFactor = *(float*)(p->value);
+                    this->scaleFactor = *(float *)(p->value);
                 }
             }
         }
@@ -256,7 +258,7 @@ bool Lv2UI::instantiate(
 
     WindowHandle x11Handle = cairoWindow->Handle();
 
-    *widget = (LV2UI_Widget)(void*)x11Handle.getHandle();
+    *widget = (LV2UI_Widget)(void *)x11Handle.getHandle();
     auto ui = this->Render();
     cairoWindow->GetRootElement()->AddChild(ui);
     if (this->resize)
@@ -273,6 +275,13 @@ void Lv2UI::InitUrids()
     urids.log__Trace = GetUrid(LV2_LOG__Trace);
     urids.log__Warning = GetUrid(LV2_LOG__Warning);
     urids.atom__Float = GetUrid(LV2_ATOM__Float);
+    urids.atom__eventTransfer = GetUrid(LV2_ATOM__eventTransfer);
+    urids.atom__Object = GetUrid(LV2_ATOM__Object);
+    urids.atom__Resource = GetUrid(LV2_ATOM__Resource);
+    urids.atom__Blank = GetUrid(LV2_ATOM__Blank);
+    urids.patch__Set = GetUrid(LV2_PATCH__Set);
+    urids.patch__property = GetUrid(LV2_PATCH__property);
+    urids.patch__value = GetUrid(LV2_PATCH__value);
 }
 
 void Lv2UI::ui_port_event(
@@ -281,20 +290,53 @@ void Lv2UI::ui_port_event(
     uint32_t format,
     const void *buffer)
 {
-    if (format == 0) // port notification.
+    if (port_index < this->pluginInfo->ports().size())
     {
-        float value = *(float *)buffer;
-        if (port_index >= 0 && port_index < bindingSites.size())
+        if (pluginInfo->ports()[port_index].is_atom_port())
         {
-            this->currentHostPortValues[port_index] = value;
-            auto bindingSite = bindingSites[port_index];
-            if (bindingSite)
+            if (format == urids.atom__eventTransfer)
             {
-                bindingSite->set(value);
+                const LV2_Atom*atom = (LV2_Atom*)buffer;
+                if (atom->type == urids.atom__Object
+                || atom->type == urids.atom__Resource
+                || atom->type == urids.atom__Blank)
+                {
+                    const LV2_Atom_Object *object = (const LV2_Atom_Object*)atom;
+                    if (object->body.otype == urids.patch__Set)
+                    {
+                        const LV2_Atom *property = nullptr;
+                        const LV2_Atom *value = nullptr;
+                        lv2_atom_object_get(object,
+                            urids.patch__property,&property,
+                            urids.patch__value,&value,
+                            0);
+                        if (property != nullptr && value != nullptr)
+                        {
+                            OnPatchPropertyReceived(property->type,value);
+                        }
+                    }
+                }
+            }
+        }
+        else if (pluginInfo->ports()[port_index].is_control_port())
+        {
+            if (format == 0) // port notification.
+            {
+                float value = *(float *)buffer;
+                if (port_index >= 0 && port_index < bindingSites.size())
+                {
+                    this->currentHostPortValues[port_index] = value;
+                    auto bindingSite = bindingSites[port_index];
+                    if (bindingSite)
+                    {
+                        bindingSite->set(value);
+                    }
+                }
             }
         }
     }
 }
+
 int Lv2UI::ui_show()
 {
 
@@ -524,17 +566,21 @@ LvtkContainerElement::ptr Lv2UI::Render()
     LvtkScrollContainerElement::ptr scrollElement = LvtkScrollContainerElement::Create();
     scrollElement->HorizontalScrollEnabled(false)
         .VerticalScrollEnabled(true);
-    scrollElement->Style().Background(Theme()->paper)
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .VerticalAlignment(LvtkAlignment::Stretch);
+    scrollElement->Style().Background(Theme()->paper).HorizontalAlignment(LvtkAlignment::Stretch).VerticalAlignment(LvtkAlignment::Stretch);
+
+    scrollElement->Child(RenderControls());
+    return scrollElement;
+}
+
+LvtkContainerElement::ptr Lv2UI::RenderControls()
+{
     {
         portViewFactory->Theme(this->theme);
         LvtkContainerElement::ptr container = portViewFactory->CreatePage();
 
         AddRenderControls(container);
-        scrollElement->Child(container);
+        return container;
     }
-    return scrollElement;
 }
 
 bool Lv2UI::IsVuMeterPair(size_t portIndex)
@@ -708,7 +754,12 @@ int Lv2UI::ui_resize(int width, int height)
 {
     if (this->cairoWindow)
     {
-      //  cairoWindow->Resize(width,height);
+        //  cairoWindow->Resize(width,height);
     }
     return 0;
+}
+
+void Lv2UI::OnPatchPropertyReceived(LV2_URID type, const void*data)
+{
+
 }

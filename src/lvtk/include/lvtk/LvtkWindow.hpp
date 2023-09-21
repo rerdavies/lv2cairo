@@ -343,11 +343,12 @@ namespace lvtk
         void Idle();
         void Size(const LvtkSize &size);
 
-        // Native Window callbask.
+        // Native Window callback.
         void OnExpose(WindowHandle h, int64_t x, int64_t y, int64_t width, int64_t height);
         virtual void MouseDown(WindowHandle h, uint64_t button, int64_t x, int64_t y, ModifierState state);
         virtual void MouseMove(WindowHandle h, int64_t x, int64_t y, ModifierState state);
         virtual void MouseUp(WindowHandle h, uint64_t button, int64_t x, int64_t y, ModifierState state);
+        virtual void MouseLeave(WindowHandle h);
 
         /// @brief Notification of a raw X11 keysim down event.
         /// @param eventArgs Keyboard event arguments.
