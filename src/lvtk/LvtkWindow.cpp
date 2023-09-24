@@ -90,11 +90,11 @@ void LvtkWindow::Invalidate()
 void LvtkWindow::Invalidate(const LvtkRectangle &bounds)
 {
     LvtkRectangle rc = LvtkRectangle(
-        bounds.Left() * windowScale,
+        bounds.Left () * windowScale,
         bounds.Top() * windowScale,
         bounds.Width() * windowScale,
         bounds.Height() * windowScale);
-    damageList.Invalidate(rc);
+        damageList.Invalidate(rc);
 }
 
 void LvtkWindow::OnExpose(WindowHandle h, int64_t x, int64_t y, int64_t width, int64_t height)

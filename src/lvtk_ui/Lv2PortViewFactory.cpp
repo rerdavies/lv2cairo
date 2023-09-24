@@ -578,3 +578,9 @@ Lv2PortViewFactory &Lv2PortViewFactory::Theme(std::shared_ptr<LvtkTheme> theme)
     this->theme = theme;
     return *this;
 }
+
+LvtkSize Lv2PortViewFactory::DefaultSize() const
+{
+    return LvtkSize(Lv2ControlWidth ,Lv2ControlHeight);
+
+}

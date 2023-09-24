@@ -151,6 +151,9 @@ namespace lvtk
         /// Usually, this should be the same as LvtkTheme::paper. If the property has default value,
         /// the theme color will be copied in automatically.
         LvtkColor backgroundColor = LvtkColor(0,0,0,0);
+
+
+        LvtkWindow* owner = nullptr;
     public:
         /// @brief Load saved values from the settingsObject.
         void Load();
@@ -300,6 +303,10 @@ namespace lvtk
         LvtkWindow &Settings(const json_variant &settings);
 
         bool ModalDisable() const;
+
+
+        LvtkCreateWindowParameters& WindowParameters() { return windowParameters; }
+
 
     protected:
         virtual void OnClosing();

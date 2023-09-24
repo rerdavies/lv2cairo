@@ -21,6 +21,7 @@
 #include "lvtk_ui/Lv2PortView.hpp"
 #include "lvtk/LvtkSettingsFile.hpp"
 #include "lvtk_ui/Lv2PortViewFactory.hpp"
+#include "lvtk_ui/Lv2FrequencyPlotElement.hpp"
 
 #include "lvtk/LvtkWindow.hpp"
 #include "lvtk/LvtkFlexGridElement.hpp"
@@ -46,6 +47,9 @@
 
 #include "lvtk/LvtkGroupElement.hpp"
 
+struct LV2_Atom_Forge_ : public LV2_Atom_Forge
+{
+};
 using namespace lvtk::ui;
 using namespace lvtk;
 
@@ -112,6 +116,7 @@ Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, const LvtkCreateWindowPa
     : pluginInfo(pluginInfo), createWindowParameters(createWindowParameters),
       icuInstance(lvtk::IcuString::Instance()) // lifetime managment for Icu libraries.
 {
+
     this->createWindowParameters.positioning = LvtkWindowPositioning::ChildWindow;
 
     SetCreateWindowDefaults();
@@ -146,7 +151,11 @@ Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, const LvtkCreateWindowPa
                 bindingSiteObserverHandles[index] = pBinding->addObserver([this, index](double value)
                                                                           { this->OnPortValueChanged(index, value); });
             }
+        } else if (port.is_atom_port() && port.is_input())
+        {
+            this->inputAtomPort = port.index();
         }
+
     }
 
     this->Theme(LvtkTheme::Create(true));
@@ -155,6 +164,8 @@ Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, const LvtkCreateWindowPa
 
 Lv2UI::~Lv2UI()
 {
+    delete forge;
+
     if (cairoWindow)
     {
         cairoWindow->CloseRootWindow();
@@ -206,6 +217,11 @@ bool Lv2UI::instantiate(
         LogError("Missing " LV2_URID__map "feature.");
         return false;
     }
+
+    this->forge = new LV2_Atom_Forge_();
+
+    lv2_atom_forge_init(this->forge, this->map);
+
     LV2_URID lv2ui_scaleFactor = this->GetUrid(LV2_UI__scaleFactor);
     if (options)
     {
@@ -227,7 +243,7 @@ bool Lv2UI::instantiate(
     bool parentWindowFound = false;
     for (int i = 0; features[i] != nullptr; ++i)
     {
-        std::cout << "Feature: " << features[i]->URI << std::endl;
+        // std::cout << "Feature: " << features[i]->URI << std::endl;
         if (!strcmp(features[i]->URI, LV2_UI__parent))
         {
             parentWindowFound = true;
@@ -265,6 +281,19 @@ bool Lv2UI::instantiate(
     {
         resize->ui_resize(resize->handle, (int)std::ceil(createWindowParameters.size.Width()), (int)std::ceil(createWindowParameters.size.Height()));
     }
+
+    // request initial value of properties we're interested in.
+    // for (auto&frequencyPlot: this->pluginInfo->piPedalUI().frequencyPlots())
+    // {
+    //     LV2_URID urid = GetUrid(frequencyPlot.patchProperty().c_str());
+    //     this->RequestPatchProperty(urid);
+    // }
+
+    // for (auto&fileProperty: this->pluginInfo->piPedalUI().fileProperties())
+    // {
+    //     LV2_URID urid = GetUrid(fileProperty.patchProperty().c_str());
+    //     this->RequestPatchProperty(urid);
+    // }
     return true;
 }
 
@@ -277,11 +306,14 @@ void Lv2UI::InitUrids()
     urids.atom__Float = GetUrid(LV2_ATOM__Float);
     urids.atom__eventTransfer = GetUrid(LV2_ATOM__eventTransfer);
     urids.atom__Object = GetUrid(LV2_ATOM__Object);
+    urids.atom__URID = GetUrid(LV2_ATOM__URID);
     urids.atom__Resource = GetUrid(LV2_ATOM__Resource);
     urids.atom__Blank = GetUrid(LV2_ATOM__Blank);
     urids.patch__Set = GetUrid(LV2_PATCH__Set);
     urids.patch__property = GetUrid(LV2_PATCH__property);
     urids.patch__value = GetUrid(LV2_PATCH__value);
+    urids.patch__Get = GetUrid(LV2_PATCH__Get);
+    urids.patch__accept = GetUrid(LV2_PATCH__accept);
 }
 
 void Lv2UI::ui_port_event(
@@ -296,23 +328,22 @@ void Lv2UI::ui_port_event(
         {
             if (format == urids.atom__eventTransfer)
             {
-                const LV2_Atom*atom = (LV2_Atom*)buffer;
-                if (atom->type == urids.atom__Object
-                || atom->type == urids.atom__Resource
-                || atom->type == urids.atom__Blank)
+                const LV2_Atom *atom = (LV2_Atom *)buffer;
+                if (atom->type == urids.atom__Object || atom->type == urids.atom__Resource || atom->type == urids.atom__Blank)
                 {
-                    const LV2_Atom_Object *object = (const LV2_Atom_Object*)atom;
+                    const LV2_Atom_Object *object = (const LV2_Atom_Object *)atom;
                     if (object->body.otype == urids.patch__Set)
                     {
                         const LV2_Atom *property = nullptr;
                         const LV2_Atom *value = nullptr;
                         lv2_atom_object_get(object,
-                            urids.patch__property,&property,
-                            urids.patch__value,&value,
-                            0);
-                        if (property != nullptr && value != nullptr)
+                                            urids.patch__property, &property,
+                                            urids.patch__value, &value,
+                                            0);
+                        if (property != nullptr && property->type == urids.atom__URID &&  value != nullptr)
                         {
-                            OnPatchPropertyReceived(property->type,value);
+                            const LV2_Atom_URID *atomUrid = (const LV2_Atom_URID*)property;
+                            OnPatchPropertyReceived(atomUrid->body, value);
                         }
                     }
                 }
@@ -616,9 +647,33 @@ bool Lv2UI::IsVuMeterPair(size_t portIndex)
     return true;
 }
 
+static void InsertExtendedControl(
+    LvtkContainerElement::ptr container,  
+    std::vector<size_t> *containerIndex,
+    size_t index, // index of the child.
+    LvtkElement::ptr child)
+{
+    size_t position = containerIndex->size();
+    for (size_t i = 0; i < containerIndex->size(); ++i)
+    {
+        if (index >= containerIndex->at(i))
+        {
+            position = i;
+            break;
+        }
+    }
+    container->AddChild(child,position);
+    containerIndex->insert(containerIndex->begin()+position,index-1);
+}
+
+
 void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
 {
     std::map<std::string, LvtkGroupElement::ptr> portGroups;
+
+    std::map<std::string, std::vector<size_t>> portGroupControlIndices;
+    std::vector<size_t> mainControlIndex;
+
     for (size_t i = 0; i < this->pluginInfo->ports().size(); ++i)
     {
         auto &port = this->pluginInfo->ports()[i];
@@ -641,7 +696,8 @@ void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
                             break;
                         }
                     }
-
+                    // xxx redo this.
+                    mainControlIndex.push_back(port.index());
                     container->AddChild(
                         RenderStereoControl(
                             label,
@@ -655,14 +711,22 @@ void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
                 {
 
                     LvtkGroupElement::ptr portGroup;
+                    std::vector<size_t> *groupIndex;
+
                     if (portGroups.contains(port.port_group()))
                     {
                         portGroup = portGroups[port.port_group()];
+                        groupIndex = &(portGroupControlIndices[port.port_group()]);
                     }
                     else
                     {
                         portGroup = LvtkGroupElement::Create();
                         portGroups[port.port_group()] = portGroup;
+                        portGroupControlIndices[port.port_group()] = std::vector<size_t>();
+                        groupIndex = &(portGroupControlIndices[port.port_group()]);
+
+                        mainControlIndex.push_back(port.index());
+
                         container->AddChild(portGroup);
                         for (const auto &portGroupInfo : pluginInfo->port_groups())
                         {
@@ -673,6 +737,7 @@ void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
                             }
                         }
                     }
+                    groupIndex->push_back(port.index());
                     portGroup->AddChild(
                         RenderControl(
                             GetControlProperty(port.symbol()),
@@ -681,12 +746,43 @@ void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
             }
             else
             {
+                mainControlIndex.push_back(port.index());
                 container->AddChild(
                     RenderControl(
                         GetControlProperty(port.symbol()),
                         port));
             }
         }
+    }
+
+    for (auto&frequencyPlot: this->pluginInfo->piPedalUI().frequencyPlots())
+    {
+        LvtkContainerElement::ptr plotContainer;
+        std::vector<size_t> *controlIndex = nullptr;
+
+
+        if (frequencyPlot.portGroup().length() != 0)
+        {
+            plotContainer = portGroups[frequencyPlot.portGroup()];
+            if (!plotContainer)
+            {
+                plotContainer = LvtkGroupElement::Create();
+                InsertExtendedControl(container,&mainControlIndex,frequencyPlot.index(),plotContainer);
+            }
+            controlIndex = &(portGroupControlIndices[frequencyPlot.portGroup()]);
+
+        } else {
+            plotContainer = container;
+            controlIndex = &mainControlIndex;
+        }
+        auto plotControl = Lv2FrequencyPlotElement::Create(this,&frequencyPlot);
+        auto size = this->portViewFactory->DefaultSize();
+        plotControl->Style()
+            .Height(size.Height()-16)
+            .Width(frequencyPlot.width())
+            ;
+        
+        InsertExtendedControl(plotContainer,controlIndex,frequencyPlot.index(),plotControl);
     }
 }
 
@@ -759,7 +855,32 @@ int Lv2UI::ui_resize(int width, int height)
     return 0;
 }
 
-void Lv2UI::OnPatchPropertyReceived(LV2_URID type, const void*data)
+void Lv2UI::OnPatchPropertyReceived(LV2_URID type, const void *data)
 {
+    PatchPropertyEventArgs eventArgs { type,data};
+    
+    OnPatchProperty.Fire(eventArgs);
+}
+
+void Lv2UI::RequestPatchProperty(LV2_URID property)
+{
+    lv2_atom_forge_set_buffer(forge, patchRequestBuffer, sizeof(patchRequestBuffer));
+    LV2_Atom_Forge_Frame frame;
+    lv2_atom_forge_object(forge, &frame, 0, urids.patch__Get);
+    lv2_atom_forge_key(forge, urids.patch__accept);
+    lv2_atom_forge_urid(forge, property);
+    lv2_atom_forge_pop(forge, &frame);
+
+    LV2_Atom *msg = lv2_atom_forge_deref(forge, frame.ref);
+    if (inputAtomPort == (uint32_t)-1)
+    {
+        LogError("RequestPatchProperty: plugin does not have an input atom port.");
+    } else {
+        this->writeFunction(controller,
+            inputAtomPort,        
+            lv2_atom_total_size(msg),
+            urids.atom__eventTransfer,
+            msg);
+    }
 
 }

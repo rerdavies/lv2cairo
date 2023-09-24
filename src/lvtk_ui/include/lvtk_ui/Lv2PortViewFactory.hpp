@@ -44,6 +44,7 @@ namespace lvtk::ui
 
         static ptr Create() { return std::make_shared<self>(); }
 
+        LvtkSize DefaultSize() const;
         // Height of the edit/label area.
         virtual double EditControlHeight() const;
         // With of the port control, dependent on control type.

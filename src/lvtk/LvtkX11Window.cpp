@@ -451,10 +451,12 @@ void LvtkX11Window::CreateWindow(
     Display *display,
     LvtkCreateWindowParameters &parameters)
 {
-
     if (display)
     {
         x11Display = display;
+    } else if (parameters.owner != nullptr)
+    {
+        x11Display = parameters.owner->nativeWindow->x11Display;
     }
     else
     {

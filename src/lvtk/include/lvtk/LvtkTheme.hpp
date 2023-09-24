@@ -66,6 +66,10 @@ namespace lvtk {
         LvtkColor portGroupBorderColor;
         LvtkColor dialogBackgroundColor;
 
+        LvtkColor plotBackground;
+        LvtkColor plotTickColor;
+        LvtkColor plotColor;
+
     };
 
     class LvtkTheme: public LvtkThemeColors {
@@ -155,7 +159,11 @@ namespace lvtk {
         LvtkVuSettings vuSettings;
         LvtkVuSettings dbVuSettings;
 
+
+
         LvtkStyle::ptr lampStyle;
+
+        LvtkStyle::ptr plotStyle;
 
         LvtkStyle::ptr statusTextStyle;
 

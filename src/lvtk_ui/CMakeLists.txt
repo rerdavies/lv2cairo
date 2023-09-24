@@ -32,6 +32,8 @@ add_library(lvtk_ui STATIC
     include/lvtk_ui/MimeTypes.hpp
     include/lvtk_ui/Lv2FileDialog.hpp
     include/lvtk_ui/GlobMatcher.hpp
+    include/lvtk_ui/Lv2FrequencyPlotElement.hpp
+    Lv2FrequencyPlotElement.cpp
     Lv2FileDialog.cpp
     GlobMatcher.cpp
     MimeTypes.cpp

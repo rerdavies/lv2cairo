@@ -110,6 +110,10 @@ LvtkThemeColors::LvtkThemeColors(bool darkTheme)
         lampOnColor = vuColor;
         lampOffColor = "#000000";
         portGroupBorderColor = secondaryTextColor;
+
+        plotBackground = vuBackground;
+        plotTickColor = "#E0E0E0";
+        plotColor = "#00C000C0";
     }
     else
     {
@@ -146,6 +150,9 @@ LvtkThemeColors::LvtkThemeColors(bool darkTheme)
 
         portGroupBorderColor = "#606060";
 
+        plotBackground = vuBackground;
+        plotTickColor = "#E0E0E0";
+        plotColor = "#00C000C0";
 
     }
 
@@ -498,10 +505,19 @@ void LvtkTheme::BuildStyles()
 
     );
 
+
     lampStyle = std::make_shared<LvtkStyle>(
         LvtkStyle()
             .Width(26)
             .Height(26)
+    );
+
+    plotStyle = std::make_shared<LvtkStyle>(
+        LvtkStyle()
+            .Background(plotBackground)
+            .Width(80)
+            .RoundCorners({8})
+            .Height(52)
     );
 
     statusTextStyle = std::make_shared<LvtkStyle>(

@@ -34,6 +34,8 @@
 
 #include <unordered_map>
 
+struct LV2_Atom_Forge_;
+
 namespace lvtk
 {
     class LvtkWindow;
@@ -92,8 +94,16 @@ namespace lvtk::ui
         Lv2UI&SetControlValue(const std::string&key, double value);
         double GetControlValue(const std::string&key) const;
 
+        LvtkWindow::ptr Window() { return cairoWindow; }
 
-    protected:
+    public:
+
+        struct PatchPropertyEventArgs {
+            LV2_URID property;
+            const void*value;
+        };
+        LvtkEvent<PatchPropertyEventArgs> OnPatchProperty;
+
         LvtkBindingProperty<double>&GetControlProperty(const std::string&key);
         const LvtkBindingProperty<double>&GetControlProperty(const std::string&key) const;
 
@@ -106,9 +116,30 @@ namespace lvtk::ui
             LvtkBindingProperty<double>&rightValue,const Lv2PortInfo&rightPortInfo
             );
 
+        /// @brief Request a patch property.
+        /// @param property The URID of the property to request.
+        /// Sends an LV2_PATCH__get request for the property, which 
+        /// will subsequently generate a call to OnPatchPropertyReceived.
+        /// If the plugin does not support the requested property, no 
+        /// response will be received, and the request will silently fail.
+        void RequestPatchProperty(LV2_URID property);
+        
+        
+        /// @brief Notify that an LV2_PATCH__set property has been received from the plugin.
+        /// @param type The URID of the patch property.
+        /// @param data The value of the patch property.
+        /// Override this method to receive notifications when an LV2_PATCH__Set event is 
+        /// received from the plugin.
+        ///
+        /// type contains the type of the LV2_PATCH__property member of the LV2_PATCH__Set message
+        /// (which is nominally the URID of the patch property).
+        ///
+        /// value contains the LV2_PATCH__value object member of the LV2_PATCH__Set message which 
+        /// will be a pointer to an LV2_Atom structure that varies depending on the patch property.
         virtual void OnPatchPropertyReceived(LV2_URID type, const void*data);
         
     private:
+        uint32_t inputAtomPort = (uint32_t)-1;
         IcuString::Ptr icuInstance; // lifetime managment for Icu libraries.
         float scaleFactor = 1.0;
 
@@ -139,14 +170,18 @@ namespace lvtk::ui
             LV2_URID atom__Float;
             LV2_URID atom__eventTransfer;
             LV2_URID atom__Object;
+            LV2_URID atom__URID;
             LV2_URID atom__Resource;
             LV2_URID atom__Blank;
             LV2_URID patch__Set;
             LV2_URID patch__property;
             LV2_URID patch__value;
+            LV2_URID patch__Get;
+            LV2_URID patch__accept;
         };
         Urids urids;
         // LV2 callback handlers.
+    protected:
         virtual bool instantiate(
             const char *plugin_ui_uri,
             const char *plugin_uri,
@@ -166,7 +201,7 @@ namespace lvtk::ui
         virtual int ui_idle() override;
         virtual void ui_delete() override;
         virtual int ui_resize(int width, int height) override;
-
+    private:
         std::string pluginUiUri;
         std::string pluginUri;
         std::string bundlePath;
@@ -182,6 +217,10 @@ namespace lvtk::ui
         LV2UI_Request_Value *requestValue = nullptr;
 
         std::shared_ptr<LvtkWindow> cairoWindow;
+
+
+        LV2_Atom_Forge_ *forge = nullptr;
+        uint8_t patchRequestBuffer[128];
     };
 
     class Lv2UIRegistrationBase
