@@ -480,6 +480,10 @@ void LvtkX11Window::CreateWindow(
 
     if (parameters.positioning != LvtkWindowPositioning::ChildWindow)
     {
+        if (!this->x11LogicalParentWindow && parameters.owner)
+        {
+            this->x11LogicalParentWindow = (Window)(parameters.owner->Handle().getHandle());
+        }
         // normal window path.
         parentWindow = this->x11RootWindow;
         this->x11ParentWindow = parentWindow;
