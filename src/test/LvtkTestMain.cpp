@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -27,6 +27,7 @@
 #include "lvtk/LvtkSettingsFile.hpp"
 
 
+#include "TableTestPage.hpp"
 #include "PaletteTestPage.hpp"
 #include "StandardDialogTestPage.hpp"
 #include "DialTestPage.hpp"
@@ -178,6 +179,7 @@ void TestWindow::Render()
     pages.push_back(EditBoxTestPage::Create());
     pages.push_back(TypographyTestPage::Create());
     pages.push_back(FlexGridTestPage::Create());
+    pages.push_back(TableTestPage::Create());
     pages.push_back(ButtonTestPage::Create());
     pages.push_back(SvgTestPage::Create());
     pages.push_back(ScrollBarTestPage::Create());
@@ -355,6 +357,7 @@ void RequestRerender() {
 
 int main(int argc, char **argv)
 {
+
     SetResourceDirectories(argv[0]);
 
     while (true)

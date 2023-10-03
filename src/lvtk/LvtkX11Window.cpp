@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -36,24 +36,28 @@ using namespace lvtk;
 static constexpr int ANIMATION_RATE = 60;
 static constexpr std::chrono::steady_clock::duration ANIMATION_DELAY = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::microseconds(1000000 / ANIMATION_RATE));
 
-
 #define X_INIT_ATOM(name) \
-    name = XInternAtom(display,"_" #name, False);
+    name = XInternAtom(display, "_" #name, False)
 
-struct LvtkX11Window::XAtoms {
+struct LvtkX11Window::XAtoms
+{
     XAtoms(Display *display)
     {
-        X_INIT_ATOM(NET_FRAME_EXTENTS)
-        X_INIT_ATOM(NET_WM_STATE_MAXIMIZED_VERT)
-        X_INIT_ATOM(NET_WM_STATE_MAXIMIZED_HORZ)
-        X_INIT_ATOM(NET_WM_STATE_FOCUSED)
-        X_INIT_ATOM(NET_WM_STATE)
+        X_INIT_ATOM(NET_FRAME_EXTENTS);
+        X_INIT_ATOM(NET_WM_STATE_MAXIMIZED_VERT);
+        X_INIT_ATOM(NET_WM_STATE_MAXIMIZED_HORZ);
+        X_INIT_ATOM(NET_WM_STATE_FOCUSED);
+        X_INIT_ATOM(NET_WM_STATE);
+        X_INIT_ATOM(NET_ACTIVE_WINDOW);
+        X_INIT_ATOM(NET_RESTACK_WINDOW);
     }
     Atom NET_FRAME_EXTENTS,
         NET_WM_STATE_MAXIMIZED_VERT,
         NET_WM_STATE_MAXIMIZED_HORZ,
         NET_WM_STATE_FOCUSED,
-        NET_WM_STATE;
+        NET_WM_STATE,
+        NET_ACTIVE_WINDOW,
+        NET_RESTACK_WINDOW;
 };
 
 template <typename T>
@@ -352,6 +356,12 @@ LvtkX11Window::LvtkX11Window(
         parentWindow,
         nullptr,
         parameters);
+
+    if (parameters.owner)
+    {
+        parameters.owner->nativeWindow->childWindows.push_back(this);
+        this->parent = parameters.owner->nativeWindow;
+    }
     CreateSurface(size.Width(), size.Height());
 }
 
@@ -413,7 +423,6 @@ void LvtkX11Window::DestroyWindowAndSurface()
         cairoWindow = nullptr;
         t->OnX11WindowClosed();
     }
-
 }
 static ModifierState makeModifierState(unsigned int state)
 {
@@ -446,6 +455,70 @@ static std::string ToX11Color(const LvtkColor &color)
     // s << "rgbi:" << color.R() << "/" << color.G() << '/' << color.B();
     // return s.str();
 }
+
+Window LvtkX11Window::GetTransientTarget(Window win)
+{
+    Window transientFor = 0;
+
+    while (true)
+    {
+        auto status = XGetTransientForHint(x11Display, win, &transientFor);
+        if (status != 0)
+        {
+
+            if (transientFor != 0)
+            {
+                return transientFor;
+            }
+        }
+        Window root, parent, *children = nullptr;
+        unsigned int num_children;
+
+        XQueryTree(x11Display, win, &root, &parent, &children, &num_children);
+        XFree(children);
+        if (parent != 0)
+        {
+            win = parent;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return 0;
+}
+static Window GetOwnerFrameWindow(Display *x11Display,Window win)
+{
+    Window transientFor = 0;
+
+    while (true)
+    {
+        auto status = XGetTransientForHint(x11Display, win, &transientFor);
+        if (status != 0)
+        {
+
+            if (transientFor != 0)
+            {
+                return win;
+            }
+        }
+        Window root, parent, *children = nullptr;
+        unsigned int num_children;
+
+        XQueryTree(x11Display, win, &root, &parent, &children, &num_children);
+        XFree(children);
+        if (parent != 0)
+        {
+            win = parent;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return 0;
+}
+
 void LvtkX11Window::CreateWindow(
     Window parentWindow,
     Display *display,
@@ -454,7 +527,8 @@ void LvtkX11Window::CreateWindow(
     if (display)
     {
         x11Display = display;
-    } else if (parameters.owner != nullptr)
+    }
+    else if (parameters.owner != nullptr)
     {
         x11Display = parameters.owner->nativeWindow->x11Display;
     }
@@ -480,32 +554,50 @@ void LvtkX11Window::CreateWindow(
 
     if (parameters.positioning != LvtkWindowPositioning::ChildWindow)
     {
-        if (!this->x11LogicalParentWindow && parameters.owner)
-        {
-            this->x11LogicalParentWindow = (Window)(parameters.owner->Handle().getHandle());
-        }
-        // normal window path.
         parentWindow = this->x11RootWindow;
         this->x11ParentWindow = parentWindow;
-    } else {
+
+        if (parameters.owner)
+        {
+            this->x11LogicalParentWindow = GetOwnerFrameWindow(
+                x11Display,
+                 (Window)(parameters.owner->nativeWindow->Handle().getHandle()));
+
+            // this->x11LogicalParentWindow = GetTransientTarget(
+            //     (Window)(parameters.owner->nativeWindow->Handle().getHandle()));
+            if (!this->x11LogicalParentWindow)
+            {
+                this->x11LogicalParentWindow = this->x11RootWindow;
+            }
+
+            // this->x11LogicalParentWindow = GetTransientFor(parameters.owner->nativeWindow->Handle());
+            //  this->x11LogicalParentWindow = (Window)(parameters.owner->Handle().getHandle());
+
+            parentWindow = this->x11ParentWindow = this->x11RootWindow; // this->x11LogicalParentWindow;
+            // parentWindow = this->x11ParentWindow = this->x11LogicalParentWindow;
+        }
+        // normal window path.
+    }
+    else
+    {
         // plugin UI window.
         this->x11ParentWindow = parentWindow;
         if (parentWindow == 0)
         {
             // plugin UI window, test case.
             this->x11ParentWindow = x11RootWindow;
-            this->x11ParentWindow = x11RootWindow;
+            parentWindow = x11RootWindow;
         }
     }
-    
+
     XSizeHints *sizeHints = (XSizeHints *)GenerateNormalHints(parameters);
 
     XSetWindowAttributes windowAttributes;
     memset(&windowAttributes, 0, sizeof(windowAttributes));
-    if (parameters.windowType == LvtkWindowType::Dialog)
-    {
-        windowAttributes.do_not_propagate_mask = KeyPressMask | KeyReleaseMask | PointerMotionMask | ButtonPressMask | ButtonMotionMask | ButtonReleaseMask;
-    }
+    // if (parameters.windowType == LvtkWindowType::Dialog)
+    // {
+    //     windowAttributes.do_not_propagate_mask = KeyPressMask | KeyReleaseMask | PointerMotionMask | ButtonPressMask | ButtonMotionMask | ButtonReleaseMask;
+    // }
 
     XColor color;
     memset(&color, 0, sizeof(color));
@@ -540,7 +632,7 @@ void LvtkX11Window::CreateWindow(
         DefaultVisual(x11Display, DefaultScreen(x11Display)),
         CWBackPixel | CWEventMask | CWDontPropagate,
         &windowAttributes);
-        
+
     // auto event_mask = ExposureMask | KeyPressMask | KeyReleaseMask | VisibilityChangeMask | PointerMotionMask | EnterWindowMask |
     //                   LeaveWindowMask | KeymapStateMask |
     //                   ButtonPressMask | ButtonMotionMask | ButtonReleaseMask |
@@ -548,9 +640,18 @@ void LvtkX11Window::CreateWindow(
 
     // XSelectInput(x11Display, x11Window, event_mask);
 
+    // if (parameters.owner)
+    // {
+    //     Window frameWindow = GetTopLevelSibling(parameters.owner->Handle());
+    //     XSetTransientForHint(x11Display,x11Window,frameWindow);
+    // } else 
     if (x11LogicalParentWindow != parentWindow)
     {
-        XSetTransientForHint(x11Display, x11Window, x11LogicalParentWindow);
+        if (
+            XSetTransientForHint(x11Display, x11Window, x11LogicalParentWindow) == 0)
+        {
+            logDebug(x11Window, "Failed to set WM_TRANSIENT_FOR");
+        }
     }
     if (parameters.windowType == LvtkWindowType::Dialog)
     {
@@ -566,23 +667,25 @@ void LvtkX11Window::CreateWindow(
         wmProtocols = XInternAtom(x11Display, "WM_PROTOCOLS", False);
         XSetWMProtocols(x11Display, x11Window, &wmDeleteWindow, 1);
 
-        SetStringProperty("_GTK_APPLICATION_ID",parameters.gtkApplicationId);
+        SetStringProperty("_GTK_APPLICATION_ID", parameters.gtkApplicationId);
 
         XClassHint *classHint = XAllocClassHint();
         xClassHint = classHint;
-        
+
         this->res_class = parameters.x11Windowclass;
-        classHint->res_class = const_cast<char*>(res_class.c_str());
+        classHint->res_class = const_cast<char *>(res_class.c_str());
         this->res_name = parameters.x11WindowName;
 
-        classHint->res_name = const_cast<char*>(this->res_name.c_str());
-        XSetClassHint(x11Display,x11Window,classHint);
+        classHint->res_name = const_cast<char *>(this->res_name.c_str());
+        XSetClassHint(x11Display, x11Window, classHint);
         // GetSynchronousFrameExtents();
     }
     SetWindowType(parameters.windowType);
     WindowTitle(parameters.title);
 
     XMapWindow(x11Display, x11Window);
+
+    XRaiseWindow(x11Display, x11Window);
     XClearWindow(x11Display, x11Window);
 
     this->size = parameters.size;
@@ -774,12 +877,23 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
 
         if (window && !window->ModalDisable())
         {
-            window->MouseDown(
-                WindowHandle(xEvent.xbutton.window),
-                xEvent.xbutton.button,
-                xEvent.xbutton.x,
-                xEvent.xbutton.y,
-                makeModifierState(xEvent.xbutton.state));
+            if (xEvent.xbutton.button >= 4 && xEvent.xbutton.button <= 7)
+            {
+                window->MouseScrollWheel(
+                    WindowHandle(xEvent.xbutton.window),
+                    (LvtkScrollDirection)(xEvent.xbutton.button-4),
+                    xEvent.xbutton.x,
+                    xEvent.xbutton.y,
+                    makeModifierState(xEvent.xbutton.state));
+
+            } else {
+                window->MouseDown(
+                    WindowHandle(xEvent.xbutton.window),
+                    xEvent.xbutton.button,
+                    xEvent.xbutton.x,
+                    xEvent.xbutton.y,
+                    makeModifierState(xEvent.xbutton.state));
+            }
         }
         break;
     }
@@ -788,18 +902,20 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
         LvtkWindow::ptr window = GetLvtkWindow(xEvent.xbutton.window);
         if (window)
         {
-            window->MouseUp(
-                WindowHandle(xEvent.xbutton.window),
-                xEvent.xbutton.button,
-                xEvent.xbutton.x,
-                xEvent.xbutton.y,
-                makeModifierState(xEvent.xbutton.state));
+            if (!(xEvent.xbutton.button >= 4 && xEvent.xbutton.button <= 7)) // ignore scrollwheel up events
+            {
+                window->MouseUp(
+                    WindowHandle(xEvent.xbutton.window),
+                    xEvent.xbutton.button,
+                    xEvent.xbutton.x,
+                    xEvent.xbutton.y,
+                    makeModifierState(xEvent.xbutton.state));
+            }
         }
         break;
     }
     case MotionNotify:
     {
-
 
         LvtkWindow::ptr window = GetLvtkWindow(xEvent.xmotion.window);
 
@@ -894,20 +1010,16 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
             LvtkWindow::ptr window = child->cairoWindow;
             assert(window);
 
-            child->location = LvtkPoint((double)xEvent.xconfigure.x-this->frameExtents.left, (double)xEvent.xconfigure.y-this->frameExtents.top);
+            child->location = LvtkPoint((double)xEvent.xconfigure.x - this->frameExtents.left, (double)xEvent.xconfigure.y - this->frameExtents.top);
 
             LvtkSize size{(double)xEvent.xconfigure.width, (double)xEvent.xconfigure.height};
 
-
-            logDebug(xEvent.xconfigure.window, SS("ConfigureNotify (" 
-                    << xEvent.xconfigure.x << "," << xEvent.xconfigure.y
-                    << "," << xEvent.xconfigure.width << "," << xEvent.xconfigure.height
-                    << ") ("
-                    << child->location.x << "," << child->location.y
-                    << "," <<  size.Width() << "," << size.Height() << ")"
-                    ));
-
-
+            logDebug(xEvent.xconfigure.window, SS("ConfigureNotify ("
+                                                  << xEvent.xconfigure.x << "," << xEvent.xconfigure.y
+                                                  << "," << xEvent.xconfigure.width << "," << xEvent.xconfigure.height
+                                                  << ") ("
+                                                  << child->location.x << "," << child->location.y
+                                                  << "," << size.Width() << "," << size.Height() << ")"));
 
             if (child->size != size)
             {
@@ -1067,7 +1179,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
         {
             if (xEvent.xproperty.state == PropertyNewValue)
             {
-                logDebug(e.window,SS("PropertyNotify new value: " << XGetAtomName(x11Display, e.atom)));
+                logDebug(e.window, SS("PropertyNotify new value: " << XGetAtomName(x11Display, e.atom)));
                 if (e.atom == xAtoms->NET_FRAME_EXTENTS)
                 {
                     child->OnFrameExtentsUpdated();
@@ -1084,12 +1196,12 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
         break;
     }
     default:
-        logDebug(0,SS("Dropping unhandled XEevent.type = " << xEvent.type));
+        logDebug(0, SS("Dropping unhandled XEevent.type = " << xEvent.type));
         break;
     }
 }
 
-static constexpr bool ENABLE_EVENT_TRACING = false;
+static constexpr bool ENABLE_EVENT_TRACING = true;
 
 void LvtkX11Window::logDebug(Window x11Window, const std::string &message)
 {
@@ -1106,11 +1218,11 @@ bool LvtkX11Window::GrabPointer()
     int result = XGrabPointer(
         this->x11Display,
         this->x11Window,
-        False,//True, // xxx False
-        ButtonPressMask | ButtonMotionMask | ButtonReleaseMask ,
+        False, 
+        ButtonPressMask | ButtonMotionMask | ButtonReleaseMask,
         GrabModeAsync,
         GrabModeAsync,
-        None, //DefaultRootWindow(x11Display), // None, this->x11Window,
+        None, // DefaultRootWindow(x11Display), // None, this->x11Window,
         None,
         CurrentTime);
     return result == GrabSuccess;
@@ -1398,6 +1510,11 @@ void LvtkX11Window::Close()
 {
     if (this->x11Window)
     {
+        auto parent = this;
+        while (parent->parent)
+        {
+            parent = parent->parent;
+        }
         EraseChild(x11Window);
     }
 }
@@ -1427,10 +1544,6 @@ bool LvtkX11Window::EraseChild(Window x11Window)
             }
         }
     }
-    if (this->parent != nullptr)
-    {
-        return parent->EraseChild(x11Window);
-    }
     return false;
 }
 
@@ -1445,7 +1558,7 @@ void LvtkX11Window::FireConfigurationChanged()
             x11Display,
             this->x11Window, x11LogicalParentWindow,
             0, 0, &x, &y, &child);
-        location = LvtkPoint(x, y) - LvtkPoint(frameExtents.left,frameExtents.top);
+        location = LvtkPoint(x, y) - LvtkPoint(frameExtents.left, frameExtents.top);
     }
     else
     {
@@ -1455,7 +1568,7 @@ void LvtkX11Window::FireConfigurationChanged()
             x11Display,
             this->x11Window, x11RootWindow,
             0, 0, &x, &y, &child);
-        location = LvtkPoint(x, y) - LvtkPoint(frameExtents.left,frameExtents.top);
+        location = LvtkPoint(x, y) - LvtkPoint(frameExtents.left, frameExtents.top);
     }
     if (cairoWindow)
     {
@@ -1527,15 +1640,15 @@ void LvtkX11Window::OnWmStateUpdated()
         {
             std::stringstream s;
             s << "_NET_WM_STATE:";
-            for (Atom atom: atoms)
+            for (Atom atom : atoms)
             {
-                s << " " << XGetAtomName(x11Display,atom);
+                s << " " << XGetAtomName(x11Display, atom);
             }
-            logDebug(x11Window,s.str());
+            logDebug(x11Window, s.str());
         }
-        bool maximizedHorz = std::find(atoms.begin(),atoms.end(),xAtoms->NET_WM_STATE_MAXIMIZED_HORZ) != atoms.end();
-        bool maximizedVert = std::find(atoms.begin(),atoms.end(),xAtoms->NET_WM_STATE_MAXIMIZED_VERT) != atoms.end();
-        bool hidden = std::find(atoms.begin(),atoms.end(),xAtoms->NET_WM_STATE_MAXIMIZED_VERT) != atoms.end();
+        bool maximizedHorz = std::find(atoms.begin(), atoms.end(), xAtoms->NET_WM_STATE_MAXIMIZED_HORZ) != atoms.end();
+        bool maximizedVert = std::find(atoms.begin(), atoms.end(), xAtoms->NET_WM_STATE_MAXIMIZED_VERT) != atoms.end();
+        bool hidden = std::find(atoms.begin(), atoms.end(), xAtoms->NET_WM_STATE_MAXIMIZED_VERT) != atoms.end();
 
         LvtkWindowState windowState = LvtkWindowState::Normal;
         if (maximizedHorz && maximizedVert)
@@ -1547,7 +1660,6 @@ void LvtkX11Window::OnWmStateUpdated()
             windowState = LvtkWindowState::Minimized;
         }
         this->windowState = windowState;
-
     }
 }
 
@@ -1585,25 +1697,23 @@ bool LvtkX11Window::waitForX11Event(std::chrono::milliseconds ms)
     return true;
 }
 
-void LvtkX11Window::SetStringProperty(const std::string&key, const std::string&value)
+void LvtkX11Window::SetStringProperty(const std::string &key, const std::string &value)
 {
     XTextProperty text;
-    text.value = (unsigned char*)(void*)(value.c_str());
+    text.value = (unsigned char *)(void *)(value.c_str());
     text.encoding = XA_STRING;
     text.format = 8;
     text.nitems = value.length();
 
-    XSetTextProperty(x11Display,x11Window,&text,GetAtom(key.c_str()));
+    XSetTextProperty(x11Display, x11Window, &text, GetAtom(key.c_str()));
 }
-std::optional<std::string> GetStringProperty(const std::string&key)
+std::optional<std::string> GetStringProperty(const std::string &key)
 {
     throw std::runtime_error("Not implemented.");
 }
 
 void LvtkX11Window::Resize(int width, int height)
 {
-    XResizeWindow(x11Display,x11Window,width,height);
+    XResizeWindow(x11Display, x11Window, width, height);
 }
-
-
 

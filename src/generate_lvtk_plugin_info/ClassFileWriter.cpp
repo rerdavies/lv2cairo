@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -254,6 +254,8 @@ void ClassFileWriter::Write(const std::shared_ptr<Lv2PluginInfo> pluginInfo)
             {
                 s << Tab() << "using namespace lvtk::ui;" << endl;
                 s << endl;
+
+                WRITE_PROPERTY(pluginInfo, uri)
 
                 WRITE_PROPERTY(pluginInfo, name)
                 WRITE_PROPERTY(pluginInfo, brand)

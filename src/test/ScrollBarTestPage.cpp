@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -79,7 +79,7 @@ LvtkElement::ptr IpsemLoremWide()
     container->Style()
         .FlexDirection(LvtkFlexDirection::Row)
         .FlexWrap(LvtkFlexWrap::NoWrap)
-        .FlexColumnGap(16)
+        .ColumnGap(16)
         .FlexAlignItems(LvtkAlignment::Start)
         .Padding({16,16,0,16})
         ;
@@ -117,7 +117,7 @@ LvtkElement::ptr IpsemLoremWideAndTall()
     container->Style()
         .FlexDirection(LvtkFlexDirection::Row)
         .FlexWrap(LvtkFlexWrap::NoWrap)
-        .FlexColumnGap(16)
+        .ColumnGap(16)
         .FlexAlignItems(LvtkAlignment::Start)
         .Padding({16,16,0,16})
         ;
@@ -158,7 +158,7 @@ LvtkElement::ptr ScrollBarTestPage::CreatePageView(LvtkTheme::ptr theme)
         .FlexAlignItems(LvtkAlignment::Start)
         .FlexDirection(LvtkFlexDirection::Row)
         .FlexWrap(LvtkFlexWrap::Wrap)
-        .FlexColumnGap(16)
+        .ColumnGap(16)
         .Background(theme->paper)
         .Padding({24, 16, 24, 16})
         .VerticalAlignment(LvtkAlignment::Stretch)

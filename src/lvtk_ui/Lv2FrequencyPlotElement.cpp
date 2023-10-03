@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -55,6 +55,9 @@ Lv2FrequencyPlotElement::Lv2FrequencyPlotElement(Lv2UI *lv2UI, const UiFrequency
 }
 void Lv2FrequencyPlotElement::PreComputeGridXs()
 {
+    majorGridXs.resize(0);
+    minorGridXs.resize(0);
+    
     double m = frequencyPlot.width() / (std::log(frequencyPlot.xRight()) - std::log(frequencyPlot.xLeft()));
 
     double gridX0 = std::pow(10, std::floor(std::log10(this->frequencyPlot.xLeft())));
@@ -123,26 +126,44 @@ void Lv2FrequencyPlotElement::OnValuesChanged(const void *data)
     {
         size_t count = (atomVector->atom.size - sizeof(LV2_Atom_Vector_Body)) / atomVector->body.child_size;
         const float *newValues = (const float *)((const uint8_t *)data + sizeof(LV2_Atom_Vector));
-        if (count == this->values.size())
+
+        bool axesChanged = true;
+        if (count == this->values.size() + 4)
         {
             bool changed = false;
-            for (size_t i = 0; i < count; ++i)
+            axesChanged = false;
+            axesChanged 
+                = frequencyPlot.xLeft() != newValues[0]
+                || frequencyPlot.xRight() != newValues[1]
+                || frequencyPlot.yTop() != newValues[2]
+                || frequencyPlot.yBottom() != newValues[3];
+
+            for (size_t i = 0; i < values.size(); ++i)
             {
-                if (this->values[i] != newValues[i])
+                if (this->values[i] != newValues[i+4])
                 {
                     changed = true;
                     break;
                 }
             }
-            if (!changed)
+            if (!changed && !axesChanged)
             {
                 return;
             }
         }
-        this->values.resize(count);
-        for (size_t i = 0; i < count; ++i)
+
+        if (axesChanged)
         {
-            this->values[i] = newValues[i];
+            frequencyPlot.xLeft(newValues[0]);
+            frequencyPlot.xRight(newValues[1]);
+            frequencyPlot.yTop(newValues[2]);
+            frequencyPlot.yBottom(newValues[3]);
+            PreComputeGridXs();
+        } 
+        this->values.resize(count-4);
+        for (size_t i = 0; i < this->values.size(); ++i)
+        {
+            this->values[i] = newValues[i+4];
         }
         Invalidate();
     }

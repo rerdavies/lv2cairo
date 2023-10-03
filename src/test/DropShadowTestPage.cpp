@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -40,8 +40,8 @@ LvtkElement::ptr DropShadowTestPage::CreatePageView(LvtkTheme::ptr theme)
             .FlexWrap(LvtkFlexWrap::Wrap)
             .FlexDirection(LvtkFlexDirection::Row)
             .FlexAlignItems(LvtkAlignment::Center)
-            .FlexRowGap(16)
-            .FlexColumnGap(16)
+            .RowGap(16)
+            .ColumnGap(16)
             .HorizontalAlignment(LvtkAlignment::Stretch)
             .VerticalAlignment(LvtkAlignment::Stretch)
 

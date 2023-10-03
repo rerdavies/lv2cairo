@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -59,6 +59,8 @@ namespace lvtk
 
         self &HorizontalAlignment(LvtkAlignment alignment);
         self &VerticalAlignment(LvtkAlignment alignment);
+
+        LvtkThicknessMeasurement Margin() const;
         self &Margin(const LvtkThicknessMeasurement &value);
         self &MarginLeft(const LvtkMeasurement &value);
         self &MarginTop(const LvtkMeasurement &value);
@@ -67,6 +69,8 @@ namespace lvtk
         self &MarginStart(const LvtkMeasurement &value);
         self &MarginEnd(const LvtkMeasurement &value);
 
+
+        LvtkThicknessMeasurement BorderWidth() const;
         self &BorderWidth(const LvtkThicknessMeasurement &value);
         self &BorderWidthLeft(const LvtkMeasurement &value);
         self &BorderWidthTop(const LvtkMeasurement &value);
@@ -75,6 +79,7 @@ namespace lvtk
         self &BorderWidthStart(const LvtkMeasurement &value);
         self &BorderWidthEnd(const LvtkMeasurement &value);
 
+        LvtkThicknessMeasurement Padding() const;
         self &Padding(const LvtkThicknessMeasurement &value);
         self &PaddingLeft(const LvtkMeasurement &value);
         self &PaddingTop(const LvtkMeasurement &value);
@@ -82,6 +87,16 @@ namespace lvtk
         self &PaddingBottom(const LvtkMeasurement &value);
         self &PaddingStart(const LvtkMeasurement &value);
         self &PaddingEnd(const LvtkMeasurement &value);
+
+        LvtkThicknessMeasurement CellPadding() const;
+        self &CellPadding(const LvtkThicknessMeasurement &value);
+        self &CellPaddingLeft(const LvtkMeasurement &value);
+        self &CellPaddingTop(const LvtkMeasurement &value);
+        self &CellPaddingRight(const LvtkMeasurement &value);
+        self &CellPaddingBottom(const LvtkMeasurement &value);
+        self &CellPaddingStart(const LvtkMeasurement &value);
+        self &CellPaddingEnd(const LvtkMeasurement &value);
+
 
         self &BorderColor(const LvtkPattern &pattern);
         self &Background(const LvtkPattern &pattern);
@@ -134,10 +149,7 @@ namespace lvtk
         LvtkMeasurement Height() const;
         LvtkMeasurement FontSize() const;
 
-        LvtkThicknessMeasurement Margin() const;
 
-        LvtkThicknessMeasurement Padding() const;
-        LvtkThicknessMeasurement BorderWidth() const;
 
         const LvtkPattern &Background() const;
         const LvtkPattern &BorderColor() const;
@@ -174,11 +186,11 @@ namespace lvtk
         self &TextAlign(LvtkTextAlign value);
         LvtkTextAlign TextAlign() const;
 
-        self &FlexRowGap(const LvtkMeasurement &value);
-        LvtkMeasurement FlexRowGap() const;
+        self &RowGap(const LvtkMeasurement &value);
+        LvtkMeasurement RowGap() const;
 
-        self &FlexColumnGap(const LvtkMeasurement &value);
-        LvtkMeasurement FlexColumnGap() const;
+        self &ColumnGap(const LvtkMeasurement &value);
+        LvtkMeasurement ColumnGap() const;
 
         self &Opacity(double value);
         double Opacity() const;
@@ -257,6 +269,7 @@ namespace lvtk
         std::optional<LvtkThicknessMeasurement> margin;
         std::optional<LvtkThicknessMeasurement> borderWidth;
         std::optional<LvtkThicknessMeasurement> padding;
+        std::optional<LvtkThicknessMeasurement> cellPadding;
         LvtkPattern borderColor;
         LvtkPattern background;
         LvtkPattern color;

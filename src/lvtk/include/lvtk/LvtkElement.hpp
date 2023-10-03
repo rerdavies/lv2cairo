@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -112,6 +112,10 @@ namespace lvtk
         MouseEvent MouseUp;
         MouseEvent MouseMove;
 
+        using ScrollWheelEvent = LvtkEvent<LvtkScrollWheelEventArgs>;
+
+        ScrollWheelEvent ScrollWheel;
+
         using MouseOverEvent = LvtkEvent<LvtkMouseOverEventArgs>;
         MouseOverEvent MouseOver;
         MouseOverEvent MouseOut;
@@ -137,6 +141,8 @@ namespace lvtk
         virtual bool OnMouseMove(LvtkMouseEventArgs &event);
         virtual bool OnMouseOver(LvtkMouseOverEventArgs &event);
         virtual bool OnMouseOut(LvtkMouseOverEventArgs &event);
+
+        virtual bool OnScrollWheel(LvtkScrollWheelEventArgs &event);
 
 
         /// @brief Notification that a key was pressed.
@@ -174,6 +180,7 @@ namespace lvtk
         virtual bool FireMouseDown(LvtkMouseEventArgs&event);
         virtual bool FireMouseUp(LvtkMouseEventArgs&event);
         virtual void UpdateMouseOver(LvtkPoint mousePosition);
+        virtual bool FireScrollWheel(LvtkScrollWheelEventArgs&event);
 
         void SetMouseOver(bool mouseOver);
 

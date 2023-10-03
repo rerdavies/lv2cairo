@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -697,6 +697,16 @@ bool LvtkElement::OnMouseDown(LvtkMouseEventArgs &event)
     }
     return false;
 }
+bool LvtkElement::OnScrollWheel(LvtkScrollWheelEventArgs &event)
+{
+    if (ScrollWheel.Fire(event))
+    {
+        return true;
+    }
+    return false;
+}
+
+
 bool LvtkElement::OnMouseUp(LvtkMouseEventArgs &event)
 {
     if (MouseUp.Fire(event))
@@ -774,6 +784,23 @@ bool LvtkElement::FireKeyDown(const LvtkKeyboardEventArgs &event)
     }
     return false;
 }
+
+bool LvtkElement::FireScrollWheel(LvtkScrollWheelEventArgs &event)
+{
+    if (Style().Visibility() == LvtkVisibility::Visible)
+    {
+        if (this->screenBorderBounds.Contains(event.screenPoint))
+        {
+            event.point = event.screenPoint - LvtkPoint(this->screenClientBounds.Left(), this->screenClientBounds.Top());
+            if (OnScrollWheel(event))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 
 bool LvtkElement::FireMouseDown(LvtkMouseEventArgs &event)
 {
@@ -1218,3 +1245,4 @@ void LvtkElement::OnLayoutComplete()
 bool LvtkElement::LayoutValid() const {
     return this->layoutValid;
 }
+

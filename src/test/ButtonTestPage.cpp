@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -211,7 +211,7 @@ LvtkElement::ptr ButtonTestPage::CreatePageView(LvtkTheme::ptr theme)
     } {
         auto flexGrid = LvtkFlexGridElement::Create();
         flexGrid->Style()
-            .FlexColumnGap(8)
+            .ColumnGap(8)
             .FlexAlignItems(LvtkAlignment::Center)
             .FlexJustification(LvtkFlexJustification::Start)
             .FlexWrap(LvtkFlexWrap::NoWrap)
@@ -243,7 +243,7 @@ LvtkElement::ptr ButtonTestPage::CreatePageView(LvtkTheme::ptr theme)
         auto flexGrid = LvtkFlexGridElement::Create();
         main->AddChild(flexGrid);
         flexGrid->Style()
-            .FlexColumnGap(8)
+            .ColumnGap(8)
             .FlexAlignItems(LvtkAlignment::Center)
             .FlexJustification(LvtkFlexJustification::Start)
             .FlexWrap(LvtkFlexWrap::NoWrap)
@@ -273,7 +273,7 @@ LvtkElement::ptr ButtonTestPage::CreatePageView(LvtkTheme::ptr theme)
     if (true ){
         auto flexGrid = LvtkFlexGridElement::Create();
         flexGrid->Style()
-            .FlexColumnGap(8)
+            .ColumnGap(8)
             .FlexAlignItems(LvtkAlignment::Center)
             .FlexJustification(LvtkFlexJustification::Start)
             .FlexWrap(LvtkFlexWrap::NoWrap)
@@ -316,7 +316,7 @@ LvtkElement::ptr ButtonTestPage::CreatePageView(LvtkTheme::ptr theme)
     if (true ){
         auto flexGrid = LvtkFlexGridElement::Create();
         flexGrid->Style()
-            .FlexColumnGap(8)
+            .ColumnGap(8)
             .FlexAlignItems(LvtkAlignment::Center)
             .FlexJustification(LvtkFlexJustification::Start)
             .FlexWrap(LvtkFlexWrap::NoWrap)
@@ -389,7 +389,7 @@ LvtkElement::ptr ButtonTestPage::CreatePageView(LvtkTheme::ptr theme)
         auto flexGrid = LvtkFlexGridElement::Create();
         main->AddChild(flexGrid);
         flexGrid->Style()
-            .FlexColumnGap(8)
+            .ColumnGap(8)
             .FlexAlignItems(LvtkAlignment::Center)
             .FlexJustification(LvtkFlexJustification::Start)
             .FlexWrap(LvtkFlexWrap::NoWrap)
@@ -417,7 +417,7 @@ LvtkElement::ptr ButtonTestPage::CreatePageView(LvtkTheme::ptr theme)
         auto flexGrid = LvtkFlexGridElement::Create();
         main->AddChild(flexGrid);
         flexGrid->Style()
-            .FlexColumnGap(24)
+            .ColumnGap(24)
             .FlexAlignItems(LvtkAlignment::Center)
             .FlexJustification(LvtkFlexJustification::Start)
             .FlexWrap(LvtkFlexWrap::NoWrap)

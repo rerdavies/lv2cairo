@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -122,7 +122,10 @@ namespace lvtk {
         virtual void FinalizeLayout(const LvtkRectangle &layoutClipBounds,const LvtkRectangle& screenOffest, bool clippedInLayout = false) override;
     protected:
         virtual void OnLayoutComplete() override;
-        
+
+
+        virtual bool FireScrollWheel(LvtkScrollWheelEventArgs &event) override;
+
         virtual bool FireMouseDown(LvtkMouseEventArgs&event) override;
         virtual bool FireMouseUp(LvtkMouseEventArgs&event) override;
         virtual void UpdateMouseOver(LvtkPoint mousePosition) override;

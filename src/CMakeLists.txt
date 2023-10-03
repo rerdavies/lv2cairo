@@ -51,9 +51,9 @@ endif()
 
 
 
-message(STATUS "CMAKE_DEB_HOST_ARCH: ${CMAKE_DEB_HOST_ARCH}")
-message(STATUS "CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
-message(STATUS "CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
+message(STATUS "lvtk: CMAKE_DEB_HOST_ARCH: ${CMAKE_DEB_HOST_ARCH}")
+message(STATUS "lvtk: CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
+message(STATUS "lvtk: CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
 
 add_subdirectory(generate_lvtk_plugin_info)
 add_subdirectory(lvtk)

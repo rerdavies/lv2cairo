@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -25,8 +25,8 @@ using namespace lvtk;
 LvtkSize LvtkFlexGridElement::MeasureClient(LvtkSize constraint, LvtkSize available, LvtkDrawingContext &context)
 {
     this->clipChildren = false;
-    flexRowGap = Style().FlexRowGap().PixelValue();
-    flexColumnGap = Style().FlexColumnGap().PixelValue();
+    flexRowGap = Style().RowGap().PixelValue();
+    flexColumnGap = Style().ColumnGap().PixelValue();
 
     childInfos.resize(0);
     flows.resize(0);
@@ -286,7 +286,7 @@ LvtkSize LvtkFlexGridElement::MeasureClient(LvtkSize constraint, LvtkSize availa
 
             double rowGap = currentFlow.childStart == currentFlow.childEnd ? 0: this->flexRowGap;
 
-            if (element->Style().VerticalAlignment() == LvtkAlignment::Stretch && constraint.Width() != 0) // only stretch if we are stretchy.
+            if (element->Style().HorizontalAlignment() == LvtkAlignment::Stretch && constraint.Width() != 0) // only stretch if we are stretchy.
             {
                 ChildInfo childInfo;
                 childInfo.nFlow = nFlow;
@@ -481,8 +481,8 @@ LvtkSize LvtkFlexGridElement::Arrange(LvtkSize available, LvtkDrawingContext &co
     LvtkSize paddingSize = this->removeThickness(borderSize,style.BorderWidth());
     LvtkSize clientSize = this->removeThickness(paddingSize,style.Padding());
 
-    double columnGap = Style().FlexColumnGap().PixelValue();
-    double rowGap = Style().FlexRowGap().PixelValue();
+    double columnGap = Style().ColumnGap().PixelValue();
+    double rowGap = Style().RowGap().PixelValue();
     if (style.FlexDirection() == LvtkFlexDirection::Row)
     {
         double top = 0;

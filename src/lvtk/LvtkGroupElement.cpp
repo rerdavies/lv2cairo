@@ -15,7 +15,7 @@ LvtkGroupElement::LvtkGroupElement()
     flexGrid->Style()
         .HorizontalAlignment(LvtkAlignment::Start)
         .FlexWrap(LvtkFlexWrap::Wrap)
-        .FlexRowGap(16);
+        .RowGap(16);
         
     super::AddChild(flexGrid);
 

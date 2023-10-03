@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -24,6 +24,9 @@
 
 namespace lvtk::ui {
 
+    /// Element that display a frequency-response graph.
+    ///
+    /// 
     class Lv2FrequencyPlotElement: public LvtkElement {
     public:
         using self=Lv2FrequencyPlotElement;
@@ -52,7 +55,7 @@ namespace lvtk::ui {
 
         void OnValuesChanged(const void*value);
         Lv2UI*lv2UI = nullptr;
-        const UiFrequencyPlot frequencyPlot;
+        UiFrequencyPlot frequencyPlot;
         std::vector<float> values;
         std::vector<double> majorGridXs;
         std::vector<double> minorGridXs;

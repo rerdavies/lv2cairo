@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -177,6 +177,7 @@ namespace lvtk
 
         void Close();
 
+
         void CloseRootWindow();
 
         WindowHandle Handle() const;
@@ -315,6 +316,7 @@ namespace lvtk
         virtual bool OnMouseDown(LvtkMouseEventArgs &event);
         virtual bool OnMouseMove(LvtkMouseEventArgs &event);
         virtual bool OnMouseUp(LvtkMouseEventArgs &event);
+        virtual bool OnScrollWheel(LvtkScrollWheelEventArgs &event);
         virtual void OnIdle();
         virtual void OnSizeChanged(const LvtkSize &size);
 
@@ -353,6 +355,7 @@ namespace lvtk
         // Native Window callback.
         void OnExpose(WindowHandle h, int64_t x, int64_t y, int64_t width, int64_t height);
         virtual void MouseDown(WindowHandle h, uint64_t button, int64_t x, int64_t y, ModifierState state);
+        virtual void MouseScrollWheel(WindowHandle h, LvtkScrollDirection direction, int64_t x, int64_t y, ModifierState state);
         virtual void MouseMove(WindowHandle h, int64_t x, int64_t y, ModifierState state);
         virtual void MouseUp(WindowHandle h, uint64_t button, int64_t x, int64_t y, ModifierState state);
         virtual void MouseLeave(WindowHandle h);

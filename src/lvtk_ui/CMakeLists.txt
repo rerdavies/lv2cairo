@@ -17,7 +17,7 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 
-add_library(lvtk_ui STATIC
+add_library(lvtk_ui OBJECT
     include/lvtk_ui/Lv2ControlConstants.hpp
     include/lvtk_ui/Lv2PortViewFactory.hpp
     include/lvtk_ui/Lv2PluginType.hpp
@@ -37,7 +37,6 @@ add_library(lvtk_ui STATIC
     Lv2FileDialog.cpp
     GlobMatcher.cpp
     MimeTypes.cpp
-    PiPedalUI.cpp
     Lv2PluginInfo.cpp
     Lv2PortViewFactory.cpp
     Lv2PluginType.cpp
@@ -46,8 +45,16 @@ add_library(lvtk_ui STATIC
     Lv2UI.cpp
     Lv2UI_glue.cpp
     Lv2Units.cpp
+    PiPedalUI.cpp
+
     ss.hpp
 )
+
+
+message(STATUS "lvtk_ui CMAKE_DEB_HOST_ARCH: ${CMAKE_DEB_HOST_ARCH}")
+message(STATUS "lvtk_ui CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
+message(STATUS "lvtk_ui CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
+
 
 
 set(LV2CAIRO_UI_INCLUDE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include" )

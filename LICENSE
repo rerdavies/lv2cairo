@@ -1,4 +1,4 @@
-Copyright (c) 2023 Robin Davies
+Copyright (c) 2023 Robin E. R. Davies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -16,3 +16,18 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+=== 
+
+Third-party licenses:
+
+This project includes files, and uses dependencies that are 
+licensed under a variety of 3rd-party Open Source licenses (none of them GPL). 
+  
+A complete list of machine-generated 3rd-party licenses can be found in the files debian/copyrights-raw and debian/copyright-fixups.
+
+As part of the build process, the ToobAmp build generates a 
+cleaner and more legible set of license notices that can be found in the file build/src/ToobAmp.lv2/LICENSE.md. This file
+can also be found at /usr/lib/lv2/ToobAmp.lv2/LICENSE.md 
+after ToobAmp is installed.
+

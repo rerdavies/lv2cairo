@@ -9,9 +9,11 @@ find_package(X11)
 
 
 add_executable(lvtk_demo  
+    $<TARGET_OBJECTS:lvtk> $<TARGET_OBJECTS:lvtk_ui>
 
     LvtkTestMain.cpp
     TestPage.hpp
+    TableTestPage.cpp TableTestPage.hpp
     PaletteTestPage.cpp PaletteTestPage.hpp
     Lv2UiTestPage.cpp Lv2UiTestPage.hpp SamplePluginInfo.hpp
     MotionBlurTestPage.cpp MotionBlurTestPage.hpp
@@ -51,6 +53,8 @@ target_link_libraries(lvtk_demo
 )
 
 add_executable(CatchTest 
+    $<TARGET_OBJECTS:lvtk> $<TARGET_OBJECTS:lvtk_ui>
+
     MaterialColorTest.cpp
     TestMain.cpp
     ColorTest.cpp

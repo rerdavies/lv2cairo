@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -87,6 +87,7 @@ namespace lvtk
 
         void Close();
 
+
         void WindowTitle(const std::string &title);
         void SetWindowType(LvtkWindowType windowType);
 
@@ -140,6 +141,7 @@ namespace lvtk
         void Resize(int width, int height);
 
     private:
+
         struct XAtoms;
 
         std::unique_ptr<XAtoms> xAtoms;
@@ -173,6 +175,9 @@ namespace lvtk
         void RegisterControllerMessages();
 
     private:
+
+        Window GetTransientTarget(Window other);
+
         using clock_t = std::chrono::steady_clock;
 
 

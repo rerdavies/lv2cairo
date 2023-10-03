@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -24,9 +24,9 @@ using namespace lvtk::ui;
 
 
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#ifndef __clang__
 #pragma GCC optimize("no-var-tracking") // to speed up compilation
-
+#endif
 
 void MimeTypes::MaybeInitialize()
 {

@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -104,6 +104,8 @@ namespace lvtk
         void ScrollIntoView(LvtkElement *element, LvtkThickness surroundingSpace);
 
     protected:
+        virtual bool OnScrollWheel(LvtkScrollWheelEventArgs &event) override;
+
         virtual bool ClipChildren() const override;
 
         virtual void OnHorizontalScrollEnableChanged(bool value);

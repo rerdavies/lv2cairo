@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -213,6 +213,8 @@ void LvtkWindow::CreateChildWindow(
     const LvtkCreateWindowParameters &parameters,
     LvtkElement::ptr element)
 {
+    this->rootElement->AddChild(element);
+    
     this->windowScale = parent->windowScale;
     this->windowParameters = parameters;
     this->windowParameters.settingsObject = parent->Settings();
@@ -295,6 +297,19 @@ bool LvtkWindow::PumpMessages(bool block)
     }
 }
 
+bool LvtkWindow::OnScrollWheel(LvtkScrollWheelEventArgs &event)
+{
+    if (this->GetRootElement() != nullptr)
+    {
+        if (GetRootElement()->FireScrollWheel(event))
+        {
+            return true;
+        }
+    }
+    return false;
+
+}
+
 bool LvtkWindow::OnMouseDown(LvtkMouseEventArgs &event)
 {
     if (this->Capture() != nullptr)
@@ -351,6 +366,15 @@ bool LvtkWindow::OnMouseMove(LvtkMouseEventArgs &event)
     }
     return false;
 }
+
+
+void LvtkWindow::MouseScrollWheel(WindowHandle h, LvtkScrollDirection direction, int64_t x, int64_t y, ModifierState state)
+{
+    LvtkScrollWheelEventArgs event{h, direction, x / windowScale, y / windowScale, state};
+    OnScrollWheel(event);
+
+}
+
 
 void LvtkWindow::MouseDown(WindowHandle h, uint64_t button, int64_t x, int64_t y, ModifierState state)
 {
@@ -1400,3 +1424,6 @@ WindowHandle LvtkWindow::Handle() const
     }
     return WindowHandle();
 }
+
+
+

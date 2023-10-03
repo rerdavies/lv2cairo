@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -40,9 +40,9 @@ UiFileProperty::UiFileProperty(const std::string &name, const std::string &patch
 // }
 
 PiPedalUI::PiPedalUI(
-    std::vector<UiFileProperty> &&fileProperties,
-    std::vector<UiFrequencyPlot> &&frequencyPlots,
-    std::vector<UiPortNotification> &&portNotifications)
+    std::vector<lvtk::ui::UiFileProperty> &&fileProperties,
+    std::vector<lvtk::ui::UiFrequencyPlot> &&frequencyPlots,
+    std::vector<lvtk::ui::UiPortNotification> &&portNotifications)
 {
 
     this->fileProperties_ = std::move(fileProperties);

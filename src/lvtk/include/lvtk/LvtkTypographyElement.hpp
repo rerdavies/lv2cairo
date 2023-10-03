@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -77,6 +77,8 @@ namespace lvtk
     protected:
         void OnTextChanged(const std::string&text);
         void OnVariantChanged(LvtkTypographyVariant value);
+        void OnMount() override;
+
     private:
         IcuString::Ptr icuString;
         bool SingleLine() const;
@@ -88,7 +90,6 @@ namespace lvtk
         bool hasFixedLayout = false;
         LvtkSize clientMeasure;
         LvtkStyle::ptr GetVariantStyle();
-        void OnMount(LvtkWindow*window) override;
 
         PangoFontDescription*GetFontDescription();
 

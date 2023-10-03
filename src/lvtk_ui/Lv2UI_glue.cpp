@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -173,6 +173,7 @@ Lv2UIRegistrationBase::~Lv2UIRegistrationBase()
 {
 }
 
+
 // The main LV2 entry point.
 LV2_SYMBOL_EXPORT
 const LV2UI_Descriptor *
@@ -180,6 +181,7 @@ lv2ui_descriptor(uint32_t index)
 {
     if (descriptors.size() == 0)
     {
+
         for (size_t i = 0; i < gRegistrationCount; ++i)
         {
             auto registration = gRegistrations[i];

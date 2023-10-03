@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -48,8 +48,8 @@ LvtkElement::ptr MotionBlurTestPage::CreatePageView(LvtkTheme::ptr theme)
         .HorizontalAlignment(LvtkAlignment::Stretch)
         .FlexDirection(LvtkFlexDirection::Row)
         .FlexWrap(LvtkFlexWrap::Wrap)
-        .FlexColumnGap(16)
-        .FlexRowGap(16);
+        .ColumnGap(16)
+        .RowGap(16);
 
 
     LvtkSlideInOutAnimationElement::ptr slide;

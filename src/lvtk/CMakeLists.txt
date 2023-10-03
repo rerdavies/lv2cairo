@@ -56,7 +56,7 @@ if (0)
     endforeach()
 endif()
 
-add_library(lvtk STATIC
+add_library(lvtk OBJECT
     ./include/lvtk/LvtkObject.hpp
     ./include/lvtk/IcuString.hpp
     ./include/lvtk/JsonVariant.hpp
@@ -107,6 +107,10 @@ add_library(lvtk STATIC
     ./include/lvtk/LvtkSlideInOutAnimationElement.hpp
     ./include/lvtk/LvtkCieColors.hpp
     ./include/lvtk/LvtkGroupElement.hpp
+    ./include/lvtk/LvtkTableElement.hpp
+    ./include/lvtk/LvtkMarkdownElement.hpp
+    ./LvtkMarkdownElement.cpp
+    ./LvtkTableElement.cpp
     ./LvtkGroupElement.cpp
     ./LvtkCieColors.cpp
     ./LvtkSlideInOutAnimationElement.cpp

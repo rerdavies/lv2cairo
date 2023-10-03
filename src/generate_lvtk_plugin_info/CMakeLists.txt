@@ -15,6 +15,7 @@ endif()
 
 
 add_executable(generate_lvtk_plugin_info  
+    $<TARGET_OBJECTS:lvtk> $<TARGET_OBJECTS:lvtk_ui>
     LilvPiPedalUI.cpp
     LilvPiPedalUI.hpp
     AutoLilvNode.cpp

@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -112,7 +112,7 @@ LvtkElement::ptr PaletteTestPage::CreatePageView(LvtkTheme::ptr theme)
         main->Style()
             .Background(theme->paper)
             .Padding({24, 16, 24, 16})
-            .FlexColumnGap(16)
+            .ColumnGap(16)
             .FlexDirection(LvtkFlexDirection::Row)
             .FlexWrap(LvtkFlexWrap::NoWrap);
         {

@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -233,11 +233,11 @@ FlexTestElement::FlexTestElement()
             element->ValueProperty.addObserver(
                 [this](double value)
                 {
-                    grid->Style().FlexRowGap(value);
+                    grid->Style().RowGap(value);
                     grid->InvalidateLayout();
                 })
             );
-            controlGrid->AddChild(LabeledEditControl("FlexRowGap", element));
+            controlGrid->AddChild(LabeledEditControl("RowGap", element));
         }
         {
             auto element = LvtkNumericEditBoxElement::Create();
@@ -250,11 +250,11 @@ FlexTestElement::FlexTestElement()
             element->ValueProperty.addObserver(
                 [this](double value)
                 {
-                    grid->Style().FlexColumnGap(value);
+                    grid->Style().ColumnGap(value);
                     grid->InvalidateLayout();
                 })
             );
-            controlGrid->AddChild(LabeledEditControl("FlexColumnGap", element));
+            controlGrid->AddChild(LabeledEditControl("ColumnGap", element));
         }
 
         stack->AddChild(controlGrid);

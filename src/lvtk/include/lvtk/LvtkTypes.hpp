@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -65,6 +65,8 @@ namespace lvtk
         }
 
 
+        LvtkSize operator+(const LvtkSize&other) { return LvtkSize(width+other.width,height+other.height);}
+        LvtkSize operator-(const LvtkSize&other) { return LvtkSize(width-other.width,height-other.height);}
         LvtkSize operator/(double value) const { return LvtkSize(width/value,height/value); }
         LvtkSize operator*(double value) const { return LvtkSize(width*value,height*value); }
         LvtkSize ceil() const { return LvtkSize(std::ceil(width),std::ceil(height));}
@@ -577,6 +579,29 @@ namespace lvtk
         unsigned int keysym = 0;
         ModifierState modifierState;
     };
+    enum class LvtkScrollDirection {
+        Up,
+        Down,
+        Left,
+        Right
+    };
+    struct LvtkScrollWheelEventArgs
+    {
+    public:
+        LvtkScrollWheelEventArgs();
+        LvtkScrollWheelEventArgs(WindowHandle h, LvtkScrollDirection scrollDirection, double x, double y, ModifierState modifierState);
+
+        WindowHandle h;
+        LvtkScrollDirection scrollDirection;
+
+        // Mouse location in element coordinates.
+        LvtkPoint point;
+        // Mouse location in screeen coordinates.
+        LvtkPoint screenPoint;
+        ModifierState modifierState;
+    };
+
+
     struct LvtkMouseEventArgs
     {
     public:
@@ -611,6 +636,14 @@ namespace lvtk
     }
     inline LvtkMouseEventArgs::LvtkMouseEventArgs()
         : h(WindowHandle(0)), button(0), point({0, 0}), screenPoint({0, 0}), modifierState(ModifierState::Empty)
+    {
+    }
+    inline LvtkScrollWheelEventArgs::LvtkScrollWheelEventArgs(WindowHandle h, LvtkScrollDirection scrollDirection, double x, double y, ModifierState modifierState)
+        : h(h), scrollDirection(scrollDirection), point({-1, -1}), screenPoint({double(x), double(y)}), modifierState(modifierState)
+    {
+    }
+    inline LvtkScrollWheelEventArgs::LvtkScrollWheelEventArgs()
+        : h(WindowHandle(0)), scrollDirection(LvtkScrollDirection::Up), point({0, 0}), screenPoint({0, 0}), modifierState(ModifierState::Empty)
     {
     }
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -41,6 +41,8 @@ SamplePlugin::SamplePlugin() : super(
     this->Theme(theme);
 }
 
+// Refereence this variable to get the linker to deman-link the entire .obj.
+int uiLinkTarget;
 static Lv2UIRegistration<SamplePlugin> registration { PLUGIN_UI_URI};
 
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -170,33 +170,33 @@ void LvtkTheme::BuildStyles()
             .FontFamily(fontFamily)
             .FontWeight(LvtkFontWeight::Light)
             .FontSize(titleSize)
-            .LineSpacing(1.5)
+            .LineSpacing(1.2)
             .Color(secondaryTextColor));
     headingStyle = std::make_shared<LvtkStyle>(
         LvtkStyle()
             .FontFamily(fontFamily)
             .FontWeight(LvtkFontWeight::Bold)
             .FontSize(headingSize)
-            .LineSpacing(1.5)
+            .LineSpacing(1.2)
             .Color(secondaryTextColor));
     bodyPrimaryStyle = std::make_shared<LvtkStyle>(
         LvtkStyle()
             .FontFamily(fontFamily)
             .FontSize(bodySize)
-            .LineSpacing(1.5)
+            .LineSpacing(1.2)
             .Color(primaryTextColor));
     bodySecondaryStyle = std::make_shared<LvtkStyle>(
         LvtkStyle()
             .FontFamily(fontFamily)
             .FontSize(bodySize)
-            .LineSpacing(1.5)
+            .LineSpacing(1.2)
             .Color(secondaryTextColor));
     captionStyle = std::make_shared<LvtkStyle>(
         LvtkStyle()
             .FontFamily(fontFamily)
             .FontSize(captionSize)
             .TextTransform(LvtkTextTransform::Capitalize)
-            .LineSpacing(1.25)
+            .LineSpacing(1.0)
             .Color(secondaryTextColor));
 
     buttonDisableStyle = std::make_shared<LvtkStyle>(

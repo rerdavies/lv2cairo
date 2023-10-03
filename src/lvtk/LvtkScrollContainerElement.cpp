@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -272,3 +272,69 @@ bool LvtkScrollContainerElement::ClipChildren() const
 {
     return true;
 }
+
+bool LvtkScrollContainerElement::OnScrollWheel(LvtkScrollWheelEventArgs &event) {
+    constexpr double SCROLL_AMOUNT = 24;
+
+    switch (event.scrollDirection)
+    {
+    case LvtkScrollDirection::Left:
+    {
+        if (this->HorizontalScrollEnabled())
+        {
+            double newValue = HorizontalScrollOffset()-SCROLL_AMOUNT;
+            if (newValue < 0)
+            {
+                newValue = 0;
+            }
+            HorizontalScrollOffset(newValue);
+            return true;
+        }
+        break;
+    }
+    case LvtkScrollDirection::Right:
+    {
+        if (this->HorizontalScrollEnabled())
+        {
+            double newValue = HorizontalScrollOffset() +SCROLL_AMOUNT;
+            if (newValue > MaximumHorizontalScrollOffset())
+            {
+                newValue = MaximumHorizontalScrollOffset();
+            }
+            HorizontalScrollOffset(newValue);
+            return true;
+        }
+        break;
+    }
+
+    case LvtkScrollDirection::Up:
+    {
+        if (this->VerticalScrollEnabled())
+        {
+            double newValue = VerticalScrollOffset()-SCROLL_AMOUNT;
+            if (newValue < 0)
+            {
+                newValue = 0;
+            }
+            VerticalScrollOffset(newValue);
+            return true;
+        }
+        break;
+    }
+    case LvtkScrollDirection::Down:
+        if (this->VerticalScrollEnabled())
+        {
+            double newValue = VerticalScrollOffset()+SCROLL_AMOUNT;
+            if (newValue > this->MaximumVerticalScrollOffset())
+            {
+                newValue = MaximumVerticalScrollOffset();
+            }
+            VerticalScrollOffset(newValue);
+            return true;
+        }
+        break;
+        
+    }
+    return false;
+}
+

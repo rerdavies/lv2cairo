@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby gra nted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -586,7 +586,7 @@ LvtkElement::ptr Lv2FileDialog::RenderBreadcrumb(
         auto flexGrid = LvtkFlexGridElement::Create();
         flexGrid->Style()
             .FlexAlignItems(LvtkAlignment::Center)
-            .FlexColumnGap(4);
+            .ColumnGap(4);
         if (icon.length() != 0)
         {
             auto element = LvtkSvgElement::Create();
@@ -831,7 +831,7 @@ LvtkElement::ptr Lv2FileDialog::RenderTopPanel()
         .FlexDirection(LvtkFlexDirection::Row)
         .FlexWrap(LvtkFlexWrap::NoWrap)
         .Padding({8, 4, 8, 4})
-        .FlexRowGap(8);
+        .RowGap(8);
     {
         auto undoContainer = LvtkFlexGridElement::Create();
         {
@@ -929,8 +929,8 @@ LvtkElement::ptr Lv2FileDialog::RenderFileList()
                 .Padding({8, 8, 8, 24})
                 .FlexDirection(LvtkFlexDirection::Column)
                 .FlexWrap(LvtkFlexWrap::Wrap)
-                .FlexColumnGap(16)
-                .FlexRowGap(0);
+                .ColumnGap(16)
+                .RowGap(0);
             scroll->Child(body);
         }
         container->AddChild(scroll);
@@ -1015,7 +1015,7 @@ LvtkElement::ptr Lv2FileDialog::RenderPanel(size_t index, const FilePanel &locat
             .FlexDirection(LvtkFlexDirection::Row)
             .FlexWrap(LvtkFlexWrap::NoWrap)
             .FlexAlignItems(LvtkAlignment::Center)
-            .FlexColumnGap(8)
+            .ColumnGap(8)
             .Padding({16, 8, 16, 8});
         {
             auto icon = LvtkSvgElement::Create();
@@ -1097,7 +1097,7 @@ LvtkElement::ptr Lv2FileDialog::RenderFooter()
         .FlexAlignItems(LvtkAlignment::Center)
         .FlexDirection(LvtkFlexDirection::Row)
         .FlexWrap(LvtkFlexWrap::NoWrap)
-        .FlexColumnGap(8)
+        .ColumnGap(8)
         .Padding({20, 16, 24, 16})
         .BorderWidth({0, 1, 0, 0})
         .BorderColor(Theme().dividerColor)
@@ -1310,7 +1310,7 @@ void Lv2FileDialog::LoadMixedDirectoryFiles(const std::vector<std::string> &file
             auto container = LvtkFlexGridElement::Create();
             container->Style()
                 .FlexWrap(LvtkFlexWrap::NoWrap)
-                .FlexColumnGap(8)
+                .ColumnGap(8)
                 .FlexAlignItems(LvtkAlignment::Start)
                 .Padding({8, 4, 8, 4});
             {
@@ -1477,7 +1477,7 @@ void Lv2FileDialog::LoadFiles(const std::filesystem::path &path)
             auto container = LvtkFlexGridElement::Create();
             container->Style()
                 .FlexWrap(LvtkFlexWrap::NoWrap)
-                .FlexColumnGap(8)
+                .ColumnGap(8)
                 .FlexAlignItems(LvtkAlignment::Center)
                 .Padding({8, 4, 8, 4});
             {

@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -340,9 +340,9 @@ LvtkStyle::ptr LvtkTypographyElement::GetVariantStyle()
     }
 }
 
-void LvtkTypographyElement::OnMount(LvtkWindow *window)
+void LvtkTypographyElement::OnMount()
 {
-    super::OnMount(window);
+    super::OnMount();
     RemoveClass(variantStyle);
     variantStyle = GetVariantStyle();
     AddClass(variantStyle);

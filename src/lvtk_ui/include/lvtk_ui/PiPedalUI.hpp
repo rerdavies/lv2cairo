@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -179,10 +179,14 @@ namespace lvtk::ui {
         int32_t index() const { return index_; }
         const std::string&portGroup() const { return portGroup_; }
         float xLeft() const { return xLeft_; }
+        void xLeft(float value) { xLeft_ = value;}
         float xRight() const { return xRight_; }
+        void xRight(float value) { xRight_ = value; }
         bool xLog() const { return xLog_; }
         float yTop() const { return yTop_; }
+        void yTop(float value) { yTop_ = value; }
         float yBottom() const { return yBottom_; }
+        void yBottom(float value) { yBottom_ = value; }
         bool yDb() const { return yDb_; }
         float width() const { return width_; }
 

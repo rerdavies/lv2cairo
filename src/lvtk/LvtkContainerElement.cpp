@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -125,6 +125,30 @@ void LvtkContainerElement::FinalizeLayout(const LvtkRectangle &layoutClipBounds,
         clippedInLayout = true;
     }
 }
+
+bool LvtkContainerElement::FireScrollWheel(LvtkScrollWheelEventArgs &event)
+{
+    if (Style().Visibility() == LvtkVisibility::Visible)
+    {
+
+        if (this->screenBorderBounds.Contains(event.screenPoint))
+        {
+            for (int64_t i = children.size() - 1; i >= 0; --i)
+            {
+                auto child = children[i];
+                if (child->screenBorderBounds.Contains(event.screenPoint))
+                {
+                    if (child->FireScrollWheel(event))
+                        return true;
+                }
+            }
+        }
+        return super::FireScrollWheel(event);
+    }
+    return false;
+
+}
+
 
 bool LvtkContainerElement::FireMouseDown(LvtkMouseEventArgs &event)
 {

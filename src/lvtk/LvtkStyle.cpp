@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -80,6 +80,11 @@ LvtkStyle &LvtkStyle::BorderWidth(const LvtkThicknessMeasurement &value)
 LvtkStyle &LvtkStyle::Padding(const LvtkThicknessMeasurement &value)
 {
     padding = value;
+    return *this;
+}
+LvtkStyle &LvtkStyle::CellPadding(const LvtkThicknessMeasurement &value)
+{
+    cellPadding = value;
     return *this;
 }
 
@@ -205,6 +210,20 @@ LvtkThicknessMeasurement LvtkStyle::Padding() const
     LvtkThicknessMeasurement result;
     return result;
 }
+
+LvtkThicknessMeasurement LvtkStyle::CellPadding() const
+{
+    std::optional<LvtkThicknessMeasurement> value = FromSelfOrClasses<LvtkThicknessMeasurement>(&LvtkStyle::cellPadding);
+    if (value.has_value())
+    {
+        LvtkThicknessMeasurement result = value.value();
+        result.ResolvePercent(this->elementSize);
+        return result;
+    }
+    LvtkThicknessMeasurement result;
+    return result;
+}
+
 LvtkThicknessMeasurement LvtkStyle::BorderWidth() const
 {
     std::optional<LvtkThicknessMeasurement> value = FromSelfOrClasses<LvtkThicknessMeasurement>(&LvtkStyle::borderWidth);
@@ -842,24 +861,24 @@ LvtkStyle &LvtkStyle::PaddingBottom(const LvtkMeasurement &value)
     return *this;
 }
 
-LvtkStyle &LvtkStyle::FlexRowGap(const LvtkMeasurement &value)
+LvtkStyle &LvtkStyle::RowGap(const LvtkMeasurement &value)
 {
     flexRowGap = value;
     return *this;
 }
-LvtkMeasurement LvtkStyle::FlexRowGap() const
+LvtkMeasurement LvtkStyle::RowGap() const
 {
     LvtkMeasurement result = FromSelfOrClasses(&LvtkStyle::flexRowGap);
     result.ResolvePercent(this->elementSize.Height());
     return result;
 }
 
-LvtkStyle &LvtkStyle::FlexColumnGap(const LvtkMeasurement &value)
+LvtkStyle &LvtkStyle::ColumnGap(const LvtkMeasurement &value)
 {
     flexColumnGap = value;
     return *this;
 }
-LvtkMeasurement LvtkStyle::FlexColumnGap() const
+LvtkMeasurement LvtkStyle::ColumnGap() const
 {
     LvtkMeasurement result = FromSelfOrClasses(&LvtkStyle::flexColumnGap);
     result.ResolvePercent(this->elementSize.Width());
@@ -945,5 +964,61 @@ std::optional<LvtkMeasurement> LvtkStyle::MaxWidth() const
     return result;
 }
 
+LvtkStyle &LvtkStyle::CellPaddingLeft(const LvtkMeasurement &value)
+{
+    if (!cellPadding.has_value())
+    {
+        cellPadding = LvtkThicknessMeasurement(0, 0, 0, 0);
+    }
+    cellPadding.value().Left(value);
+    return *this;
+}
+LvtkStyle &LvtkStyle::CellPaddingTop(const LvtkMeasurement &value)
+{
+    if (!cellPadding.has_value())
+    {
+        cellPadding = LvtkThicknessMeasurement(0, 0, 0, 0);
+    }
+    cellPadding.value().Top(value);
+    return *this;
+}
+LvtkStyle &LvtkStyle::CellPaddingRight(const LvtkMeasurement &value)
+{
+    if (!cellPadding.has_value())
+    {
+        cellPadding = LvtkThicknessMeasurement(0, 0, 0, 0);
+    }
+    cellPadding.value().Right(value);
+    return *this;
+}
+
+LvtkStyle &LvtkStyle::CellPaddingStart(const LvtkMeasurement &value)
+{
+    if (!cellPadding.has_value())
+    {
+        cellPadding = LvtkThicknessMeasurement(0, 0, 0, 0);
+    }
+    cellPadding.value().Left(value);
+    return *this;
+}
+LvtkStyle &LvtkStyle::CellPaddingEnd(const LvtkMeasurement &value)
+{
+    if (!cellPadding.has_value())
+    {
+        cellPadding = LvtkThicknessMeasurement(0, 0, 0, 0);
+    }
+    cellPadding.value().Right(value);
+    return *this;
+}
+
+LvtkStyle &LvtkStyle::CellPaddingBottom(const LvtkMeasurement &value)
+{
+    if (!cellPadding.has_value())
+    {
+        cellPadding = LvtkThicknessMeasurement(0, 0, 0, 0);
+    }
+    cellPadding.value().Bottom(value);
+    return *this;
+}
 
 

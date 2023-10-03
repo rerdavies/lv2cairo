@@ -44,6 +44,7 @@ add_custom_command(
 )
 
 add_library(lv2tk_test SHARED
+
     SamplePlugin.cpp SamplePlugin.hpp
     Lv2Plugin.cpp
     Lv2Plugin.hpp
@@ -65,6 +66,8 @@ target_link_directories(
 )
 
 add_library(lv2tk_test_ui SHARED
+    $<TARGET_OBJECTS:lvtk> $<TARGET_OBJECTS:lvtk_ui>
+
     SamplePluginUi.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/SamplePluginInfo.hpp 
 )
@@ -72,7 +75,8 @@ set_target_properties(lv2tk_test_ui PROPERTIES OUTPUT_NAME "${LV2_UI_SO_NAME}")
 set_target_properties(lv2tk_test_ui PROPERTIES PREFIX "")
 
 target_link_options(lv2tk_test_ui PRIVATE
-    "-Wl,-z,nodelete"
+    "-Wl,-z,nodelete" 
+    -Wl,-uiLinkTarget
 )
 
 

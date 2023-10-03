@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin Davies
+// Copyright (c) 2023 Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -41,6 +41,7 @@
 #include "lv2/options/options.h"
 #include <stdio.h>
 #include <stdarg.h>
+#include <cmath>
 
 #include <vector>
 #include <string.h>
@@ -67,7 +68,7 @@ void Lv2UI::SetCreateWindowDefaults()
     }
     if (params.minSize == LvtkSize::Zero)
     {
-        params.minSize = LvtkSize(320, 200);
+        params.minSize = LvtkSize(320, std::min(params.size.Height(),200.0));
     }
     if (params.maxSize == LvtkSize::Zero)
     {
