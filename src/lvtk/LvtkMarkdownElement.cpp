@@ -55,6 +55,8 @@ namespace lvtk::implementation
         {
             Style()
                 .Height(1)
+                .MarginTop(16)
+                .MarginBottom(16)
                 .HorizontalAlignment(LvtkAlignment::Stretch);
         }
 
@@ -81,7 +83,7 @@ void LvtkMarkdownElement::SetMarkdown(const std::string &text)
 void LvtkMarkdownElement::SetMarkdown(std::istream &s)
 {
     std::string line;
-    while (s)
+    while (s && !s.eof())
     {
         std::getline(s, line);
         AddMarkdownLine(line);
@@ -100,16 +102,9 @@ void LvtkMarkdownElement::FlushMarkdown()
         .SingleLine(false);
     lineBuffer.resize(0);
 
-    if (lineBreak)
-    {
-        lineBreak = false;
-        element->Style()
-            .MarginBottom(0)
-            .PaddingBottom(8);
-    }
     if (hangingText.length() != 0)
     {
-        constexpr double HANGING_INDENT_WIDTH = 32;
+        constexpr double HANGING_INDENT_WIDTH = 18;
         auto hangingElement = LvtkTypographyElement::Create();
 
         hangingElement->Variant(textVariant).Text(hangingText);
@@ -123,19 +118,29 @@ void LvtkMarkdownElement::FlushMarkdown()
             .FlexAlignItems(LvtkAlignment::Start)
             .HorizontalAlignment(LvtkAlignment::Stretch)
             .MarginLeft(leftMargin)
-            .MarginBottom(8);
+            .MarginBottom(16);
         grid->AddChild(hangingElement);
         grid->AddChild(element);
         this->leftMargin += HANGING_INDENT_WIDTH;
+        AddChild(grid);
+        this->hangingText = "";
     }
     else
     {
-        element->Style().MarginLeft(leftMargin).MarginBottom(8);
+        element->Style().MarginLeft(leftMargin).MarginBottom(16);
+        if (lineBreak)
+        {
+            lineBreak = false;
+            element->Style()
+                .MarginBottom(0)
+                .PaddingBottom(4);
+        }
+
         AddChild(element);
     }
 }
 
-static bool StripHangingIndent(const std::string &line, std::string &hangingText, std::string &lineOut, size_t &hangingIndentSpaces)
+static bool GetHangingIndentText(const std::string &line, std::string &hangingText, std::string &lineOut, size_t &hangingIndentSpaces)
 {
     hangingIndentSpaces = 0;
     size_t hangingIndentPosition = std::string::npos;
@@ -179,20 +184,24 @@ static bool StripHangingIndent(const std::string &line, std::string &hangingText
                 }
             }
         }
-        if (hangingIndentPosition == std::string::npos)
-        {
-            return false;
-        }
-        hangingText = std::string(line.begin(), line.end() + i);
-        while (i < line.size() && line[i] == ' ')
-        {
-            ++i;
-        }
-        lineOut = std::string(line.begin() + i, line.end());
-        hangingIndentSpaces = i;
-        return true;
     }
-    return false;
+    if (hangingIndentPosition == std::string::npos)
+    {
+        return false;
+    }
+    hangingText = std::string(line.begin(), line.begin() + hangingIndentPosition);
+    if (hangingText == "-")
+    {
+        hangingText = "•";
+    }
+    size_t i = hangingIndentPosition;
+    while (i < line.size() && line[i] == ' ')
+    {
+        ++i;
+    }
+    lineOut = std::string(line.begin() + i, line.end());
+    hangingIndentSpaces = i;
+    return true;
 }
 
 void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
@@ -212,19 +221,6 @@ void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
     if (lineBuffer.length() == 0)
     {
 
-        std::string lineOut;
-        size_t hangingIndentSpaces;
-        if (StripHangingIndent(text, this->hangingText, lineOut, hangingIndentSpaces))
-        {
-            lineBuffer = lineOut;
-            hangingIndentStack.push_back({this->leftMargin, this->hangingIndentChars});
-            this->hangingIndentChars = hangingIndentSpaces;
-            return;
-        }
-    }
-    else
-    {
-
         while (hangingIndentStack.size() != 0)
         {
             bool hasIndent = true;
@@ -241,8 +237,35 @@ void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
                 text = std::string(text.begin() + hangingIndentChars, text.end());
                 break;
             }
+            auto &stackTop = hangingIndentStack[hangingIndentStack.size() - 1];
+            this->hangingIndentChars = stackTop.indentCharacters;
+            this->leftMargin = stackTop.indentMargin;
+            hangingIndentStack.pop_back();
             FlushMarkdown();
         }
+
+        std::string lineOut;
+        size_t hangingIndentSpaces;
+        if (GetHangingIndentText(text, this->hangingText, lineOut, hangingIndentSpaces))
+        {
+            lineBuffer = lineOut;
+            hangingIndentStack.push_back({this->leftMargin, this->hangingIndentChars});
+            this->hangingIndentChars = hangingIndentSpaces;
+            return;
+        }
+    }
+
+    if (text.ends_with("  "))
+    {
+        std::string t = std::string(text.begin(), text.end() - 2);
+        lineBreak = true;
+        if (t.length() == 0 && lineBuffer.length() == 0)
+        {
+            lineBuffer = " ";
+        }
+        lineBuffer += t;
+        FlushMarkdown();
+        return;
     }
     size_t ws = 0;
     while (ws < text.length() && text[ws] == ' ')
@@ -250,15 +273,6 @@ void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
     if (ws != 0)
     {
         text = std::string(text.begin() + ws, text.end());
-    }
-
-    if (text.ends_with("  "))
-    {
-        std::string t = std::string(text.begin(), text.end() - 2);
-        lineBreak = true;
-        lineBuffer += t;
-        FlushMarkdown();
-        return;
     }
     if (lineBuffer.length() != 0 && !lineBuffer.ends_with(' '))
     {

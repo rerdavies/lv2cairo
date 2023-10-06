@@ -30,10 +30,11 @@ typedef struct _PangoLayout PangoLayout;
 
 namespace lvtk
 {
-
+    namespace implementation {
+            class AnimatedDropdownElement;
+    }
     class LvtkTypographyElement;
     class LvtkSvgElement;
-    class AnimatedDropdownElement;
     using selection_id_t = int64_t;
     constexpr selection_id_t INVALID_SELECTION_ID = (selection_id_t)-1;
     class LvtkDropdownItem
@@ -132,7 +133,7 @@ namespace lvtk
         {
             super::Measure(constraint, maxAvailable, context);
         }
-        std::shared_ptr<AnimatedDropdownElement> RenderDropdown();
+        std::shared_ptr<implementation::AnimatedDropdownElement> RenderDropdown();
 
     protected:
         virtual void SelectPrevious();
@@ -145,7 +146,7 @@ namespace lvtk
         void UpdateColors();
         void FireItemClick(selection_id_t itemId);
 
-        std::shared_ptr<AnimatedDropdownElement> dropdownElement;
+        std::shared_ptr<implementation::AnimatedDropdownElement> dropdownElement;
         LvtkHoverColors hoverTextColors;
 
         bool selectionValid = false;

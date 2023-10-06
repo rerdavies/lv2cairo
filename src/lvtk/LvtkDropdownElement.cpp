@@ -38,8 +38,24 @@
 
 using namespace lvtk;
 
-namespace lvtk
+namespace lvtk::implementation
 {
+    class DropdownItemLayoutElement : public LvtkContainerElement
+    {
+    public:
+        using self = DropdownItemLayoutElement;
+        using super = LvtkContainerElement;
+        using ptr = std::shared_ptr<self>;
+        static ptr Create() { return std::make_shared<self>(); }
+
+    protected:
+        virtual LvtkSize MeasureClient(LvtkSize clientConstraint, LvtkSize clientAvailable, LvtkDrawingContext &context) override;
+        virtual LvtkSize Arrange(LvtkSize available, LvtkDrawingContext &context) override;
+    private:
+        std::vector<double> columnWidths;
+        std::vector<size_t> columnCounts;
+    };
+
     class AnimatedDropdownElement : public LvtkDropShadowElement
     {
         using clock_t = std::chrono::steady_clock;
@@ -51,13 +67,13 @@ namespace lvtk
         using ptr = std::shared_ptr<self>;
 
         static ptr Create(
-            const LvtkTheme&theme,
+            const LvtkTheme &theme,
             const std::vector<LvtkDropdownItemElement::ptr> &itemElements)
         {
-            return std::make_shared<self>(theme,itemElements);
+            return std::make_shared<self>(theme, itemElements);
         }
 
-        AnimatedDropdownElement(const LvtkTheme &theme,const std::vector<LvtkDropdownItemElement::ptr> &itemElements)
+        AnimatedDropdownElement(const LvtkTheme &theme, const std::vector<LvtkDropdownItemElement::ptr> &itemElements)
         {
             this->DropShadow(theme.menuDropShadow);
             this->Style()
@@ -67,9 +83,8 @@ namespace lvtk
             {
                 this->slideElement = LvtkSlideInOutAnimationElement::Create();
 
-                LvtkVerticalStackElement::ptr stack = LvtkVerticalStackElement::Create();
-                stack->Style()
-                    .HorizontalAlignment(LvtkAlignment::Start);
+                auto stack = DropdownItemLayoutElement::Create();
+
                 slideElement->AddChild(stack);
 
                 for (auto &item : itemElements)
@@ -85,9 +100,12 @@ namespace lvtk
         BINDING_PROPERTY(SelectedId, selection_id_t, -1)
         // BINDING_PROPERTY(SelectionColor,LvtkColor,LvtkColor(1,0.5,0.5))
     protected:
-        virtual void OnMount() override {
+        bool wrapElements = false;
+        virtual void OnMount() override
+        {
             super::OnMount();
         }
+
     private:
         LvtkSlideInOutAnimationElement::ptr slideElement;
         bool AnimateUpward() const;
@@ -137,6 +155,76 @@ namespace lvtk
             }
         }
     }
+}
+
+using namespace lvtk::implementation;
+
+LvtkSize DropdownItemLayoutElement::MeasureClient(LvtkSize clientConstraint, LvtkSize clientAvailable, LvtkDrawingContext &context)
+{
+    columnCounts.resize(0);
+    columnWidths.resize(0);
+    double width = 0;
+    double height = 0;
+
+    double x = 0; double y = 0;
+    double columnWidth = 0;
+    size_t columnCount = 0;
+    for (auto & child: Children())
+    {
+        child->Measure(clientConstraint,clientAvailable,context);
+        LvtkSize childSize = child->MeasuredSize();
+        if (y + childSize.Height() >= clientAvailable.Height() && columnCount != 0)
+        {
+            columnCounts.push_back(columnCount);
+            columnWidths.push_back(columnWidth);
+            if (y > height)
+            {
+                height = y;
+            }
+            x += columnWidth;
+            y = 0;
+            columnCount = 0;
+            columnWidth = 0;
+        }
+        if (childSize.Width() > columnWidth)
+        {
+            columnWidth = childSize.Width();
+        }
+        y += childSize.Height();
+        ++columnCount;
+    }
+    if (columnCount != 0)
+    {
+        columnCounts.push_back(columnCount);
+        columnWidths.push_back(columnWidth);
+        if (y > height) height = y;
+        x += columnWidth;
+    }
+    width = x;
+    return LvtkSize(width,height);
+}
+LvtkSize DropdownItemLayoutElement::Arrange(LvtkSize available, LvtkDrawingContext &context)
+{
+    double x = 0;
+    size_t childIx = 0;
+    for (size_t column = 0; column < columnCounts.size(); ++column)
+    {
+        double y = 0;
+        double columnWidth = columnWidths[column];
+        for (size_t i = 0; i < columnCounts[column]; ++i)
+        {
+            LvtkElement::ptr child = Child(childIx++);
+            LvtkSize size = child->MeasuredSize();
+            size.Width(columnWidth);
+            child->Arrange(size,context);
+            LvtkRectangle rc { x,y,size.Width(),size.Height()};
+            child->Layout(rc);
+            y += size.Height();
+        }
+        x += columnWidth;
+    }
+
+    return available;
 }
 
 LvtkSize LvtkDropdownElement::MeasureClient(LvtkSize clientConstraint, LvtkSize clientAvailable, LvtkDrawingContext &context)
@@ -397,12 +485,12 @@ AnimatedDropdownElement::ptr LvtkDropdownElement::RenderDropdown()
             dropdownItemElements.push_back(item);
             auto itemId = dropdownItem.ItemId();
             dropdownItemEventHandles.push_back(item->Clicked.AddListener([this, itemId](const LvtkMouseEventArgs &e)
-                                                                        {
+                                                                         {
                     this->FireItemClick(itemId);
                     return true; }));
         }
         auto &theme = Theme();
-        auto frame = AnimatedDropdownElement::Create(theme,dropdownItemElements);
+        auto frame = AnimatedDropdownElement::Create(theme, dropdownItemElements);
         // add a spacer to eforce miminimum width.
         double minWidth = this->ClientBounds().Width() - 8;
         auto spacer = LvtkElement::Create();
@@ -412,7 +500,6 @@ AnimatedDropdownElement::ptr LvtkDropdownElement::RenderDropdown()
         frame->SelectedId(this->SelectedId());
 
         this->dropdownElement = frame;
-
     }
     return dropdownElement;
 }
@@ -435,9 +522,7 @@ void LvtkDropdownElement::OpenDropdown()
     this->dropdownElement = dropdown;
     this->Window()->GetRootElement()->AddPopup(
         dropdown, this, [this]()
-        { 
-            this->ReleaseDropdownElements(); 
-        });
+        { this->ReleaseDropdownElements(); });
     dropdown->SetAnchor(this);
 }
 bool LvtkDropdownElement::DropdownOpen() const

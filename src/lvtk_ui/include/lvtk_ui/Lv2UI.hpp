@@ -34,6 +34,8 @@
 
 #include <unordered_map>
 
+#include <lv2/atom/atom.h>
+
 struct LV2_Atom_Forge_;
 
 namespace lvtk
@@ -100,9 +102,14 @@ namespace lvtk::ui
 
         struct PatchPropertyEventArgs {
             LV2_URID property;
-            const void*value;
+            const uint8_t*value;
         };
         LvtkEvent<PatchPropertyEventArgs> OnPatchProperty;
+
+        void WritePatchProperty(LV2_URID property,const LV2_Atom *value);
+        void WritePatchProperty(LV2_URID property,bool value);
+        void WritePatchProperty(LV2_URID property,float value);
+        void WritePatchProperty(LV2_URID property,const std::string& value);
 
         LvtkBindingProperty<double>&GetControlProperty(const std::string&key);
         const LvtkBindingProperty<double>&GetControlProperty(const std::string&key) const;
@@ -136,7 +143,7 @@ namespace lvtk::ui
         ///
         /// value contains the LV2_PATCH__value object member of the LV2_PATCH__Set message which 
         /// will be a pointer to an LV2_Atom structure that varies depending on the patch property.
-        virtual void OnPatchPropertyReceived(LV2_URID type, const void*data);
+        virtual void OnPatchPropertyReceived(LV2_URID type, const uint8_t*data);
         
     private:
         uint32_t inputAtomPort = (uint32_t)-1;
@@ -168,11 +175,13 @@ namespace lvtk::ui
             LV2_URID log__Warning;
             LV2_URID log__Trace;
             LV2_URID atom__Float;
-            LV2_URID atom__eventTransfer;
-            LV2_URID atom__Object;
+            LV2_URID atom__Bool;
+            LV2_URID atom__String;
             LV2_URID atom__URID;
             LV2_URID atom__Resource;
             LV2_URID atom__Blank;
+            LV2_URID atom__Object;
+            LV2_URID atom__eventTransfer;
             LV2_URID patch__Set;
             LV2_URID patch__property;
             LV2_URID patch__value;
@@ -182,6 +191,7 @@ namespace lvtk::ui
         Urids urids;
         // LV2 callback handlers.
     protected:
+
         virtual bool instantiate(
             const char *plugin_ui_uri,
             const char *plugin_uri,

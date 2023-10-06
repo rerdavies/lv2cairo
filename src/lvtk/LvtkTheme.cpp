@@ -92,7 +92,7 @@ LvtkThemeColors::LvtkThemeColors(bool darkTheme)
         this->errorColor = "#FF6666";
 
         this->popupBackground = "#101010";
-        this->dividerColor = "#282828";
+        this->dividerColor = "#FFFFFF70";
         this->primaryTextColor = "#F0F0F0";
         this->secondaryTextColor = "#A0A0A0";
 

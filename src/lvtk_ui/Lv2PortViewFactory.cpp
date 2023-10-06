@@ -560,12 +560,15 @@ LvtkContainerElement::ptr Lv2PortViewFactory::CreatePage()
     element->Style()
         .HorizontalAlignment(LvtkAlignment::Stretch)
         .VerticalAlignment(LvtkAlignment::Stretch)
-        .Padding({24, 16, 24, 16})
+        .Padding({24, 16, 24, 0})
         .RowGap(16)
         .ColumnGap(8)
         .FlexAlignItems(LvtkAlignment::Center)
         .Background(Theme().paper)
-        .FlexWrap(LvtkFlexWrap::Wrap);
+        .FlexWrap(LvtkFlexWrap::Wrap)
+        // .BorderWidth({1})
+        // .BorderColor(LvtkColor("#FF8080"))
+        ;
     return element;
 }
 

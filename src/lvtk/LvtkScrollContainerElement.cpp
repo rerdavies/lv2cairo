@@ -238,8 +238,8 @@ void LvtkScrollContainerElement::FinalizeLayout(const LvtkRectangle&layoutClipRe
     {
         VerticalScrollOffset(std::max(0.0,VerticalDocumentSize()-VerticalWindowSize()));
     }
-    MaximumHorizontalScrollOffset(HorizontalDocumentSize()-HorizontalWindowSize());
-    MaximumVerticalScrollOffset(VerticalDocumentSize()-VerticalWindowSize());
+    MaximumHorizontalScrollOffset(std::max(0.0,HorizontalDocumentSize()-HorizontalWindowSize()));
+    MaximumVerticalScrollOffset(std::max(0.0,VerticalDocumentSize()-VerticalWindowSize()));
 
 }
 

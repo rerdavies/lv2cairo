@@ -42,6 +42,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <cmath>
+#include <cassert>
 
 #include <vector>
 #include <string.h>
@@ -315,6 +316,9 @@ void Lv2UI::InitUrids()
     urids.patch__value = GetUrid(LV2_PATCH__value);
     urids.patch__Get = GetUrid(LV2_PATCH__Get);
     urids.patch__accept = GetUrid(LV2_PATCH__accept);
+    urids.atom__Bool = GetUrid(LV2_ATOM__Bool);
+    urids.atom__String = GetUrid(LV2_ATOM__String);
+
 }
 
 void Lv2UI::ui_port_event(
@@ -344,7 +348,7 @@ void Lv2UI::ui_port_event(
                         if (property != nullptr && property->type == urids.atom__URID &&  value != nullptr)
                         {
                             const LV2_Atom_URID *atomUrid = (const LV2_Atom_URID*)property;
-                            OnPatchPropertyReceived(atomUrid->body, value);
+                            OnPatchPropertyReceived(atomUrid->body, (uint8_t*)value);
                         }
                     }
                 }
@@ -679,7 +683,7 @@ void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
     {
         auto &port = this->pluginInfo->ports()[i];
 
-        if (port.is_control_port())
+        if (port.is_control_port() && !port.not_on_gui())
         {
             if (port.port_group().length() != 0)
             {
@@ -856,7 +860,7 @@ int Lv2UI::ui_resize(int width, int height)
     return 0;
 }
 
-void Lv2UI::OnPatchPropertyReceived(LV2_URID type, const void *data)
+void Lv2UI::OnPatchPropertyReceived(LV2_URID type, const uint8_t *data)
 {
     PatchPropertyEventArgs eventArgs { type,data};
     
@@ -885,3 +889,73 @@ void Lv2UI::RequestPatchProperty(LV2_URID property)
     }
 
 }
+
+void Lv2UI::WritePatchProperty(LV2_URID property,const LV2_Atom *value)
+{
+    size_t messageSize = 
+        value->size + sizeof(LV2_Atom) + sizeof(LV2_Atom_Object) + sizeof(LV2_URID)*3 + 4;
+
+    std::vector<uint8_t> buffer;
+    buffer.resize(messageSize);
+
+	LV2_Atom_Forge_Frame objectFrame;
+
+	lv2_atom_forge_object(forge, &objectFrame, 0, urids.patch__Set);
+
+	lv2_atom_forge_key(forge, urids.patch__property);
+	lv2_atom_forge_urid(forge, property);
+
+	lv2_atom_forge_key(forge, urids.patch__value);
+    lv2_atom_forge_write(forge,value,value->size + sizeof(LV2_Atom));
+
+	lv2_atom_forge_pop(forge, &objectFrame);
+
+
+    LV2_Atom *msg = (LV2_Atom*)&(buffer[0]);
+
+    assert(msg->size + sizeof(LV2_Atom) <= buffer.size());
+
+    if (inputAtomPort == (uint32_t)-1)
+    {
+        LogError("WritePatchProperty: plugin does not have an input atom port.");
+    } else {
+        this->writeFunction(controller,
+            inputAtomPort,        
+            lv2_atom_total_size(msg),
+            urids.atom__eventTransfer,
+            msg);
+    }
+
+}
+void Lv2UI::WritePatchProperty(LV2_URID property,bool value)
+{
+    LV2_Atom_Bool atom;
+    atom.atom.size = sizeof(atom.body);
+    atom.atom.type = urids.atom__Bool;
+    atom.body = value? 1: 0;
+    WritePatchProperty(property,(const LV2_Atom*)&atom);
+}
+void Lv2UI::WritePatchProperty(LV2_URID property,float value)
+{
+    LV2_Atom_Float atom;
+    atom.atom.size = sizeof(atom.body);
+    atom.atom.type = urids.atom__Float;
+    atom.body = value;
+    WritePatchProperty(property,(const LV2_Atom*)&atom);
+
+}
+void Lv2UI::WritePatchProperty(LV2_URID property,const std::string& value)
+{
+    size_t atomSize = sizeof(LV2_Atom) + value.length() + 1;
+    std::vector<uint8_t> atomBuffer;
+    uint8_t *pBuffer = &(atomBuffer[0]);
+    atomBuffer.resize(atomSize);
+    LV2_Atom_String *atom = (LV2_Atom_String*)pBuffer;
+    atom->atom.type = urids.atom__String;
+    atom->atom.size = value.length()+1;
+    char*pAtomString = (char*)(pBuffer + sizeof(LV2_Atom));
+    strcpy(pAtomString,value.c_str());
+    WritePatchProperty(property,(const LV2_Atom*)pBuffer);
+}
+
+
