@@ -91,8 +91,9 @@ void LvtkDialog::Show(LvtkWindow *parentWindow)
     parameters.x11WindowName = X11WindowName();
     parameters.gravity = this->Gravity();
     parameters.positioning = this->positioning;
-    parameters.windowType = this->windowType;
+    parameters.windowType = LvtkWindowType::Utility;
     parameters.backgroundColor = Theme().dialogBackgroundColor;
+    parameters.owner = parentWindow;
 
     parameters.Load();
     this->windowScale = parentWindow->windowScale;
@@ -206,4 +207,6 @@ void LvtkDialog::OnClosing()
         modalDisableWindow->RemoveModalDisable();
         modalDisableWindow = nullptr;
     }
+    ClosingEventArgs args;
+    Closing.Fire(args);
 }

@@ -182,20 +182,33 @@ LilvUiFileProperty::LilvUiFileProperty(LilvWorld *pWorld, const LilvNode *node, 
     {
         this->index_ = -1;
     }
-
-    AutoLilvNode pipedalUI__directory = lilv_new_uri(pWorld, PIPEDAL_UI__directory);
-    AutoLilvNode directory = lilv_world_get(
-        pWorld,
-        node,
-        /*lvuri*/pipedalUI__directory,
-        nullptr);
-    if (directory)
     {
-        this->directory_ = directory.AsString();
+        AutoLilvNode pipedalUI__directory = lilv_new_uri(pWorld, PIPEDAL_UI__directory);
+        AutoLilvNode directory = lilv_world_get(
+            pWorld,
+            node,
+            /*lvuri*/pipedalUI__directory,
+            nullptr);
+        if (directory)
+        {
+            this->directory_ = directory.AsString();
+        }
+        if (directory_.length() == 0)
+        {
+            throw std::runtime_error("PipedalUI::fileProperty: must specify at least a directory.");
+        }
     }
-    if (directory_.length() == 0)
     {
-        throw std::runtime_error("PipedalUI::fileProperty: must specify at least a directory.");
+        AutoLilvNode pipedalUI__resourceDirectory = lilv_new_uri(pWorld, PIPEDAL_UI__resourceDirectory);
+        AutoLilvNode resourceDirectory = lilv_world_get(
+            pWorld,
+            node,
+            /*lvuri*/pipedalUI__resourceDirectory,
+            nullptr);
+        if (resourceDirectory)
+        {
+            this->resourceDirectory_ = resourceDirectory.AsString();
+        }
     }
 
     AutoLilvNode pipedalUI__patchProperty = lilv_new_uri(pWorld, PIPEDAL_UI__patchProperty);

@@ -44,7 +44,13 @@ namespace lvtk {
         void AddMarkdownLine(const std::string &text);
         void FlushMarkdown();
     private:
-
+        enum class MarkdownVariant {
+            H1,
+            H2,
+            H3,
+            H4,
+            Paragraph
+        };
         struct HangingIndentState {
             double indentMargin;
             size_t indentCharacters;
@@ -52,11 +58,16 @@ namespace lvtk {
 
         std::vector<HangingIndentState> hangingIndentStack;
 
+        MarkdownVariant markdownVariant = MarkdownVariant::Paragraph;
+
         LvtkTypographyVariant textVariant = LvtkTypographyVariant::BodyPrimary;
         std::string lineBuffer;
         std::string hangingText;
         double leftMargin = 0;
         size_t hangingIndentChars = 0;
+
+        LvtkMeasurement titleSize = LvtkMeasurement::Point(14);
+        LvtkMeasurement headingSize = LvtkMeasurement::Point(12);
 
         bool lineBreak = false;
     };

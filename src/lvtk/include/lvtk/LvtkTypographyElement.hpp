@@ -40,6 +40,7 @@ namespace lvtk
     enum class LvtkTypographyVariant {
         Title,
         Heading,
+        Subheading,
         BodyPrimary,
         BodySecondary,
         Caption,
@@ -78,7 +79,6 @@ namespace lvtk
         void OnTextChanged(const std::string&text);
         void OnVariantChanged(LvtkTypographyVariant value);
         void OnMount() override;
-
     private:
         IcuString::Ptr icuString;
         bool SingleLine() const;

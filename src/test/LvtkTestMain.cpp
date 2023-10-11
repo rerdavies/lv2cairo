@@ -27,6 +27,7 @@
 #include "lvtk/LvtkSettingsFile.hpp"
 
 
+#include "TunerTestPage.hpp"
 #include "TableTestPage.hpp"
 #include "PaletteTestPage.hpp"
 #include "StandardDialogTestPage.hpp"
@@ -188,7 +189,7 @@ void TestWindow::Render()
     pages.push_back(MotionBlurTestPage::Create());
     pages.push_back(PaletteTestPage::Create());
     pages.push_back(VerticalStackTestPage::Create());
-
+    pages.push_back(TunerTestPage::Create());
     lvtk::SetLogLevel(LvtkLogLevel::Debug);
 
 

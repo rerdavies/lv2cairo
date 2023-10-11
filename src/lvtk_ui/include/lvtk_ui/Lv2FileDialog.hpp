@@ -42,12 +42,12 @@ namespace lvtk
 namespace lvtk::ui
 {
 
-    struct LvtkFileFilter {
+    struct Lv2FileFilter {
         std::string label;
         std::vector<std::string> extensions;
         std::vector<std::string> mimeTypes;
 
-        bool operator==(const LvtkFileFilter&other) const;
+        bool operator==(const Lv2FileFilter&other) const;
     };
 
     class Lv2FileDialog : public lvtk::LvtkDialog
@@ -64,12 +64,28 @@ namespace lvtk::ui
 
         LvtkEvent<std::string> OK;
 
+        LvtkEvent<void> Cancelled;
+
         BINDING_PROPERTY(SelectedLocation, int64_t, 2);
 
         BINDING_PROPERTY_REF(SelectedFile, std::string, std::string());
 
-        BINDING_PROPERTY_REF(FileTypes, std::vector<LvtkFileFilter>, std::vector<LvtkFileFilter>())
+        BINDING_PROPERTY_REF(FileTypes, std::vector<Lv2FileFilter>, std::vector<Lv2FileFilter>())
         BINDING_PROPERTY(SelectedFileType, int64_t, 0)
+
+        const std::string& DefaultDirectory() const;
+        Lv2FileDialog&DefaultDirectory(const std::string&path);
+
+        struct LvtkFilePanel
+        {
+            std::string label;
+            std::string icon;
+            std::string path;
+        };
+
+        void AddPanel(size_t position, const LvtkFilePanel&panel);
+
+
 
     protected:
         BINDING_PROPERTY(OkEnabled, bool, false);
@@ -78,7 +94,7 @@ namespace lvtk::ui
         BINDING_PROPERTY(FavoriteButtonEnabled, bool, false);
 
         BINDING_PROPERTY_REF(FavoriteIconSource, std::string, "FileDialog/favorite_unchecked.svg")
-        void OnFileTypesChanged(const std::vector<LvtkFileFilter>& value);
+        void OnFileTypesChanged(const std::vector<Lv2FileFilter>& value);
         void OnSelectedFileTypeChanged(int64_t value);
     protected:
         BINDING_PROPERTY(SearchProgressActive,bool,false)
@@ -95,6 +111,8 @@ namespace lvtk::ui
         void OnOk();
 
     private:
+        std::string defaultDirectory;
+        bool okClose = false;
         IcuString::Ptr icuString; // strictly lifetime managment.
 
         BINDING_PROPERTY_REF(FileTypeDropdownItems,std::vector<LvtkDropdownItem>,std::vector<LvtkDropdownItem>())
@@ -148,7 +166,6 @@ namespace lvtk::ui
 
             bool operator==(const FilePanel &other) const;
         };
-
         struct FileLocation
         {
             std::string path;
@@ -158,6 +175,7 @@ namespace lvtk::ui
         };
 
         static std::vector<FilePanel> gPanels;
+        std::vector<FilePanel> panels;
 
         struct LvtkDialogFile;
 
@@ -264,6 +282,6 @@ namespace lvtk::ui
         double searchButtonWidth = 0;
         bool FileTypeMatch(const std::filesystem::path &path) const;
 
-        std::optional<LvtkFileFilter> currentFileFilter;
+        std::optional<Lv2FileFilter> currentFileFilter;
     };
 }

@@ -145,7 +145,7 @@ public:
             button->Clicked.AddListener([this](const LvtkMouseEventArgs&)
             {
                 auto dlg = Lv2FileDialog::Create("Open","TestFileDialog");
-                std::vector<LvtkFileFilter> fileTypes
+                std::vector<Lv2FileFilter> fileTypes
                 {
                     {"All files",{},{}},
                     {"Audio files",{},{ "audio/*"}},

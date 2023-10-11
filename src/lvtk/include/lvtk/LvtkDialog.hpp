@@ -107,6 +107,9 @@ namespace lvtk
 
         virtual void Show(LvtkWindow *parentWindow);
 
+        struct ClosingEventArgs {
+        };
+        LvtkEvent<ClosingEventArgs> Closing;
     protected:
         BINDING_PROPERTY_REF(X11WindowName,std::string,"");
         // Default name used by Window Managers.

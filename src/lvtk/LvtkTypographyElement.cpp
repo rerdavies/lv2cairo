@@ -335,6 +335,8 @@ LvtkStyle::ptr LvtkTypographyElement::GetVariantStyle()
         return theme.captionStyle;
     case LvtkTypographyVariant::Heading:
         return theme.headingStyle;
+    case LvtkTypographyVariant::Subheading:
+        return theme.subheadingStyle;
     default:
         return nullptr;
     }

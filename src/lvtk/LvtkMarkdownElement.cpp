@@ -96,8 +96,10 @@ void LvtkMarkdownElement::FlushMarkdown()
         return;
 
     auto element = MarkdownTypographyElement::Create();
-    element->Variant(textVariant)
-        .Text(lineBuffer);
+    element->Variant(textVariant);
+
+    element->Text(lineBuffer);
+    
     element->Style()
         .SingleLine(false);
     lineBuffer.resize(0);
@@ -130,14 +132,55 @@ void LvtkMarkdownElement::FlushMarkdown()
         element->Style().MarginLeft(leftMargin).MarginBottom(16);
         if (lineBreak)
         {
-            lineBreak = false;
             element->Style()
                 .MarginBottom(0)
                 .PaddingBottom(4);
+        } 
+        if (markdownVariant != MarkdownVariant::Paragraph)
+        {
+            Style()
+                .MarginTop(16)
+                ;
+        }
+        switch (markdownVariant)
+        {
+            case MarkdownVariant::H1:
+                Style()
+                    
+                    .FontWeight(LvtkFontWeight::Bold)
+                    .FontSize(titleSize)
+                    .MarginBottom(24)
+                    ;
+                break;
+            case MarkdownVariant::H2:
+                Style()
+                    .FontWeight(LvtkFontWeight::Bold)
+                    .FontSize(headingSize)
+                    .MarginBottom(24)
+                    ;
+                break;
+            case MarkdownVariant::H3:
+                Style()
+                    .FontWeight(LvtkFontWeight::Bold)
+                    .MarginBottom(24)
+                    ;
+                break;
+            case MarkdownVariant::H4:
+                Style()
+                    .MarginBottom(24)
+                    ;
+                break;
+            default:
+                break;
+        }
+        
+        if (!lineBreak) {
+            markdownVariant = MarkdownVariant::Paragraph;
         }
 
         AddChild(element);
     }
+    lineBreak = false;
 }
 
 static bool GetHangingIndentText(const std::string &line, std::string &hangingText, std::string &lineOut, size_t &hangingIndentSpaces)
@@ -204,6 +247,35 @@ static bool GetHangingIndentText(const std::string &line, std::string &hangingTe
     return true;
 }
 
+static bool IsRule(const std::string&text)
+{
+    if (!text.starts_with("---")) return false;
+
+    for (auto i = text.begin()+3; i != text.end(); ++i)
+    {
+        if (*i != '-') return false;
+    }
+    return true;
+}
+
+static bool GetTitleChars(const std::string&text, int &titleChars,std::string&lineOut)
+{
+    titleChars = 0;
+    if (!text.starts_with("###")) return false;
+
+    auto i = text.begin();
+    while (i != text.end() && *i == '#')
+    {
+        ++i;
+        ++titleChars;
+    }
+    while (i != text.end() && *i == ' ')
+    {
+        ++i;
+    }
+    lineOut = std::string(i,text.end());
+    return true;
+}
 void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
 {
     std::string text = text_;
@@ -212,7 +284,7 @@ void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
         FlushMarkdown();
         return;
     }
-    if (text == "---")
+    if (IsRule(text))
     {
         FlushMarkdown();
         AddChild(MarkdownRuleElement::Create());
@@ -246,7 +318,25 @@ void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
 
         std::string lineOut;
         size_t hangingIndentSpaces;
-        if (GetHangingIndentText(text, this->hangingText, lineOut, hangingIndentSpaces))
+        int titleChars;
+        if (GetTitleChars(text,titleChars, lineOut))
+        {
+            switch (titleChars)
+            {
+            case 3:
+                markdownVariant = MarkdownVariant::H1;
+                break;
+            case 4:
+                markdownVariant = MarkdownVariant::H2;
+                break;
+            case 5:
+                markdownVariant = MarkdownVariant::H3;
+            case 6:
+            default:
+                markdownVariant = MarkdownVariant::H4;
+                break;
+            }
+        } else if (GetHangingIndentText(text, this->hangingText, lineOut, hangingIndentSpaces))
         {
             lineBuffer = lineOut;
             hangingIndentStack.push_back({this->leftMargin, this->hangingIndentChars});
@@ -284,6 +374,7 @@ void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
 LvtkMarkdownElement &LvtkMarkdownElement::TextVariant(LvtkTypographyVariant textVariant)
 {
     this->textVariant = textVariant;
+    this->markdownVariant = MarkdownVariant::Paragraph;
     return *this;
 }
 LvtkTypographyVariant LvtkMarkdownElement::TextVariant() const

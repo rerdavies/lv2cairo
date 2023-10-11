@@ -13,6 +13,7 @@ add_executable(lvtk_demo
 
     LvtkTestMain.cpp
     TestPage.hpp
+    TunerTestPage.cpp TunerTestPage.hpp
     TableTestPage.cpp TableTestPage.hpp
     PaletteTestPage.cpp PaletteTestPage.hpp
     Lv2UiTestPage.cpp Lv2UiTestPage.hpp SamplePluginInfo.hpp

@@ -17,29 +17,6 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/*
- * MIT License
- * 
- * Copyright (c) 2023 Robin E. R. Davies
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is furnished to do
- * so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 
 #pragma once
 
@@ -83,7 +60,7 @@ namespace lvtk::ui {
     public:
         UiFileType() { }
         UiFileType(const std::string&label, const std::string &fileType);
-        UiFileType(const std::string&label, const std::string &mimeType, std::string &fileExtension);
+        UiFileType(const std::string&label, const std::string &mimeType, const std::string &fileExtension);
 
 
         const std::string& label() const { return label_;}
@@ -123,6 +100,7 @@ namespace lvtk::ui {
         std::string label_;
         std::int32_t index_ = -1;
         std::string directory_;
+        std::string resourceDirectory_;
         std::vector<UiFileType> fileTypes_;
         std::string patchProperty_;
         std::string portGroup_;
@@ -136,12 +114,17 @@ namespace lvtk::ui {
         {
             *(UiFileProperty_Init*)(this) = std::move(values);
         }
-        UiFileProperty(const std::string&name, const std::string&patchProperty,const std::string &directory);
+        UiFileProperty(
+            const std::string&name, 
+            const std::string&patchProperty,
+            const std::string &directory,
+            const std::string &resourceDirectory);
 
 
         const std::string &label() const { return label_; }
         int32_t index() const { return index_; }
         const std::string &directory() const { return directory_; }
+        const std::string &resourceDirectory() const { return resourceDirectory_; }
         const std::string&portGroup() const { return portGroup_; }
 
         const std::vector<UiFileType> &fileTypes() const { return fileTypes_; }

@@ -39,6 +39,7 @@ namespace lvtk::ui {
         StereoVuMeterRight,
         LED,
         StatusOutputMessage,
+        Tuner,
         Other
     };
     class Lv2PortViewController {

@@ -53,7 +53,11 @@ namespace lvtk::ui
         virtual LvtkContainerElement::ptr CreatePage();
 
         virtual LvtkContainerElement::ptr CreateContainer(Lv2PortViewController *viewController);
+        virtual LvtkContainerElement::ptr CreateContainer();
         virtual LvtkElement::ptr CreateCaption(Lv2PortViewController *viewController);
+        LvtkElement::ptr CreateCaption(const std::string&title,LvtkAlignment alignment = LvtkAlignment::Start);
+
+
         virtual LvtkElement::ptr CreateControl(Lv2PortViewController *viewController);
 
         virtual LvtkElement::ptr CreateDial(Lv2PortViewController *viewController);
@@ -65,6 +69,7 @@ namespace lvtk::ui
         virtual LvtkElement::ptr CreateEditArea(Lv2PortViewController *viewController);
         virtual LvtkElement::ptr CreateLed(Lv2PortViewController *viewController);
         virtual LvtkElement::ptr CreateStatusMessage(Lv2PortViewController *viewController,const std::vector<LvtkDropdownItem> &items);
+        virtual LvtkElement::ptr CreateTuner(Lv2PortViewController *viewController);
 
 
         enum class ValueControlStyle

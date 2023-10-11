@@ -179,6 +179,13 @@ void LvtkTheme::BuildStyles()
             .FontSize(headingSize)
             .LineSpacing(1.2)
             .Color(secondaryTextColor));
+    subheadingStyle = std::make_shared<LvtkStyle>(
+        LvtkStyle()
+            .FontFamily(fontFamily)
+            .FontWeight(LvtkFontWeight::Bold)
+            .FontSize(bodySize)
+            .LineSpacing(1.2)
+            .Color(secondaryTextColor));
     bodyPrimaryStyle = std::make_shared<LvtkStyle>(
         LvtkStyle()
             .FontFamily(fontFamily)

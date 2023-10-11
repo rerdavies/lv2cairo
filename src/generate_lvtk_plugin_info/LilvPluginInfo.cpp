@@ -510,7 +510,7 @@ PiPedalUI LilvPluginInfo::FindWritablePathProperties(LilvWorld*pWorld, const Lil
 
                         auto fileProperty =
                             UiFileProperty(
-                                strLabel, propertyUri.AsUri(), lv2DirectoryName);
+                                strLabel, propertyUri.AsUri(), lv2DirectoryName,"");
 
                         AutoLilvNode dc__format = lilv_new_uri(pWorld, "http://purl.org/dc/terms/format");
                         AutoLilvNodes dc_types = lilv_world_find_nodes(pWorld, propertyUri, dc__format, nullptr);

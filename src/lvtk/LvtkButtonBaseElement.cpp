@@ -121,8 +121,40 @@ bool LvtkButtonBaseElement::OnMouseMove(LvtkMouseEventArgs &event)
     return false;
 }
 
+void LvtkButtonBaseElement::CancelKeyboardDelay()
+{
+    if (keyboardDelayHandle)
+    {
+        this->Window()->CancelPostDelayed(keyboardDelayHandle);
+        keyboardDelayHandle = AnimationHandle::InvalidHandle;
+
+    }
+}
+void LvtkButtonBaseElement::FireKeyboardClick()
+{
+    CancelKeyboardDelay();
+    LvtkMouseEventArgs eventArgs = MakeKeyboardEventArgs();
+    this->Clicked.Fire(eventArgs);
+
+    if (IsMounted())
+    {
+        StartAnimation(true);
+
+        keyboardDelayHandle = this->Window()->PostDelayed(
+            300,
+            [this](){
+                this->keyboardDelayHandle = AnimationHandle::InvalidHandle;
+                StartAnimation(false);
+            }
+        );
+    }
+}
+
+
 bool LvtkButtonBaseElement::OnMouseDown(LvtkMouseEventArgs &event)
 {
+    CancelKeyboardDelay();
+
     if (!Enabled())
         return false;
     this->animationCenter = event.point;
@@ -227,6 +259,11 @@ void LvtkButtonBaseElement::RequestAnimationTick()
 void LvtkButtonBaseElement::StartAnimation(bool increasing)
 {
     CancelAnimation();
+    if (!IsMounted())
+    {
+        AnimationValue(0);
+        return;
+    }
     this->animationStartValue = this->animationValue;
     this->animationStartTime = clock_t::now();
     this->animationIncreasing = increasing;
@@ -243,6 +280,7 @@ bool LvtkButtonBaseElement::OnLostFocus(const LvtkFocusEventArgs &eventArgs)
 {
     HoverState(HoverState() - LvtkHoverState::Focus);
     super::OnLostFocus(eventArgs);
+    StartAnimation(false);
 
     return false;
 }
@@ -261,6 +299,7 @@ void LvtkButtonBaseElement::OnMount()
 }
 void LvtkButtonBaseElement::OnUnmount()
 {
+    CancelKeyboardDelay();
     RemoveClass(Theme().buttonDisableStyle);
     if (clickEventHandle)
     {
@@ -285,6 +324,26 @@ void LvtkButtonBaseElement::OnEnabledChanged(bool enable)
         Invalidate();
     }
 }
+
+LvtkMouseEventArgs LvtkButtonBaseElement::MakeKeyboardEventArgs()
+{
+    LvtkMouseEventArgs eventArgs;
+    eventArgs.button = 0;
+    eventArgs.h = this->Window()->Handle();
+    eventArgs.modifierState = ModifierState::Empty;
+
+    LvtkSize size = ClientSize();
+    eventArgs.point = LvtkPoint(size.Width()/2,size.Height()/2);
+    LvtkRectangle screenBounds = ScreenBounds();
+    eventArgs.screenPoint = LvtkPoint(
+        screenBounds.Left() + screenBounds.Width()/2,
+        screenBounds.Top() + screenBounds.Height()/2
+    );
+    return eventArgs;
+
+}
+
+
 
 bool LvtkButtonBaseElement::ShowPressedState() const
 {

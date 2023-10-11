@@ -96,6 +96,7 @@ namespace lvtk {
 
         LvtkStyle::ptr titleStyle;
         LvtkStyle::ptr headingStyle;
+        LvtkStyle::ptr subheadingStyle;
         LvtkStyle::ptr bodyPrimaryStyle;
         LvtkStyle::ptr bodySecondaryStyle;
         LvtkStyle::ptr captionStyle;

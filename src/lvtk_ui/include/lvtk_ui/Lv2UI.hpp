@@ -46,7 +46,8 @@ namespace lvtk
 namespace lvtk::ui
 {
     class Lv2PortViewFactory;
-
+    class Lv2FileDialog;
+    
     class Lv2UI : public Lv2NativeCallbacks
     {
     private:
@@ -92,7 +93,7 @@ namespace lvtk::ui
 
         virtual LvtkContainerElement::ptr Render();
         virtual LvtkContainerElement::ptr RenderControls();
-
+        virtual LvtkElement::ptr RenderFileControl(const UiFileProperty &fileProperty);
         Lv2UI&SetControlValue(const std::string&key, double value);
         double GetControlValue(const std::string&key) const;
 
@@ -162,6 +163,8 @@ namespace lvtk::ui
         std::vector<Observable<double>::handle_t> bindingSiteObserverHandles;
         std::vector<double> currentHostPortValues;
 
+        std::map<LV2_URID,std::shared_ptr<LvtkBindingProperty<std::string>>> filePropertyBindingSites;
+
         void OnPortValueChanged(int32_t portIndex, double value);
         std::unordered_map<std::string,LvtkBindingProperty<double>*> bindingSiteMap;
 
@@ -177,6 +180,7 @@ namespace lvtk::ui
             LV2_URID atom__Float;
             LV2_URID atom__Bool;
             LV2_URID atom__String;
+            LV2_URID atom__Path;
             LV2_URID atom__URID;
             LV2_URID atom__Resource;
             LV2_URID atom__Blank;
@@ -212,6 +216,13 @@ namespace lvtk::ui
         virtual void ui_delete() override;
         virtual int ui_resize(int width, int height) override;
     private:
+
+        void SelectFile(const std::string&patchProperty);
+        void CloseFileDialog();
+
+        EventHandle okListenerHandle,cancelListenerHandle;
+        std::shared_ptr<Lv2FileDialog> fileDialog;
+
         std::string pluginUiUri;
         std::string pluginUri;
         std::string bundlePath;
@@ -231,6 +242,8 @@ namespace lvtk::ui
 
         LV2_Atom_Forge_ *forge = nullptr;
         uint8_t patchRequestBuffer[128];
+
+        std::vector<EventHandle> fileElementClickedHandles;
     };
 
     class Lv2UIRegistrationBase

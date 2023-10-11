@@ -18,6 +18,7 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "lvtk_ui/Lv2PortViewController.hpp"
+#include "lvtk_ui/PiPedalUiDefs.h"
 #include <sstream>
 #include <iomanip>
 #include <cmath>
@@ -629,6 +630,11 @@ namespace lvtk::ui
         }
         else
         {
+
+            if (portInfo.designation() == PIPEDAL_UI__tunerFrequency)
+            {
+                return Lv2PortViewType::Tuner;
+            }
             if (IsEnumeration())
             {
                 return Lv2PortViewType::StatusOutputMessage;

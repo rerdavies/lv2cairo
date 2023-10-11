@@ -20,6 +20,7 @@
 #include "lvtk/LvtkStatusTextElement.hpp"
 #include "lvtk/LvtkFlexGridElement.hpp"
 #include "lvtk/LvtkTheme.hpp"
+#include "lvtk_ui/Lv2TunerElement.hpp"
 
 #define XK_MISCELLANY
 #include "X11/keysymdef.h"
@@ -37,7 +38,10 @@ double Lv2PortViewFactory::GetControlWidth(Lv2PortViewController *viewController
 {
     Lv2PortViewType viewType = viewController->GetViewType();
     double width = defaultControlWidth;
-    if (viewType == Lv2PortViewType::Dropdown || viewType == Lv2PortViewType::StatusOutputMessage)
+    if (viewType == Lv2PortViewType::Tuner)
+    {
+        width  *= 2;
+    } else if (viewType == Lv2PortViewType::Dropdown || viewType == Lv2PortViewType::StatusOutputMessage)
     {
         width *= 2;
     }
@@ -52,16 +56,41 @@ LvtkContainerElement::ptr Lv2PortViewFactory::CreateContainer(Lv2PortViewControl
     double width = GetControlWidth(viewController, Lv2ControlWidth);
     width = 0;
 
+    auto stackElement = CreateContainer();
+    stackElement->Style()
+        .Width(width);
+    return stackElement;
+}
+
+LvtkContainerElement::ptr Lv2PortViewFactory::CreateContainer()
+{
     auto stackElement = LvtkVerticalStackElement::Create();
     stackElement->Style()
-        .Width(width)
         .Height(Lv2ControlHeight)
         .HorizontalAlignment(LvtkAlignment::Start)
         .VerticalAlignment(LvtkAlignment::Start)
         //.Background(LvtkColor(1,0.5,0.5,0.1))
         .Margin({4, 0, 4, 0});
     return stackElement;
+
 }
+
+LvtkElement::ptr Lv2PortViewFactory::CreateCaption(const std::string&title,LvtkAlignment alignment)
+{
+    auto caption = LvtkTypographyElement::Create();
+    caption->Variant(LvtkTypographyVariant::Caption);
+    caption->Style()
+        .Ellipsize(LvtkEllipsizeMode::End)
+        .SingleLine(true)
+        .HorizontalAlignment(alignment)
+        .VerticalAlignment(LvtkAlignment::Start);
+    caption->Text(title);
+    return caption;
+
+
+}
+
+
 LvtkElement::ptr Lv2PortViewFactory::CreateCaption(Lv2PortViewController *viewController)
 {
     Lv2PortViewType viewType = viewController->GetViewType();
@@ -70,17 +99,7 @@ LvtkElement::ptr Lv2PortViewFactory::CreateCaption(Lv2PortViewController *viewCo
     {
         alignment = LvtkAlignment::Start;
     }
-
-    auto caption = LvtkTypographyElement::Create();
-    caption->Variant(LvtkTypographyVariant::Caption);
-    caption->Style()
-        .Ellipsize(LvtkEllipsizeMode::End)
-        .SingleLine(true)
-        .HorizontalAlignment(alignment)
-        .VerticalAlignment(LvtkAlignment::Start);
-
-    caption->Text(viewController->Caption());
-    return caption;
+    return CreateCaption(viewController->Caption(),alignment);
 }
 
 LvtkElement::ptr Lv2PortViewFactory::CreateControl(Lv2PortViewController *viewController)
@@ -101,6 +120,8 @@ LvtkElement::ptr Lv2PortViewFactory::CreateControl(Lv2PortViewController *viewCo
         }
         return CreateDropdown(viewController, items);
     }
+    case Lv2PortViewType::Tuner:
+        return CreateTuner(viewController);
     case Lv2PortViewType::OnOff:
         return CreateOnOff(viewController);
     case Lv2PortViewType::Toggle:
@@ -128,6 +149,18 @@ LvtkElement::ptr Lv2PortViewFactory::CreateControl(Lv2PortViewController *viewCo
     default:
         return LvtkElement::Create();
     }
+}
+
+LvtkElement::ptr Lv2PortViewFactory::CreateTuner(Lv2PortViewController *viewController)
+{
+    auto element = Lv2TunerElement::Create();
+    element->Style()
+        .HorizontalAlignment(LvtkAlignment::Center)
+        .VerticalAlignment(LvtkAlignment::Center);
+
+    viewController->PortValueProperty.Bind(element->ValueProperty);
+
+    return element;
 }
 
 LvtkElement::ptr Lv2PortViewFactory::CreateToggle(Lv2PortViewController *viewController)

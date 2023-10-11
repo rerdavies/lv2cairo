@@ -13,9 +13,9 @@ else()
     message(STATUS "LILV_0_INCLUDE_DIRS: ${LILV_0_INCLUDE_DIRS}")
 endif()
 
+set (LVTK_SRC_DIR )
 
 add_executable(generate_lvtk_plugin_info  
-    $<TARGET_OBJECTS:lvtk> $<TARGET_OBJECTS:lvtk_ui>
     LilvPiPedalUI.cpp
     LilvPiPedalUI.hpp
     AutoLilvNode.cpp
@@ -26,16 +26,24 @@ add_executable(generate_lvtk_plugin_info
     LilvPluginInfo.hpp
     ClassFileWriter.cpp
     ClassFileWriter.hpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lvtk_ui/Lv2Units.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lvtk_ui/Lv2PluginType.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lvtk_ui/Lv2PluginInfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lvtk_ui/PiPedalUI.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lvtk_ui/MimeTypes.cpp
     main.cpp
     ss.hpp
 )
 target_include_directories(generate_lvtk_plugin_info PRIVATE 
     ${LILV_0_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lvtk/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lvtk_ui/include
+    ${LVTK_UI_INCLUDE_DIRS}
+
 )
 target_link_libraries(generate_lvtk_plugin_info PRIVATE 
 
     ${LILV_0_LIBRARIES}
-    lvtk_ui
-    lvtk
 )
 

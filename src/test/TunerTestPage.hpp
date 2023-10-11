@@ -19,44 +19,21 @@
 
 #pragma once
 
-#include "lvtk_ui/PiPedalUI.hpp"
-#include <lilv/lilv.h>
-#include <filesystem>
-#include "lvtk_ui/PiPedalUiDefs.h"
+#include "TestPage.hpp"
 
-
-
-
-namespace lvtk::ui
+namespace lvtk {
+class TunerTestPage : public TestPage
 {
+public:
+    using super = TestPage;
+    using ptr = std::shared_ptr<TunerTestPage>;
+    static ptr Create() { return std::make_shared<TunerTestPage>(); }
 
-    class LilvUiFileType : public UiFileType
+    TunerTestPage() : TestPage("Tuner Control")
     {
-    public:
-        LilvUiFileType(LilvWorld *pHost, const LilvNode *node);
-        static std::vector<UiFileType> GetArray(LilvWorld *pHost, const LilvNode *node, const LilvNode *uri);
-    };
 
-    class LilvUiPortNotification: public UiPortNotification {
-    public:
-            LilvUiPortNotification(LilvWorld*pWorld, const LilvNode*node);
-    };
+    }
+    LvtkElement::ptr CreatePageView(LvtkTheme::ptr theme) override;
 
-    class LilvUiFileProperty: public UiFileProperty {
-    public:
-        LilvUiFileProperty(LilvWorld*pWorld, const LilvNode*node, const std::filesystem::path&resourcePath);
-    };
-
-    class LilvUiFrequencyPlot: public UiFrequencyPlot {
-    public:
-        LilvUiFrequencyPlot(LilvWorld*pWorld, const LilvNode*node,
-          const std::filesystem::path&resourcePath);
-
-    };
-    class LilvPiPedalUI : public PiPedalUI
-    {
-    public:
-        LilvPiPedalUI(LilvWorld*pWorld, const LilvNode*uiNode, const std::filesystem::path&resourcePath);
-    };
-
-}
+};
+} // namespace

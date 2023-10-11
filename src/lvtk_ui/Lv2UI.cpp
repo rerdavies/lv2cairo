@@ -22,6 +22,9 @@
 #include "lvtk/LvtkSettingsFile.hpp"
 #include "lvtk_ui/Lv2PortViewFactory.hpp"
 #include "lvtk_ui/Lv2FrequencyPlotElement.hpp"
+#include "lvtk_ui/Lv2FileElement.hpp"
+#include "lvtk_ui/Lv2FileDialog.hpp"
+#include "ss.hpp"
 
 #include "lvtk/LvtkWindow.hpp"
 #include "lvtk/LvtkFlexGridElement.hpp"
@@ -291,11 +294,11 @@ bool Lv2UI::instantiate(
     //     this->RequestPatchProperty(urid);
     // }
 
-    // for (auto&fileProperty: this->pluginInfo->piPedalUI().fileProperties())
-    // {
-    //     LV2_URID urid = GetUrid(fileProperty.patchProperty().c_str());
-    //     this->RequestPatchProperty(urid);
-    // }
+    for (auto&fileProperty: this->pluginInfo->piPedalUI().fileProperties())
+    {
+         LV2_URID urid = GetUrid(fileProperty.patchProperty().c_str());
+         this->RequestPatchProperty(urid);
+    }
     return true;
 }
 
@@ -318,6 +321,7 @@ void Lv2UI::InitUrids()
     urids.patch__accept = GetUrid(LV2_PATCH__accept);
     urids.atom__Bool = GetUrid(LV2_ATOM__Bool);
     urids.atom__String = GetUrid(LV2_ATOM__String);
+    urids.atom__Path = GetUrid(LV2_ATOM__Path);
 
 }
 
@@ -392,6 +396,8 @@ int Lv2UI::ui_idle()
 }
 void Lv2UI::ui_delete()
 {
+    CloseFileDialog();
+
     if (cairoWindow)
     {
         cairoWindow->CloseRootWindow();
@@ -789,6 +795,31 @@ void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
         
         InsertExtendedControl(plotContainer,controlIndex,frequencyPlot.index(),plotControl);
     }
+    for (auto&fileProperty: this->pluginInfo->piPedalUI().fileProperties())
+    {
+        LvtkContainerElement::ptr fileContainer;
+        std::vector<size_t> *controlIndex = nullptr;
+
+
+        if (fileProperty.portGroup().length() != 0)
+        {
+            fileContainer = portGroups[fileProperty.portGroup()];
+            if (!fileContainer)
+            {
+                fileContainer = LvtkGroupElement::Create();
+                InsertExtendedControl(container,&mainControlIndex,fileProperty.index(),fileContainer);
+            }
+            controlIndex = &(portGroupControlIndices[fileProperty.portGroup()]);
+
+        } else {
+            fileContainer = container;
+            controlIndex = &mainControlIndex;
+        }
+        auto fileElement = RenderFileControl(fileProperty);
+        
+        InsertExtendedControl(container,controlIndex,fileProperty.index(),fileElement);
+    }
+
 }
 
 LvtkElement::ptr Lv2UI::RenderStereoControl(
@@ -862,6 +893,18 @@ int Lv2UI::ui_resize(int width, int height)
 
 void Lv2UI::OnPatchPropertyReceived(LV2_URID type, const uint8_t *data)
 {
+    const LV2_Atom*atom = (const LV2_Atom*)data;
+    if (atom->type == urids.atom__Path || atom->type == urids.atom__String)
+    {
+        auto f = filePropertyBindingSites.find(type);
+        if (f != filePropertyBindingSites.end())
+        {
+            const char*value = (const char*)LV2_ATOM_CONTENTS(LV2_Atom_String,atom);
+            f->second->set(value);
+        }
+    }
+
+
     PatchPropertyEventArgs eventArgs { type,data};
     
     OnPatchProperty.Fire(eventArgs);
@@ -893,10 +936,16 @@ void Lv2UI::RequestPatchProperty(LV2_URID property)
 void Lv2UI::WritePatchProperty(LV2_URID property,const LV2_Atom *value)
 {
     size_t messageSize = 
-        value->size + sizeof(LV2_Atom) + sizeof(LV2_Atom_Object) + sizeof(LV2_URID)*3 + 4;
+        value->size + (sizeof(LV2_Atom) 
+        + sizeof(LV2_Atom_Object) + sizeof(LV2_Atom_Property)*2 
+        + sizeof(LV2_Atom_URID)+20+4);
+    
 
     std::vector<uint8_t> buffer;
     buffer.resize(messageSize);
+
+    lv2_atom_forge_set_buffer(forge, &buffer[0], buffer.size());
+
 
 	LV2_Atom_Forge_Frame objectFrame;
 
@@ -906,7 +955,7 @@ void Lv2UI::WritePatchProperty(LV2_URID property,const LV2_Atom *value)
 	lv2_atom_forge_urid(forge, property);
 
 	lv2_atom_forge_key(forge, urids.patch__value);
-    lv2_atom_forge_write(forge,value,value->size + sizeof(LV2_Atom));
+    lv2_atom_forge_primitive(forge,value);
 
 	lv2_atom_forge_pop(forge, &objectFrame);
 
@@ -956,6 +1005,158 @@ void Lv2UI::WritePatchProperty(LV2_URID property,const std::string& value)
     char*pAtomString = (char*)(pBuffer + sizeof(LV2_Atom));
     strcpy(pAtomString,value.c_str());
     WritePatchProperty(property,(const LV2_Atom*)pBuffer);
+}
+
+LvtkElement::ptr Lv2UI::RenderFileControl(const UiFileProperty &fileProperty)
+{
+    auto container = this->portViewFactory->CreateContainer();
+    container->AddChild(this->portViewFactory->CreateCaption(fileProperty.label(),LvtkAlignment::Start));
+    container->Style()
+        .Width(portViewFactory->DefaultSize().Width()*2)
+        ;
+
+    auto midChild = LvtkContainerElement::Create();
+    midChild->Style()
+        .VerticalAlignment(LvtkAlignment::Stretch)
+        .HorizontalAlignment(LvtkAlignment::Stretch)
+        ;
+
+    container->AddChild(midChild);
+    auto fileElement = Lv2FileElement::Create();
+    fileElement->Style()
+        .HorizontalAlignment(LvtkAlignment::Stretch)
+        .VerticalAlignment(LvtkAlignment::Center)
+        ;
+    midChild->AddChild(fileElement);
+
+    auto spacer = LvtkElement::Create();
+    spacer->Style()
+        .Width(1)
+        .Height(portViewFactory->EditControlHeight());
+    container->AddChild(spacer);
+
+    std::shared_ptr<LvtkBindingProperty<std::string>> bindingProperty 
+        = std::make_shared<LvtkBindingProperty<std::string>>();
+    bindingProperty->set("");
+    
+    filePropertyBindingSites[GetUrid(fileProperty.patchProperty().c_str())] = bindingProperty;
+    bindingProperty->Bind(fileElement->FilenameProperty);
+
+    fileElement->PatchProperty(fileProperty.patchProperty());
+    
+    std::string patchProperty = fileProperty.patchProperty();
+    auto handle = fileElement->Clicked.AddListener(
+        [this,patchProperty](const LvtkMouseEventArgs &args)
+        {
+            SelectFile(patchProperty);
+            return true;
+        }
+    );
+    fileElementClickedHandles.push_back(handle);
+    this->RequestPatchProperty(GetUrid(fileProperty.patchProperty().c_str()));
+    return container;
+}
+
+void Lv2UI::CloseFileDialog()
+{
+    okListenerHandle = EventHandle::InvalidHandle;
+    cancelListenerHandle = EventHandle::InvalidHandle;
+    if (fileDialog)
+    {
+        fileDialog->Close();
+        fileDialog = nullptr;
+    }
+
+}
+void Lv2UI::SelectFile(const std::string&patchProperty)
+{
+    CloseFileDialog();
+
+    const UiFileProperty*pProperty = nullptr;
+    for (auto&fileProperty : this->pluginInfo->piPedalUI().fileProperties())
+    {
+        if (fileProperty.patchProperty() == patchProperty)
+        {
+            pProperty = &fileProperty;
+            break;
+        }
+    }
+    if (pProperty == nullptr) 
+    {
+        LogError(SS("Can't find fileProperty " << patchProperty));
+
+        return;
+    }
+    fileDialog = Lv2FileDialog::Create(pProperty->label(),"propertyDlg-" + patchProperty);
+
+    std::vector<Lv2FileFilter> fileTypes;
+    if (pProperty->fileTypes().size() > 1)
+    {
+        std::stringstream s;
+        bool firstLabel = true;
+        Lv2FileFilter filter;
+        for (auto&fileType: pProperty->fileTypes())
+        {
+            if (!firstLabel)
+            {
+                s << ", ";
+            }
+            s << fileType.label();
+            firstLabel = false;
+
+            filter.extensions.push_back(fileType.fileExtension());
+            filter.mimeTypes.push_back(fileType.mimeType());
+        }
+        filter.label = s.str();
+        fileTypes.push_back(filter);
+    }
+    for (auto&fileType: pProperty->fileTypes())
+    {
+        Lv2FileFilter filter;
+        filter.label = fileType.label();
+        filter.extensions.push_back(fileType.fileExtension());
+        filter.mimeTypes.push_back(fileType.mimeType());
+        fileTypes.push_back(filter);
+    }
+    {
+        Lv2FileFilter filter;
+        filter.label = "All files";
+        fileTypes.push_back(filter);
+    }
+    fileDialog->FileTypes(
+        fileTypes
+    );
+
+    std::string defaultDirectory = pProperty->resourceDirectory();
+    if (defaultDirectory.length() != 0)
+    {
+        fileDialog->DefaultDirectory(
+            (std::filesystem::path(this->BundlePath()) / std::filesystem::path(defaultDirectory))
+        );
+
+        Lv2FileDialog::LvtkFilePanel filePanel {
+            "Plugin",
+            "com.twoplay.lv2cairo.plugin.svg",
+            fileDialog->DefaultDirectory()
+        };
+        fileDialog->AddPanel(2,filePanel);
+
+    }
+
+    okListenerHandle = fileDialog->OK.AddListener(
+        [this](const std::string&result)
+        {
+            this->fileDialog = nullptr;
+            return true;
+        }
+    );
+    cancelListenerHandle = fileDialog->Cancelled.AddListener(
+        [this](void) {
+            this->fileDialog = nullptr;
+            return true;
+        }
+    );
+    fileDialog->Show(this->Window().get());
 }
 
 

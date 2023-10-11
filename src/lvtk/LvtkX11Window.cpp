@@ -645,7 +645,7 @@ void LvtkX11Window::CreateWindow(
     //     Window frameWindow = GetTopLevelSibling(parameters.owner->Handle());
     //     XSetTransientForHint(x11Display,x11Window,frameWindow);
     // } else 
-    if (x11LogicalParentWindow != parentWindow)
+    if (x11LogicalParentWindow != parentWindow || windowType == LvtkWindowType::Dialog)
     {
         if (
             XSetTransientForHint(x11Display, x11Window, x11LogicalParentWindow) == 0)
@@ -1515,7 +1515,7 @@ void LvtkX11Window::Close()
         {
             parent = parent->parent;
         }
-        EraseChild(x11Window);
+        parent->EraseChild(x11Window);
     }
 }
 

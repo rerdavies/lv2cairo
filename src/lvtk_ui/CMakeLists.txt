@@ -33,6 +33,10 @@ add_library(lvtk_ui OBJECT
     include/lvtk_ui/Lv2FileDialog.hpp
     include/lvtk_ui/GlobMatcher.hpp
     include/lvtk_ui/Lv2FrequencyPlotElement.hpp
+    include/lvtk_ui/Lv2TunerElement.hpp
+    include/lvtk_ui/Lv2FileElement.hpp
+    Lv2FileElement.cpp
+    Lv2TunerElement.cpp
     Lv2FrequencyPlotElement.cpp
     Lv2FileDialog.cpp
     GlobMatcher.cpp

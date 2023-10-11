@@ -328,6 +328,10 @@ void LvtkDropdownElement::OnUnmount()
 void LvtkDropdownElement::OnMount()
 {
     auto &theme = Theme();
+    
+    this->ClearClasses();
+    super::OnMount();
+
     this->hoverTextColors = theme.hoverTextColors;
     this->AddClass(theme.dropdownUnderlineStyle);
 

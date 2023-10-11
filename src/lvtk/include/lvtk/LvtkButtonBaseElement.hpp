@@ -48,7 +48,10 @@ namespace lvtk {
         virtual void OnEnabledChanged(bool value);
         virtual bool ShowPressedState() const;
 
+        void FireKeyboardClick();
     protected:
+        LvtkMouseEventArgs MakeKeyboardEventArgs();
+
         virtual bool OnFocus(const LvtkFocusEventArgs &eventArgs) override;
         virtual bool OnLostFocus(const LvtkFocusEventArgs &eventArgs) override;
 
@@ -69,6 +72,9 @@ namespace lvtk {
         virtual bool WillDraw() const override { return true; }
 
     private:
+        AnimationHandle keyboardDelayHandle;
+        void CancelKeyboardDelay();
+
 
         using clock_t = std::chrono::steady_clock;
         clock_t::time_point animationStartTime; 

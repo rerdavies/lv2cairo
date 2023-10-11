@@ -24,11 +24,16 @@
 
 using namespace lvtk::ui;
 
-UiFileProperty::UiFileProperty(const std::string &name, const std::string &patchProperty, const std::string &directory)
+UiFileProperty::UiFileProperty(
+    const std::string &name, 
+    const std::string &patchProperty, 
+    const std::string &directory, 
+    const std::string &resourceDirectory)
 {
     label_ = (name);
     patchProperty_ = (patchProperty);
     directory_ = (directory);
+    resourceDirectory_ = resourceDirectory;
 }
 
 // PiPedalUI::PiPedalUI(
@@ -56,7 +61,7 @@ PiPedalUI::PiPedalUI(
     this->fileProperties_ = std::move(fileProperties);
 }
 
-UiFileType::UiFileType(const std::string &label, const std::string &mimeType, std::string &fileExtension)
+UiFileType::UiFileType(const std::string &label, const std::string &mimeType, const std::string &fileExtension)
     : label_(label), mimeType_(mimeType), fileExtension_(fileExtension)
 {
 }

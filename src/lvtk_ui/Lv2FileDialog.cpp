@@ -40,7 +40,6 @@
 #include "ss.hpp"
 #include "lvtk_ui/MimeTypes.hpp"
 
-
 #define XK_MISCELLANY
 #include <X11/keysymdef.h>
 
@@ -185,7 +184,7 @@ public:
         virtual const char *what() const noexcept override { return "Cancelled"; }
     };
 
-    static std::vector<std::string> Filter(Lv2FileDialog *dlg,const std::vector<std::string> &input, const std::string &filter)
+    static std::vector<std::string> Filter(Lv2FileDialog *dlg, const std::vector<std::string> &input, const std::string &filter)
     {
         SearchTask searchTask;
         searchTask.globMatcher.SetPattern(filter);
@@ -517,16 +516,16 @@ public:
 };
 
 Lv2FileDialog::Lv2FileDialog(const std::string &title, const std::string &settingsKey)
-: icuString(IcuString::Instance())
+    : icuString(IcuString::Instance())
 {
     using namespace std::chrono;
 
-
+    panels = gPanels;
     SettingsKey(settingsKey);
     SelectedLocationProperty.SetElement(this, &Lv2FileDialog::OnSelectedLocationChanged);
     SelectedFileProperty.SetElement(this, &Lv2FileDialog::OnSelectedFileChanged);
-    SelectedFileTypeProperty.SetElement(this,&Lv2FileDialog::OnSelectedFileTypeChanged);
-    FileTypesProperty.SetElement(this,&Lv2FileDialog::OnFileTypesChanged);
+    SelectedFileTypeProperty.SetElement(this, &Lv2FileDialog::OnSelectedFileTypeChanged);
+    FileTypesProperty.SetElement(this, &Lv2FileDialog::OnFileTypesChanged);
 
     DefaultSize(LvtkSize(800, 600));
     MinSize(LvtkSize(600, 400));
@@ -743,8 +742,7 @@ LvtkElement::ptr Lv2FileDialog::RenderSearchProgressBar()
 {
     auto element = LvtkIndefiniteProgressElement::Create();
     element->Style()
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        ;
+        .HorizontalAlignment(LvtkAlignment::Stretch);
     SearchProgressActiveProperty.Bind(element->ActiveProperty);
     return element;
 }
@@ -1052,9 +1050,9 @@ LvtkElement::ptr Lv2FileDialog::RenderLocations()
         .BorderWidth({0, 0, 1, 0})
         .Padding({8, 8, 8, 8})
         .BorderColor(Theme().dividerColor);
-    for (size_t i = 0; i < gPanels.size(); ++i)
+    for (size_t i = 0; i < panels.size(); ++i)
     {
-        auto l = RenderPanel(i, gPanels[i]);
+        auto l = RenderPanel(i, panels[i]);
         this->locations.push_back(l);
         body->AddChild(l);
     }
@@ -1100,15 +1098,13 @@ LvtkElement::ptr Lv2FileDialog::RenderFooter()
         .ColumnGap(8)
         .Padding({20, 16, 24, 16})
         .BorderWidth({0, 1, 0, 0})
-        .BorderColor(Theme().dividerColor)
-            ;
+        .BorderColor(Theme().dividerColor);
     {
         auto element = LvtkTypographyElement::Create();
         element->Text("Filter: ").Variant(LvtkTypographyVariant::BodySecondary);
         element->Style()
             .SingleLine(true)
-            .Padding({4})
-            ;
+            .Padding({4});
         footer->AddChild((element));
     }
     {
@@ -1167,8 +1163,7 @@ LvtkElement::ptr Lv2FileDialog::Render()
     container->Style()
         .HorizontalAlignment(LvtkAlignment::Stretch)
         .VerticalAlignment(LvtkAlignment::Stretch)
-        .Background(Theme().dialogBackgroundColor)
-        ;
+        .Background(Theme().dialogBackgroundColor);
     {
         {
             container->AddChild(RenderBody());
@@ -1200,9 +1195,8 @@ void Lv2FileDialog::OnOk()
     }
     recentEntries.insert(recentEntries.begin(), recentEntry);
 
-    std::string path = SelectedFile();
     SaveSettings();
-    OK.Fire(path);
+    okClose = true;
     Close();
 }
 
@@ -1394,7 +1388,7 @@ void Lv2FileDialog::LoadFiles(const std::filesystem::path &path)
         for (auto &dirEntry : std::filesystem::directory_iterator(path))
         {
 
-            const auto& path = dirEntry.path();
+            const auto &path = dirEntry.path();
             if (IsForbiddenDirectory(path))
             {
                 continue;
@@ -1406,8 +1400,8 @@ void Lv2FileDialog::LoadFiles(const std::filesystem::path &path)
 
                     files.push_back(LvtkDialogFile(dirEntry));
                 }
-
-            } else if (dirEntry.is_regular_file())
+            }
+            else if (dirEntry.is_regular_file())
             {
                 if (!IsHiddenFile(path))
                 {
@@ -1650,7 +1644,7 @@ std::vector<std::string> Lv2FileDialog::GetFavoritesVector()
 {
     std::vector<std::string> files;
     files.reserve(this->favorites.size());
-    for (const auto&v: this->favorites)
+    for (const auto &v : this->favorites)
     {
         // if (this->FileTypeMatch(v)) - a favorite is a favorite regardless of file type.
         {
@@ -1772,7 +1766,7 @@ void Lv2FileDialog::AddCurrentLocationToForwardList()
 void Lv2FileDialog::OnOpenLocation(int64_t locationIndex)
 {
 
-    auto &panel = gPanels[locationIndex];
+    auto &panel = panels[locationIndex];
     if (currentPanel == panel)
     {
         SelectedFile("");
@@ -1821,9 +1815,9 @@ void Lv2FileDialog::SelectPanel(const FileLocation &newLocation)
     size_t locationIndex = (size_t)-1;
     size_t longestMatch = 0;
 
-    for (size_t i = 0; i < gPanels.size(); ++i)
+    for (size_t i = 0; i < panels.size(); ++i)
     {
-        auto &panel = gPanels[i];
+        auto &panel = panels[i];
         if (panel.locationType == newLocation.locationType)
         {
             if (panel.locationType == LocationType::Path)
@@ -1850,7 +1844,7 @@ void Lv2FileDialog::SelectPanel(const FileLocation &newLocation)
     }
     if (locationIndex != (size_t)-1)
     {
-        currentPanel = gPanels[locationIndex];
+        currentPanel = panels[locationIndex];
         SelectedLocation((int64_t)locationIndex);
     }
 }
@@ -1958,6 +1952,16 @@ void Lv2FileDialog::OnClosing()
     searchTextChangedHandle.Release();
 
     super::OnClosing();
+
+    if (okClose)
+    {
+        std::string path = SelectedFile();
+        OK.Fire(path);
+    }
+    else
+    {
+        Cancelled.Fire();
+    }
 }
 
 void Lv2FileDialog::SaveSettings()
@@ -1986,6 +1990,10 @@ void Lv2FileDialog::SaveSettings()
 Lv2FileDialog::FileLocation Lv2FileDialog::LoadSettings()
 {
     FileLocation location{"~", LocationType::Path};
+    if (defaultDirectory.length() != 0)
+    {
+        location = FileLocation{defaultDirectory,LocationType::Path};
+    }
     if (SettingsKey().length() == 0)
         return location;
 
@@ -2161,7 +2169,7 @@ Lv2FileDialog &Lv2FileDialog::SearchVisible(bool visible)
             SetSearchStatusMessage("");
             CancelSearchTimer();
 
-            //SearchProgressActive(false);
+            // SearchProgressActive(false);
             searchBarAnimator.SetTarget(0.0);
 
             if (this->searchEdit->Focused())
@@ -2230,7 +2238,7 @@ void Lv2FileDialog::DirectSearch()
         break;
     }
 
-    std::vector<std::string> result = SearchTask::Filter(this,baseList, this->searchEdit->Text());
+    std::vector<std::string> result = SearchTask::Filter(this, baseList, this->searchEdit->Text());
     LoadMixedDirectoryFiles(result);
     if (result.size() == 0)
     {
@@ -2285,11 +2293,11 @@ void Lv2FileDialog::StartSearchTask()
 
 bool Lv2FileDialog::FileTypeMatch(const std::filesystem::path &path) const
 {
-    if (!currentFileFilter.has_value()) 
+    if (!currentFileFilter.has_value())
     {
         return true;
     }
-    auto & filter = currentFileFilter.value();
+    auto &filter = currentFileFilter.value();
     if (filter.extensions.size() == 0 && filter.mimeTypes.size() == 0)
     {
         return true;
@@ -2297,8 +2305,13 @@ bool Lv2FileDialog::FileTypeMatch(const std::filesystem::path &path) const
     std::string extension = path.extension().string();
     if (filter.extensions.size() != 0)
     {
-        for (const auto&item: filter.extensions)
+        for (const auto &item : filter.extensions)
         {
+            if (item == "*")
+            {
+                return true;
+            }
+
             if (item == extension)
             {
                 return true;
@@ -2307,16 +2320,22 @@ bool Lv2FileDialog::FileTypeMatch(const std::filesystem::path &path) const
     }
     if (filter.mimeTypes.size() != 0)
     {
-        const auto&mimeType = MimeTypes::MimeTypeFromExtension(extension);
-        for (const auto&item: filter.mimeTypes)
+        const auto &mimeType = MimeTypes::MimeTypeFromExtension(extension);
+        for (const auto &item : filter.mimeTypes)
         {
+            if (item == "*")
+            {
+                return true;
+            }
             if (item.ends_with("*"))
             {
-                if (strncmp(mimeType.c_str(),item.c_str(),item.length()-1) == 0)
+                if (strncmp(mimeType.c_str(), item.c_str(), item.length() - 1) == 0)
                 {
                     return true;
                 }
-            } else {
+            }
+            else
+            {
                 if (mimeType == item)
                 {
                     return true;
@@ -2425,7 +2444,6 @@ void Lv2FileDialog::OnSearchBarAnimate(double value)
     InvalidateLayout();
 }
 
-
 void Lv2FileDialog::OnLayoutComplete()
 {
 
@@ -2455,14 +2473,14 @@ void Lv2FileDialog::OnLayoutComplete()
     }
 }
 
-void Lv2FileDialog::OnFileTypesChanged(const std::vector<LvtkFileFilter>& value)
+void Lv2FileDialog::OnFileTypesChanged(const std::vector<Lv2FileFilter> &value)
 {
     std::vector<LvtkDropdownItem> items;
     int64_t index = 0;
-    for (const auto &fileType: value)
+    for (const auto &fileType : value)
     {
-        items.push_back(LvtkDropdownItem(index++,fileType.label));
-    }    
+        items.push_back(LvtkDropdownItem(index++, fileType.label));
+    }
     this->FileTypeDropdownItems(items);
     OnFilterChanged();
 }
@@ -2476,25 +2494,43 @@ void Lv2FileDialog::OnFilterChanged()
     if (SelectedFileType() >= 0 && SelectedFileType() < (int64_t)FileTypes().size())
     {
         currentFileFilter = FileTypes()[SelectedFileType()];
-    } else {
+    }
+    else
+    {
         currentFileFilter.reset();
     }
     if (searchBoxOpen)
     {
         CancelSearchTimer();
         StartSearchTask();
-    } else {
+    }
+    else
+    {
         FilesScrollOffset(0);
         SelectedFile("");
         LoadFileList();
     }
 }
 
-bool LvtkFileFilter::operator==(const LvtkFileFilter&other) const
+bool Lv2FileFilter::operator==(const Lv2FileFilter &other) const
 {
-    return label == other.label
-        && extensions == other.extensions
-        && mimeTypes == other.mimeTypes
-        ;
+    return label == other.label && extensions == other.extensions && mimeTypes == other.mimeTypes;
 }
 
+const std::string &Lv2FileDialog::DefaultDirectory() const { return defaultDirectory; }
+
+Lv2FileDialog &Lv2FileDialog::DefaultDirectory(const std::string &path)
+{
+    this->defaultDirectory = path;
+    return *this;
+}
+
+void Lv2FileDialog::AddPanel(size_t position, const LvtkFilePanel&panel_)
+{
+    FilePanel panel;
+    panel.icon = panel_.icon;
+    panel.label = panel_.label;
+    panel.path = panel_.path;
+    panel.locationType = LocationType::Path;
+    this->panels.insert(this->panels.begin()+position,panel);
+}
