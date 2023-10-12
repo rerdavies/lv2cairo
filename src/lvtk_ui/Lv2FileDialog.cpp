@@ -1120,6 +1120,22 @@ LvtkElement::ptr Lv2FileDialog::RenderFooter()
             .Height(1);
         footer->AddChild(element);
     }
+    if (ShowClearValue()) {
+        LvtkButtonElement::ptr button = LvtkButtonElement::Create();
+        button->Style()
+            .Width(100)
+            .MarginRight(24);
+        button->Variant(LvtkButtonVariant::BorderButton);
+        button->Text("Clear value");
+        clearValueEventHandle = button->Clicked.AddListener(
+            [this](const LvtkMouseEventArgs &)
+            {
+                CheckValid();
+                OnClearValue();
+                return true;
+            });
+        footer->AddChild((button));
+    }
     {
         LvtkButtonElement::ptr button = LvtkButtonElement::Create();
         button->Style()
@@ -1177,6 +1193,16 @@ LvtkElement::ptr Lv2FileDialog::Render()
     return container;
 }
 
+void Lv2FileDialog::OnClearValue()
+{
+    std::string selectedFile = "";
+    SaveSettings();
+    okClose = true;
+    Close();
+    OK.Fire(selectedFile);
+
+}
+
 void Lv2FileDialog::OnOk()
 {
     if (SelectedFile().length() == 0)
@@ -1184,20 +1210,22 @@ void Lv2FileDialog::OnOk()
         return;
     }
 
-    std::string recentEntry = this->SelectedFile();
+    std::string selectedFile = this->SelectedFile();
     for (auto i = recentEntries.begin(); i != recentEntries.end(); ++i)
     {
-        if ((*i) == recentEntry)
+        if ((*i) == selectedFile)
         {
             recentEntries.erase(i);
             break;
         }
     }
-    recentEntries.insert(recentEntries.begin(), recentEntry);
+    recentEntries.insert(recentEntries.begin(), selectedFile);
 
     SaveSettings();
     okClose = true;
     Close();
+    OK.Fire(selectedFile);
+
 }
 
 void Lv2FileDialog::OnCancel()
@@ -1967,12 +1995,7 @@ void Lv2FileDialog::OnClosing()
 
     super::OnClosing();
 
-    if (okClose)
-    {
-        std::string path = SelectedFile();
-        OK.Fire(path);
-    }
-    else
+    if (!okClose)
     {
         Cancelled.Fire();
     }

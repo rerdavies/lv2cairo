@@ -161,6 +161,9 @@ lv2_port_event(LV2UI_Handle handle,
 Lv2UIRegistrationBase::Lv2UIRegistrationBase(const char *pluginUri)
     : pluginUri(pluginUri)
 {
+
+    //fprintf(stderr,"Registering %s\n",pluginUri);
+    
     if (gRegistrationCount >= MAX_REGISTRATION)
     {
         gMaxRegistrationsExceeded = true; // i/o hasn't been brought up yet. give an error later.

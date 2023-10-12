@@ -683,7 +683,7 @@ static void InsertExtendedControl(
     size_t position = containerIndex->size();
     for (size_t i = 0; i < containerIndex->size(); ++i)
     {
-        if (index >= containerIndex->at(i))
+        if (index <= containerIndex->at(i))
         {
             position = i;
             break;
@@ -833,7 +833,7 @@ void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
         }
         auto fileElement = RenderFileControl(fileProperty);
         
-        InsertExtendedControl(container,controlIndex,fileProperty.index(),fileElement);
+        InsertExtendedControl(fileContainer,controlIndex,fileProperty.index(),fileElement);
     }
 
 }
@@ -1104,7 +1104,8 @@ void Lv2UI::SelectFile(const std::string&patchProperty)
         return;
     }
     fileDialog = Lv2FileDialog::Create(pProperty->label(),"propertyDlg-" + patchProperty);
-
+    fileDialog->ShowClearValue(true);
+    
     std::vector<Lv2FileFilter> fileTypes;
     if (pProperty->fileTypes().size() > 1)
     {

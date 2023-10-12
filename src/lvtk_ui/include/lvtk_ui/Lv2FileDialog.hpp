@@ -85,7 +85,8 @@ namespace lvtk::ui
 
         void AddPanel(size_t position, const LvtkFilePanel&panel);
 
-
+        /// Show the "Clear Value" button in the dialog UI.
+        BINDING_PROPERTY(ShowClearValue, bool, false);
 
     protected:
         BINDING_PROPERTY(OkEnabled, bool, false);
@@ -109,6 +110,7 @@ namespace lvtk::ui
 
         void OnCancel();
         void OnOk();
+        void OnClearValue();
 
     private:
         using clock_t = std::chrono::steady_clock;
@@ -234,7 +236,7 @@ namespace lvtk::ui
         observer_handle_t searchButtonHandle;
         
         std::shared_ptr<LvtkButtonElement> okButton, cancelButton;
-        EventHandle okEventHandle, cancelEventHandle;
+        EventHandle okEventHandle, cancelEventHandle, clearValueEventHandle;
 
         std::vector<LvtkElement::ptr> locations;
         std::shared_ptr<LvtkContainerElement> fileListContainer;
