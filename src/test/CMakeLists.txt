@@ -56,6 +56,7 @@ target_link_libraries(lvtk_demo
 add_executable(CatchTest 
     $<TARGET_OBJECTS:lvtk> $<TARGET_OBJECTS:lvtk_ui>
 
+    UriTest.cpp
     MaterialColorTest.cpp
     TestMain.cpp
     ColorTest.cpp
@@ -69,6 +70,7 @@ add_executable(CatchTest
 
 target_include_directories(CatchTest PRIVATE
     ${Lvtk_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/src/lvtk_ui
     lvtk_ui lvtk
 )
 

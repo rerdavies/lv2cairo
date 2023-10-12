@@ -25,6 +25,7 @@
 #include "lvtk_ui/Lv2FileElement.hpp"
 #include "lvtk_ui/Lv2FileDialog.hpp"
 #include "ss.hpp"
+#include "Uri.hpp"
 
 #include "lvtk/LvtkWindow.hpp"
 #include "lvtk/LvtkFlexGridElement.hpp"
@@ -57,6 +58,7 @@ struct LV2_Atom_Forge_ : public LV2_Atom_Forge
 };
 using namespace lvtk::ui;
 using namespace lvtk;
+using namespace pipedal;
 
 void Lv2UI::SetCreateWindowDefaults()
 {
@@ -117,17 +119,31 @@ Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, LvtkSize defaultWindowSi
     SetCreateWindowDefaults();
 }
 
-Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, const LvtkCreateWindowParameters &createWindowParameters)
-    : pluginInfo(pluginInfo), createWindowParameters(createWindowParameters),
+static std::string MakeSettingsKey(const std::string &pluginUri)
+{
+    pipedal::uri uri(pluginUri);
+
+    std::filesystem::path path = uri.authority();
+    for (size_t i = 0; i < uri.segment_count(); ++i)
+    {
+        path = path / uri.segment(i);
+    }
+    return path;
+}
+Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, const LvtkCreateWindowParameters &createWindowParameters_)
+    : pluginInfo(pluginInfo), createWindowParameters(createWindowParameters_),
       icuInstance(lvtk::IcuString::Instance()) // lifetime managment for Icu libraries.
 {
+
+    this->createWindowParameters.settingsKey = MakeSettingsKey(pluginInfo->uri());
 
     this->createWindowParameters.positioning = LvtkWindowPositioning::ChildWindow;
 
     SetCreateWindowDefaults();
 
     settingsFile = std::make_shared<LvtkSettingsFile>();
-    settingsFile->Load(createWindowParameters.settingsKey);
+
+    settingsFile = LvtkSettingsFile::GetSharedFile(createWindowParameters.settingsKey);
     this->createWindowParameters.settingsObject = settingsFile->Root();
 
     this->bindingSites.resize(pluginInfo->ports().size());
@@ -997,8 +1013,8 @@ void Lv2UI::WritePatchProperty(LV2_URID property,const std::string& value)
 {
     size_t atomSize = sizeof(LV2_Atom) + value.length() + 1;
     std::vector<uint8_t> atomBuffer;
-    uint8_t *pBuffer = &(atomBuffer[0]);
     atomBuffer.resize(atomSize);
+    uint8_t *pBuffer = &(atomBuffer[0]);
     LV2_Atom_String *atom = (LV2_Atom_String*)pBuffer;
     atom->atom.type = urids.atom__String;
     atom->atom.size = value.length()+1;
@@ -1142,11 +1158,13 @@ void Lv2UI::SelectFile(const std::string&patchProperty)
         fileDialog->AddPanel(2,filePanel);
 
     }
+    LV2_URID propertyUrid = GetUrid(pProperty->patchProperty().c_str());
 
     okListenerHandle = fileDialog->OK.AddListener(
-        [this](const std::string&result)
+        [this,propertyUrid](const std::string&result)
         {
             this->fileDialog = nullptr;
+            OnPatchPropertySelected(propertyUrid,result);
             return true;
         }
     );
@@ -1159,4 +1177,14 @@ void Lv2UI::SelectFile(const std::string&patchProperty)
     fileDialog->Show(this->Window().get());
 }
 
+
+void Lv2UI::OnPatchPropertySelected(LV2_URID patchProperty, const std::string&filename)
+{
+    this->WritePatchProperty(patchProperty,filename);
+    auto f = this->filePropertyBindingSites.find(patchProperty);
+    if (f != filePropertyBindingSites.end())
+    {
+        (*f).second->set(filename);
+    }
+}
 

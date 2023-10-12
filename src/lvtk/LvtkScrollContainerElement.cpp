@@ -22,32 +22,34 @@
 #include "lvtk/LvtkLog.hpp"
 #include <cmath>
 
+#define XK_MISCELLANY
+#define XK_LATIN1
+
+#include <X11/keysymdef.h>
+
 using namespace lvtk;
 
 LvtkScrollContainerElement::LvtkScrollContainerElement()
 {
     this->horizontalScrollBar = LvtkHorizontalScrollBarElement::Create();
-    this->verticalScrollBar  = LvtkVerticalScrollBarElement::Create();
+    this->verticalScrollBar = LvtkVerticalScrollBarElement::Create();
     AddChild(horizontalScrollBar);
     AddChild(verticalScrollBar);
 
     VerticalScrollOffsetProperty.Bind(verticalScrollBar->ScrollOffsetProperty);
     HorizontalScrollOffsetProperty.Bind(horizontalScrollBar->ScrollOffsetProperty);
-    HorizontalScrollEnabledProperty.SetElement(this,&LvtkScrollContainerElement::OnHorizontalScrollEnableChanged);
-    VerticalScrollEnabledProperty.SetElement(this,&LvtkScrollContainerElement::OnVerticalScrollEnableChanged);
+    HorizontalScrollEnabledProperty.SetElement(this, &LvtkScrollContainerElement::OnHorizontalScrollEnableChanged);
+    VerticalScrollEnabledProperty.SetElement(this, &LvtkScrollContainerElement::OnVerticalScrollEnableChanged);
     OnHorizontalScrollEnableChanged(HorizontalScrollEnabled());
     OnVerticalScrollEnableChanged(VerticalScrollEnabled());
 
-    HorizontalScrollOffsetProperty.SetElement(this,&LvtkScrollContainerElement::OnHorizontalScrollOffsetChanged);
-    VerticalScrollOffsetProperty.SetElement(this,&LvtkScrollContainerElement::OnVerticalScrollOffsetChanged);
+    HorizontalScrollOffsetProperty.SetElement(this, &LvtkScrollContainerElement::OnHorizontalScrollOffsetChanged);
+    VerticalScrollOffsetProperty.SetElement(this, &LvtkScrollContainerElement::OnVerticalScrollOffsetChanged);
 
     HorizontalDocumentSizeProperty.Bind(horizontalScrollBar->DocumentSizeProperty);
     HorizontalWindowSizeProperty.Bind(horizontalScrollBar->WindowSizeProperty);
     VerticalDocumentSizeProperty.Bind(verticalScrollBar->DocumentSizeProperty);
     VerticalWindowSizeProperty.Bind(verticalScrollBar->WindowSizeProperty);
-
-
-
 }
 LvtkScrollContainerElement &LvtkScrollContainerElement::Child(LvtkElement::ptr child)
 {
@@ -78,23 +80,18 @@ void LvtkScrollContainerElement::Children(const std::vector<LvtkElement::ptr> &c
 void LvtkScrollContainerElement::RemoveAllChildren() { super::RemoveAllChildren(); }
 std::vector<LvtkElement::ptr> &LvtkScrollContainerElement::Children() { return super::Children(); }
 
-
 void LvtkScrollContainerElement::OnHorizontalScrollEnableChanged(bool value)
 {
-    horizontalScrollBar->Style().
-        Visibility(HorizontalScrollEnabled()? LvtkVisibility::Visible: LvtkVisibility::Collapsed);
+    horizontalScrollBar->Style().Visibility(HorizontalScrollEnabled() ? LvtkVisibility::Visible : LvtkVisibility::Collapsed);
     InvalidateLayout();
-
 }
 void LvtkScrollContainerElement::OnVerticalScrollEnableChanged(bool value)
 {
-    verticalScrollBar->Style().
-        Visibility(VerticalScrollEnabled()? LvtkVisibility::Visible: LvtkVisibility::Collapsed);
+    verticalScrollBar->Style().Visibility(VerticalScrollEnabled() ? LvtkVisibility::Visible : LvtkVisibility::Collapsed);
     InvalidateLayout();
-
 }
 
-LvtkSize LvtkScrollContainerElement::MeasureClient(LvtkSize clientConstraint, LvtkSize clientAvailable,LvtkDrawingContext&context)
+LvtkSize LvtkScrollContainerElement::MeasureClient(LvtkSize clientConstraint, LvtkSize clientAvailable, LvtkDrawingContext &context)
 {
     double width = clientConstraint.Width();
     double height = clientConstraint.Height();
@@ -107,13 +104,13 @@ LvtkSize LvtkScrollContainerElement::MeasureClient(LvtkSize clientConstraint, Lv
             double scrollbarExtra = horizontalScrollBar->Style().Height().PixelValue();
             if (constraint.Height() != 0)
             {
-                constraint.Height(constraint.Height()-scrollbarExtra);
+                constraint.Height(constraint.Height() - scrollbarExtra);
             }
             if (available.Height() != 0)
             {
-                available.Height(available.Height()-scrollbarExtra);
+                available.Height(available.Height() - scrollbarExtra);
             }
-            verticalScrollBar->Measure(constraint,available,context);
+            verticalScrollBar->Measure(constraint, available, context);
         }
         // pad the scrollbars so they don't overlap.
         {
@@ -122,24 +119,26 @@ LvtkSize LvtkScrollContainerElement::MeasureClient(LvtkSize clientConstraint, Lv
             double scrollbarExtra = verticalScrollBar->Style().Height().PixelValue();
             if (constraint.Height() != 0)
             {
-                constraint.Width(constraint.Width()-scrollbarExtra);
+                constraint.Width(constraint.Width() - scrollbarExtra);
             }
             if (available.Width() != 0)
             {
-                available.Width(available.Width()-scrollbarExtra);
+                available.Width(available.Width() - scrollbarExtra);
             }
-            horizontalScrollBar->Measure(constraint,available,context);
-        } 
-    }else if (HorizontalScrollEnabled())
+            horizontalScrollBar->Measure(constraint, available, context);
+        }
+    }
+    else if (HorizontalScrollEnabled())
     {
-        horizontalScrollBar->Measure(clientConstraint, clientAvailable,context);
-    } else if (VerticalScrollEnabled())
+        horizontalScrollBar->Measure(clientConstraint, clientAvailable, context);
+    }
+    else if (VerticalScrollEnabled())
     {
-        verticalScrollBar->Measure(clientConstraint, clientAvailable,context);
+        verticalScrollBar->Measure(clientConstraint, clientAvailable, context);
     }
     if (child)
     {
-        LvtkSize constraint(0,0);
+        LvtkSize constraint(0, 0);
         LvtkSize available(3E15, 3E15); // unimaginably large.
         if (!HorizontalScrollEnabled())
         {
@@ -151,19 +150,19 @@ LvtkSize LvtkScrollContainerElement::MeasureClient(LvtkSize clientConstraint, Lv
             constraint.Height(clientConstraint.Height());
             constraint.Width(clientAvailable.Width());
         }
-        child->Measure(constraint,available,context);
+        child->Measure(constraint, available, context);
     }
-    if (width == 0) 
+    if (width == 0)
     {
         width = 50;
         LogError("LvtkScrollContainer has unconstrained width. Can't decide how wide it should be.");
     }
-    if (height == 0) 
+    if (height == 0)
     {
         height = 50;
         LogError("LvtkScrollContainer has unconstrained height. Can't decide how wide it should be.");
     }
-    return LvtkSize(width,height);    
+    return LvtkSize(width, height);
 }
 
 LvtkSize LvtkScrollContainerElement::Arrange(LvtkSize available, LvtkDrawingContext &context)
@@ -179,8 +178,8 @@ LvtkSize LvtkScrollContainerElement::Arrange(LvtkSize available, LvtkDrawingCont
         LvtkSize measured = horizontalScrollBar->MeasuredSize();
         measured = horizontalScrollBar->Arrange(horizontalScrollBar->MeasuredSize(), context);
 
-        LvtkRectangle rectangle { 
-            0, clientRect.Height()-measured.Height(),
+        LvtkRectangle rectangle{
+            0, clientRect.Height() - measured.Height(),
             measured.Width(), measured.Height()};
         horizontalScrollBar->Layout(rectangle);
     }
@@ -189,8 +188,8 @@ LvtkSize LvtkScrollContainerElement::Arrange(LvtkSize available, LvtkDrawingCont
         LvtkSize measured = verticalScrollBar->MeasuredSize();
         measured = verticalScrollBar->Arrange(verticalScrollBar->MeasuredSize(), context);
 
-        LvtkRectangle rectangle { 
-            clientRect.Width()-measured.Width(), 0,
+        LvtkRectangle rectangle{
+            clientRect.Width() - measured.Width(), 0,
             measured.Width(), measured.Height()};
         verticalScrollBar->Layout(rectangle);
     }
@@ -198,49 +197,49 @@ LvtkSize LvtkScrollContainerElement::Arrange(LvtkSize available, LvtkDrawingCont
     if (child)
     {
         LvtkSize measured = child->MeasuredSize();
-        measured = child->Arrange(measured,context);
-        LvtkRectangle rectangle {
-            -HorizontalScrollOffset(),-VerticalScrollOffset(),
-            measured.Width(), measured.Height()
-        };
+        measured = child->Arrange(measured, context);
+        LvtkRectangle rectangle{
+            -HorizontalScrollOffset(), -VerticalScrollOffset(),
+            measured.Width(), measured.Height()};
         child->Layout(rectangle);
         this->childSize = measured;
-    } else {
-        this->childSize = LvtkSize(0,0);
+    }
+    else
+    {
+        this->childSize = LvtkSize(0, 0);
     }
     return available;
 }
 
-
-
-void LvtkScrollContainerElement::FinalizeLayout(const LvtkRectangle&layoutClipRect,const LvtkRectangle& screenOffset, bool clippedInLayout )
+void LvtkScrollContainerElement::FinalizeLayout(const LvtkRectangle &layoutClipRect, const LvtkRectangle &screenOffset, bool clippedInLayout)
 {
     this->savedClippedInLayout = clippedInLayout;
     this->savedLayoutClipRect = layoutClipRect;
-    super::FinalizeLayout(layoutClipRect,screenOffset,clippedInLayout);
+    super::FinalizeLayout(layoutClipRect, screenOffset, clippedInLayout);
     HorizontalWindowSize(this->ClientSize().Width());
     VerticalWindowSize(this->ClientSize().Height());
     if (child)
     {
         HorizontalDocumentSize(this->childSize.Width());
         VerticalDocumentSize(this->childSize.Height());
-    } else {
+    }
+    else
+    {
         HorizontalDocumentSize(0);
         VerticalDocumentSize(0);
     }
 
     // warning: these trigger partial scroll layout. Maybe PostDelayed?
-    if (HorizontalScrollOffset() > HorizontalDocumentSize()-HorizontalWindowSize())
+    if (HorizontalScrollOffset() > HorizontalDocumentSize() - HorizontalWindowSize())
     {
-        HorizontalScrollOffset(std::max(0.0,HorizontalDocumentSize()-HorizontalWindowSize()));
+        HorizontalScrollOffset(std::max(0.0, HorizontalDocumentSize() - HorizontalWindowSize()));
     }
-    if (VerticalScrollOffset() > VerticalDocumentSize()-VerticalWindowSize())
+    if (VerticalScrollOffset() > VerticalDocumentSize() - VerticalWindowSize())
     {
-        VerticalScrollOffset(std::max(0.0,VerticalDocumentSize()-VerticalWindowSize()));
+        VerticalScrollOffset(std::max(0.0, VerticalDocumentSize() - VerticalWindowSize()));
     }
-    MaximumHorizontalScrollOffset(std::max(0.0,HorizontalDocumentSize()-HorizontalWindowSize()));
-    MaximumVerticalScrollOffset(std::max(0.0,VerticalDocumentSize()-VerticalWindowSize()));
-
+    MaximumHorizontalScrollOffset(std::max(0.0, HorizontalDocumentSize() - HorizontalWindowSize()));
+    MaximumVerticalScrollOffset(std::max(0.0, VerticalDocumentSize() - VerticalWindowSize()));
 }
 
 void LvtkScrollContainerElement::OnHorizontalScrollOffsetChanged(double value)
@@ -257,23 +256,21 @@ void LvtkScrollContainerElement::RedoFinalLayout()
     if (child)
     {
         // update the child's layout.
-        LvtkRectangle layoutRect { -HorizontalScrollOffset(), -VerticalScrollOffset(), this->childSize.Width(),this->childSize.Height()};
+        LvtkRectangle layoutRect{-HorizontalScrollOffset(), -VerticalScrollOffset(), this->childSize.Width(), this->childSize.Height()};
         child->Layout(layoutRect);
-        
+
         // recompute visual rects for this and all children
-        this->FinalizeLayout(this->savedLayoutClipRect,Parent()->ScreenBounds(),this->savedClippedInLayout);
-
-
+        this->FinalizeLayout(this->savedLayoutClipRect, Parent()->ScreenBounds(), this->savedClippedInLayout);
     }
 }
-
 
 bool LvtkScrollContainerElement::ClipChildren() const
 {
     return true;
 }
 
-bool LvtkScrollContainerElement::OnScrollWheel(LvtkScrollWheelEventArgs &event) {
+bool LvtkScrollContainerElement::OnScrollWheel(LvtkScrollWheelEventArgs &event)
+{
     constexpr double SCROLL_AMOUNT = 24;
 
     switch (event.scrollDirection)
@@ -282,7 +279,7 @@ bool LvtkScrollContainerElement::OnScrollWheel(LvtkScrollWheelEventArgs &event) 
     {
         if (this->HorizontalScrollEnabled())
         {
-            double newValue = HorizontalScrollOffset()-SCROLL_AMOUNT;
+            double newValue = HorizontalScrollOffset() - SCROLL_AMOUNT;
             if (newValue < 0)
             {
                 newValue = 0;
@@ -296,7 +293,7 @@ bool LvtkScrollContainerElement::OnScrollWheel(LvtkScrollWheelEventArgs &event) 
     {
         if (this->HorizontalScrollEnabled())
         {
-            double newValue = HorizontalScrollOffset() +SCROLL_AMOUNT;
+            double newValue = HorizontalScrollOffset() + SCROLL_AMOUNT;
             if (newValue > MaximumHorizontalScrollOffset())
             {
                 newValue = MaximumHorizontalScrollOffset();
@@ -311,7 +308,7 @@ bool LvtkScrollContainerElement::OnScrollWheel(LvtkScrollWheelEventArgs &event) 
     {
         if (this->VerticalScrollEnabled())
         {
-            double newValue = VerticalScrollOffset()-SCROLL_AMOUNT;
+            double newValue = VerticalScrollOffset() - SCROLL_AMOUNT;
             if (newValue < 0)
             {
                 newValue = 0;
@@ -324,7 +321,7 @@ bool LvtkScrollContainerElement::OnScrollWheel(LvtkScrollWheelEventArgs &event) 
     case LvtkScrollDirection::Down:
         if (this->VerticalScrollEnabled())
         {
-            double newValue = VerticalScrollOffset()+SCROLL_AMOUNT;
+            double newValue = VerticalScrollOffset() + SCROLL_AMOUNT;
             if (newValue > this->MaximumVerticalScrollOffset())
             {
                 newValue = MaximumVerticalScrollOffset();
@@ -333,8 +330,119 @@ bool LvtkScrollContainerElement::OnScrollWheel(LvtkScrollWheelEventArgs &event) 
             return true;
         }
         break;
-        
     }
     return false;
 }
 
+bool LvtkScrollContainerElement::OnKeyDown(const LvtkKeyboardEventArgs &event)
+{
+    if (event.keysymValid)
+    {
+        if (!VerticalScrollEnabled())
+        {
+            return false;
+        }
+        if (event.modifierState == ModifierState::Empty)
+        {
+        constexpr double LINE_AMOUNT = 16;
+        double pageAmount = std::floor(ClientBounds().Height()-LINE_AMOUNT*2);
+        if (pageAmount < LINE_AMOUNT) pageAmount = LINE_AMOUNT;
+        double scrollDistance = 0;
+        switch (event.keysym)
+        {
+        case XK_Up:
+        case XK_KP_Up:
+            scrollDistance = -LINE_AMOUNT;
+            break;
+        case XK_Down:
+        case XK_KP_Down:
+            scrollDistance = LINE_AMOUNT;
+            break;
+        case XK_Page_Up:
+        case XK_KP_Page_Up:
+            scrollDistance = -pageAmount;
+            break;
+        case XK_Page_Down:
+        case XK_KP_Page_Down:
+            scrollDistance = pageAmount;
+            break;
+        case XK_Home:
+        case XK_KP_Home:
+            scrollDistance = -MaximumVerticalScrollOffset();
+            break;
+        case XK_End:
+        case XK_KP_End:
+            scrollDistance = MaximumVerticalScrollOffset();
+            break;
+        default:
+            break;
+        }
+        double scroll = VerticalScrollOffset() + scrollDistance;
+        if (scroll < 0) scroll = 0;
+        if (scroll > MaximumVerticalScrollOffset())
+        {
+            scroll = MaximumVerticalScrollOffset();
+        }
+        VerticalScrollOffset(scroll);
+        return true;
+    }
+    } else if (event.modifierState == ModifierState::Shift)
+    {
+        if (!HorizontalScrollEnabled())
+        {
+            return false;
+        }
+        constexpr double LINE_AMOUNT = 16;
+        double pageAmount = std::floor(ClientBounds().Width()-LINE_AMOUNT*2);
+        if (pageAmount < LINE_AMOUNT) pageAmount = LINE_AMOUNT;
+        double scrollDistance = 0;
+        switch (event.keysym)
+        {
+        case XK_Up:
+        case XK_KP_Up:
+            scrollDistance = -LINE_AMOUNT;
+            break;
+        case XK_Down:
+        case XK_KP_Down:
+            scrollDistance = LINE_AMOUNT;
+            break;
+        case XK_Page_Up:
+        case XK_KP_Page_Up:
+            scrollDistance = -pageAmount;
+            break;
+        case XK_Page_Down:
+        case XK_KP_Page_Down:
+            scrollDistance = pageAmount;
+            break;
+        case XK_Home:
+        case XK_KP_Home:
+            scrollDistance = -MaximumVerticalScrollOffset();
+            break;
+        case XK_End:
+        case XK_KP_End:
+            scrollDistance = MaximumVerticalScrollOffset();
+            break;
+        default:
+            break;
+        }
+        double scroll = HorizontalScrollOffset() + scrollDistance;
+        if (scroll < 0) scroll = 0;
+        if (scroll > MaximumHorizontalScrollOffset())
+        {
+            scroll = MaximumHorizontalScrollOffset();
+        }
+        HorizontalScrollOffset(scroll);
+        return true;
+
+    }
+    return false;
+}
+bool LvtkScrollContainerElement::WantsFocus() const
+{
+    return wantsFocus;
+}
+LvtkScrollContainerElement &LvtkScrollContainerElement::WantsFocus(bool value)
+{
+    this->wantsFocus = value;
+    return *this;
+}

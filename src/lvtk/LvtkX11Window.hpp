@@ -142,6 +142,9 @@ namespace lvtk
 
     private:
 
+        bool GetTopLevelWindows(std::vector<Window> &result);
+        Window GetOwnerFrameWindow(Display *x11Display,Window win);
+
         struct XAtoms;
 
         std::unique_ptr<XAtoms> xAtoms;

@@ -191,17 +191,20 @@ void LvtkTheme::BuildStyles()
             .FontFamily(fontFamily)
             .FontSize(bodySize)
             .LineSpacing(1.2)
+            .FontWeight(LvtkFontWeight::Normal)
             .Color(primaryTextColor));
     bodySecondaryStyle = std::make_shared<LvtkStyle>(
         LvtkStyle()
             .FontFamily(fontFamily)
             .FontSize(bodySize)
             .LineSpacing(1.2)
+            .FontWeight(LvtkFontWeight::Normal)
             .Color(secondaryTextColor));
     captionStyle = std::make_shared<LvtkStyle>(
         LvtkStyle()
             .FontFamily(fontFamily)
             .FontSize(captionSize)
+            .FontWeight(LvtkFontWeight::Normal)
             .TextTransform(LvtkTextTransform::Capitalize)
             .LineSpacing(1.0)
             .Color(secondaryTextColor));

@@ -566,9 +566,9 @@ LvtkElement::ptr Lv2FileDialog::RenderBreadcrumb(
     auto container = LvtkButtonBaseElement::Create();
     std::string navPath = path;
     container->Clicked.AddListener(
-        [this, navPath](const LvtkMouseEventArgs &)
+        [this, navPath](const LvtkMouseEventArgs &args)
         {
-            this->OnFileSelected(navPath);
+            this->OnFileSelected(navPath,args);
             return true;
         });
     container->Style()
@@ -1364,10 +1364,10 @@ void Lv2FileDialog::LoadMixedDirectoryFiles(const std::vector<std::string> &file
             buttonBase->AddChild(container);
             std::filesystem::path filePath = file;
             buttonBase->Clicked.AddListener(
-                [this, filePath](const LvtkMouseEventArgs &)
+                [this, filePath](const LvtkMouseEventArgs &eventArgs)
                 {
                     CheckValid();
-                    OnFileSelected(filePath);
+                    OnFileSelected(filePath,eventArgs);
                     return true;
                 });
         }
@@ -1514,10 +1514,10 @@ void Lv2FileDialog::LoadFiles(const std::filesystem::path &path)
             buttonBase->AddChild(container);
             std::filesystem::path filePath = file.path;
             buttonBase->Clicked.AddListener(
-                [this, filePath](const LvtkMouseEventArgs &)
+                [this, filePath](const LvtkMouseEventArgs &eventArgs)
                 {
                     CheckValid();
-                    OnFileSelected(filePath);
+                    OnFileSelected(filePath,eventArgs);
                     return true;
                 });
         }
@@ -1804,10 +1804,24 @@ static bool isParentDirectory(const std::filesystem::path &directory, std::files
     return false;
 }
 
-void Lv2FileDialog::OnFileSelected(const std::filesystem::path &path_)
+void Lv2FileDialog::OnFileSelected(const std::filesystem::path &path_,const LvtkMouseEventArgs&args)
 {
     std::filesystem::path path = ConvertHomePath(path_); // contents of path_ may be deleted.
     Navigate(path);
+
+    if (!std::filesystem::is_directory(path))
+    {
+        auto now = clock_t::now();
+        std::chrono::duration<double> duration = now-lastFileClickTime;
+        lastFileClickTime = now;
+        constexpr double DOUBLE_CLICK_TIME_S = 0.3;
+        if (duration.count() < DOUBLE_CLICK_TIME_S
+        && LvtkPoint::Distance(lastFileClickPoint,args.screenPoint) < 4)
+        {
+            this->OnOk();
+        }
+        lastFileClickPoint = args.screenPoint;
+    }
 }
 
 void Lv2FileDialog::SelectPanel(const FileLocation &newLocation)

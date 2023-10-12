@@ -147,6 +147,7 @@ namespace lvtk::ui
         virtual void OnPatchPropertyReceived(LV2_URID type, const uint8_t*data);
         
     private:
+        void OnPatchPropertySelected(LV2_URID patchProperty, const std::string&filename);
         uint32_t inputAtomPort = (uint32_t)-1;
         IcuString::Ptr icuInstance; // lifetime managment for Icu libraries.
         float scaleFactor = 1.0;

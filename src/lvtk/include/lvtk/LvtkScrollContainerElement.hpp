@@ -103,7 +103,13 @@ namespace lvtk
         ///the left, top, right, or bottom members of surroundingSpace to -1 to disable the space request on that edge.
         void ScrollIntoView(LvtkElement *element, LvtkThickness surroundingSpace);
 
+
+        virtual bool WantsFocus() const override;
+        virtual LvtkScrollContainerElement& WantsFocus(bool value);
+
     protected:
+        virtual bool OnKeyDown(const LvtkKeyboardEventArgs&event) override;
+
         virtual bool OnScrollWheel(LvtkScrollWheelEventArgs &event) override;
 
         virtual bool ClipChildren() const override;
@@ -131,6 +137,7 @@ namespace lvtk
         bool savedClippedInLayout = false;
 
     private: 
+        bool wantsFocus = false;
         LvtkRectangle savedLayoutClipRect;
         void RedoFinalLayout();
         // Hide these methods.

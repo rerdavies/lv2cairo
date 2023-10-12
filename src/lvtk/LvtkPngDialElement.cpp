@@ -20,6 +20,7 @@
 #include "lvtk/LvtkPngDialElement.hpp"
 #include "lvtk/LvtkWindow.hpp"
 
+
 using namespace lvtk;
 
 LvtkPngDialElement::LvtkPngDialElement()

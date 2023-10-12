@@ -35,6 +35,8 @@ add_library(lvtk_ui OBJECT
     include/lvtk_ui/Lv2FrequencyPlotElement.hpp
     include/lvtk_ui/Lv2TunerElement.hpp
     include/lvtk_ui/Lv2FileElement.hpp
+    UriHelper.cpp UriHelper.hpp
+    Uri.cpp Uri.hpp
     Lv2FileElement.cpp
     Lv2TunerElement.cpp
     Lv2FrequencyPlotElement.cpp

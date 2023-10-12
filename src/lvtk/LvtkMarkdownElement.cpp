@@ -129,7 +129,7 @@ void LvtkMarkdownElement::FlushMarkdown()
     }
     else
     {
-        element->Style().MarginLeft(leftMargin).MarginBottom(16);
+        element->Style().MarginLeft(leftMargin).MarginBottom(12);
         if (lineBreak)
         {
             element->Style()
@@ -138,40 +138,41 @@ void LvtkMarkdownElement::FlushMarkdown()
         } 
         if (markdownVariant != MarkdownVariant::Paragraph)
         {
-            Style()
-                .MarginTop(16)
+            element->Style()
+                .MarginTop(24)
                 ;
-        }
-        switch (markdownVariant)
-        {
-            case MarkdownVariant::H1:
-                Style()
-                    
-                    .FontWeight(LvtkFontWeight::Bold)
-                    .FontSize(titleSize)
-                    .MarginBottom(24)
-                    ;
-                break;
-            case MarkdownVariant::H2:
-                Style()
-                    .FontWeight(LvtkFontWeight::Bold)
-                    .FontSize(headingSize)
-                    .MarginBottom(24)
-                    ;
-                break;
-            case MarkdownVariant::H3:
-                Style()
-                    .FontWeight(LvtkFontWeight::Bold)
-                    .MarginBottom(24)
-                    ;
-                break;
-            case MarkdownVariant::H4:
-                Style()
-                    .MarginBottom(24)
-                    ;
-                break;
-            default:
-                break;
+            switch (markdownVariant)
+            {
+                case MarkdownVariant::H1:
+                    element->Style()
+                        
+                        .FontWeight(LvtkFontWeight::Bold)
+                        .FontSize(titleSize)
+                        .MarginBottom(16)
+                        ;
+                    break;
+                case MarkdownVariant::H2:
+                    element->Style()
+                        .FontWeight(LvtkFontWeight::Bold)
+                        .FontSize(headingSize)
+                        .MarginBottom(16)
+                        ;
+                    break;
+                case MarkdownVariant::H3:
+                    element->Style()
+                        .FontWeight(LvtkFontWeight::Bold)
+                        .MarginBottom(16)
+                        ;
+                    break;
+                case MarkdownVariant::H4:
+                    element->Style()
+                        .FontWeight(LvtkFontWeight::Bold)
+                        .MarginBottom(16)
+                        ;
+                    break;
+                default:
+                    break;
+            }
         }
         
         if (!lineBreak) {
@@ -261,7 +262,7 @@ static bool IsRule(const std::string&text)
 static bool GetTitleChars(const std::string&text, int &titleChars,std::string&lineOut)
 {
     titleChars = 0;
-    if (!text.starts_with("###")) return false;
+    if (!text.starts_with("#")) return false;
 
     auto i = text.begin();
     while (i != text.end() && *i == '#')
@@ -336,6 +337,7 @@ void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
                 markdownVariant = MarkdownVariant::H4;
                 break;
             }
+            text = lineOut;
         } else if (GetHangingIndentText(text, this->hangingText, lineOut, hangingIndentSpaces))
         {
             lineBuffer = lineOut;

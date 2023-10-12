@@ -38,7 +38,7 @@ std::filesystem::path LvtkSettingsFile::GetSettingsPath(const std::string &ident
 {
 #ifdef __linux__ 
     std::filesystem::path home = std::getenv("HOME");
-    std::filesystem::path path = home / ".config" / "lvtk" / identifier;
+std::filesystem::path path = home / ".config" / "io.github.rerdavies.lvtk" / identifier;
     std::filesystem::create_directories(path);
     path = path / "settings.json";
     return path;
@@ -105,12 +105,16 @@ void LvtkSettingsFile::Update()
 
     std::string newValue = s.str();
     bool written = false;
+
     if (newValue != this->lastValue)
     {
         std::filesystem::path tmpPath = 
             std::filesystem::path(
                 filePath.string() + ".$$$"
             );
+        std::filesystem::path directory = filePath.parent_path();
+
+        std::filesystem::create_directories(directory);
         {
             std::ofstream f(tmpPath);
             f << newValue << std::endl;
@@ -129,6 +133,10 @@ void LvtkSettingsFile::Update()
 LvtkSettingsFile::~LvtkSettingsFile()
 {
     Update();
+    if (sharedInstanceidentifier.length() != 0)
+    {
+        sharedInstances[this->sharedInstanceidentifier] = nullptr;
+    }
 }
 
 
@@ -173,3 +181,21 @@ LvtkSize lvtk::LvtkSizeFromJson(const json_variant&value, LvtkSize defaultValue)
     };
     return result;
 }
+
+
+std::shared_ptr<LvtkSettingsFile> LvtkSettingsFile::GetSharedFile(const std::string&identifier)
+{
+    {
+        LvtkSettingsFile*pFile = sharedInstances[identifier];
+        if (pFile)
+        {
+            return pFile->shared_from_this();
+        }
+    }
+    std::shared_ptr<LvtkSettingsFile> pFile = std::make_shared<LvtkSettingsFile>();
+    pFile->Load(identifier);
+    pFile->sharedInstanceidentifier = identifier;
+    sharedInstances[identifier] = pFile.get();
+    return pFile;
+}
+std::map<std::string,LvtkSettingsFile*> LvtkSettingsFile::sharedInstances;

@@ -111,6 +111,8 @@ namespace lvtk::ui
         void OnOk();
 
     private:
+        using clock_t = std::chrono::steady_clock;
+
         std::string defaultDirectory;
         bool okClose = false;
         IcuString::Ptr icuString; // strictly lifetime managment.
@@ -132,6 +134,10 @@ namespace lvtk::ui
             Complete
         };
         animation_clock_t::time_point searchStartTime;
+
+        animation_clock_t::time_point lastFileClickTime;
+        LvtkPoint lastFileClickPoint { -1000,-1000};
+
         
         SearchStatus currentSearchStatus = SearchStatus::Complete;
         std::vector<std::string> currentSearchResults;
@@ -194,7 +200,7 @@ namespace lvtk::ui
         void Navigate(const std::filesystem::path &path);
 
         void OnOpenLocation(int64_t location);
-        void OnFileSelected(const std::filesystem::path &path);
+        void OnFileSelected(const std::filesystem::path &path, const LvtkMouseEventArgs&mouseEventArgs);
 
         void OnSelectedLocationChanged(int64_t location);
 

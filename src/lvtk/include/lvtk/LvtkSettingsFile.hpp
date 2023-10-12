@@ -33,8 +33,10 @@
 
 namespace lvtk {
 
-    class LvtkSettingsFile  {
+    class LvtkSettingsFile: public std::enable_shared_from_this<LvtkSettingsFile>  {
     public:
+        static std::shared_ptr<LvtkSettingsFile> GetSharedFile(const std::string&identifier);
+
         LvtkSettingsFile();
         ~LvtkSettingsFile();
 
@@ -43,10 +45,12 @@ namespace lvtk {
         void Update();
         json_variant &Root();
     private: 
+        std::string sharedInstanceidentifier;
         std::filesystem::path GetSettingsPath(const std::string &identifier);
         std::filesystem::path filePath;
         std::string lastValue;
         json_variant root;
+        static std::map<std::string,LvtkSettingsFile*> sharedInstances;
 
     };
 

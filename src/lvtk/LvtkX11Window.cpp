@@ -50,6 +50,7 @@ struct LvtkX11Window::XAtoms
         X_INIT_ATOM(NET_WM_STATE);
         X_INIT_ATOM(NET_ACTIVE_WINDOW);
         X_INIT_ATOM(NET_RESTACK_WINDOW);
+        X_INIT_ATOM(NET_CLIENT_LIST);
     }
     Atom NET_FRAME_EXTENTS,
         NET_WM_STATE_MAXIMIZED_VERT,
@@ -57,18 +58,19 @@ struct LvtkX11Window::XAtoms
         NET_WM_STATE_FOCUSED,
         NET_WM_STATE,
         NET_ACTIVE_WINDOW,
-        NET_RESTACK_WINDOW;
+        NET_RESTACK_WINDOW,
+        NET_CLIENT_LIST;
 };
 
 template <typename T>
-bool GetIntArrayProperty(Display *display, Window window,
+bool GetX11ArrayProperty(Display *display, Window window,
                          Atom atomName,
                          std::vector<T> *result,
                          size_t nItems = 0,
                          Atom reqType = AnyPropertyType,
                          Atom *out_type = nullptr)
 {
-    static_assert(sizeof(T) == 1 || sizeof(T) == 2 || sizeof(T) == 4, "");
+    // static_assert(sizeof(T) == 1 || sizeof(T) == 2 || sizeof(T) == 4, "");
 
     if (atomName == None)
     {
@@ -84,7 +86,7 @@ bool GetIntArrayProperty(Display *display, Window window,
     unsigned char *data = nullptr;
     unsigned long requestedLength =
         nItems == 0
-            ? std::numeric_limits<LengthType>::max() / 4
+            ? std::numeric_limits<LengthType>::max() / sizeof(LengthType)
             : (LengthType)((sizeof(T) * nItems + 3) / 4);
 
     int rc = XGetWindowProperty(
@@ -103,17 +105,17 @@ bool GetIntArrayProperty(Display *display, Window window,
     {
         return false;
     }
-    if (format != sizeof(T) * 8)
-    {
-        XFree(data);
-        return false;
-    }
+    // if (format != sizeof(T) * 8)
+    // {
+    //     XFree(data);
+    //     return false;
+    // }
     if (out_type)
     {
         *out_type = atomType;
     }
     result->resize(nItemsOut);
-    const long *typedData = (const long *)data; // why long? I don't know. But it is long.
+    const long *typedData = (const long *)data; // All values are return as long[]. The size argument only indicates the size on the wire.
     for (size_t i = 0; i < nItemsOut; ++i)
     {
         (*result)[i] = (T)(typedData[i]);
@@ -487,12 +489,28 @@ Window LvtkX11Window::GetTransientTarget(Window win)
     }
     return 0;
 }
-static Window GetOwnerFrameWindow(Display *x11Display,Window win)
+Window LvtkX11Window::GetOwnerFrameWindow(Display *x11Display,Window win)
 {
     Window transientFor = 0;
 
+    std::vector<Window> topLevelWindows;
+
+    bool hasTopLevelWindows = GetTopLevelWindows(topLevelWindows);
     while (true)
     {
+        if (hasTopLevelWindows)
+        {
+            for (auto topLevelWindow: topLevelWindows)
+            {
+                if (topLevelWindow == win)
+                {
+                    return win;
+                }
+            }
+        }
+        // backstop in case the WM doesn't support GetTopLevelWindows.
+        // Not entirely correct, since the host app may not use TransientFor.
+        
         auto status = XGetTransientForHint(x11Display, win, &transientFor);
         if (status != 0)
         {
@@ -516,7 +534,7 @@ static Window GetOwnerFrameWindow(Display *x11Display,Window win)
             break;
         }
     }
-    return 0;
+    return x11RootWindow;
 }
 
 void LvtkX11Window::CreateWindow(
@@ -1615,7 +1633,7 @@ void LvtkX11Window::StartRestoreFocusDelay()
 void LvtkX11Window::OnFrameExtentsUpdated()
 {
     std::vector<int32_t> extents;
-    if (GetIntArrayProperty(x11Display, x11Window, GetAtom("_NET_FRAME_EXTENTS"), &extents, 4, XA_CARDINAL))
+    if (GetX11ArrayProperty(x11Display, x11Window, GetAtom("_NET_FRAME_EXTENTS"), &extents, 4, XA_CARDINAL))
     {
         if (extents.size() >= 4)
         {
@@ -1717,3 +1735,17 @@ void LvtkX11Window::Resize(int width, int height)
     XResizeWindow(x11Display, x11Window, width, height);
 }
 
+
+bool LvtkX11Window::GetTopLevelWindows(std::vector<Window> &result)
+{
+    if (!xAtoms->NET_CLIENT_LIST)
+    {
+        return false;
+    }
+    bool ret = GetX11ArrayProperty<Window>(
+            x11Display,
+            x11RootWindow,
+            xAtoms->NET_CLIENT_LIST,
+            &result);
+    return ret;
+}
