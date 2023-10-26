@@ -25,7 +25,7 @@ using namespace std;
 namespace lvtk
 {
 
-    static LvtkLogLevel logLevel = LvtkLogLevel::Info;
+    static LvtkLogLevel logLevel = LvtkLogLevel::Debug;
 
     void SetLogLevel(LvtkLogLevel logLevel_)
     {

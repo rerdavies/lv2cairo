@@ -162,6 +162,7 @@ LvtkThemeColors::LvtkThemeColors(bool darkTheme)
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #pragma GCC optimize("no-var-tracking") // to speed up compilation
 
+
 void LvtkTheme::BuildStyles()
 {
 

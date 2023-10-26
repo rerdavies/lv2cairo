@@ -33,8 +33,11 @@
 
 using namespace lvtk;
 
+static constexpr bool INTERCEPT_X_ERROR_HANDLER = true;
 static constexpr int ANIMATION_RATE = 60;
 static constexpr std::chrono::steady_clock::duration ANIMATION_DELAY = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::microseconds(1000000 / ANIMATION_RATE));
+
+
 
 #define X_INIT_ATOM(name) \
     name = XInternAtom(display, "_" #name, False)
@@ -61,6 +64,56 @@ struct LvtkX11Window::XAtoms
         NET_RESTACK_WINDOW,
         NET_CLIENT_LIST;
 };
+
+static int(*old_handler)(Display*,XErrorEvent*) = nullptr;
+
+
+static int Lvtk_ErrorHandler(Display*display, XErrorEvent*event)
+{
+
+    char buffer[1024];
+    ::XGetErrorText(display,event->error_code,buffer,sizeof(buffer));
+
+    std::cout << "X11Error*(" << std::hex << event->resourceid << std::dec << "): " <<  buffer << std::endl;
+    return 0;
+}
+
+
+void LvtkX11Window::SetErrorHandler() {
+    if (INTERCEPT_X_ERROR_HANDLER)
+    {
+        if (old_handler == nullptr)
+        {
+            old_handler = XSetErrorHandler(Lvtk_ErrorHandler);
+        }
+    }
+}
+
+void LvtkX11Window::ReleaseErrorHandler()
+{
+    if (INTERCEPT_X_ERROR_HANDLER)
+    {
+        if (old_handler != nullptr)
+        {
+            XSetErrorHandler(old_handler);
+            old_handler = nullptr;
+        }
+    }
+}
+
+inline int LvtkX11Window::CheckX11Error(int retCode)
+{
+    if (retCode != Success) 
+    { 
+        std::cout << "X11 error: " << GetX11ErrorText(retCode) << std::endl; 
+    }
+    return retCode;    
+}
+
+
+inline void LvtkX11Window::Sync() {
+    XSync(x11Display,false);
+}
 
 template <typename T>
 bool GetX11ArrayProperty(Display *display, Window window,
@@ -336,6 +389,7 @@ LvtkX11Window::LvtkX11Window(
     : cairoWindow(window)
 {
 
+    SetErrorHandler();
     CreateWindow(
         parentNativeWindow->x11Window,
         parentNativeWindow->x11Display,
@@ -345,6 +399,7 @@ LvtkX11Window::LvtkX11Window(
     parent = parentNativeWindow;
 
     CreateSurface(size.Width(), size.Height());
+    ReleaseErrorHandler();
 }
 
 LvtkX11Window::LvtkX11Window(
@@ -353,6 +408,7 @@ LvtkX11Window::LvtkX11Window(
     LvtkCreateWindowParameters &parameters)
     : cairoWindow(window)
 {
+    SetErrorHandler();
     Window parentWindow = (Window)hWindow.getHandle();
     CreateWindow(
         parentWindow,
@@ -365,6 +421,8 @@ LvtkX11Window::LvtkX11Window(
         this->parent = parameters.owner->nativeWindow;
     }
     CreateSurface(size.Width(), size.Height());
+    Sync();
+    ReleaseErrorHandler();
 }
 
 LvtkX11Window::LvtkX11Window(
@@ -373,6 +431,15 @@ LvtkX11Window::LvtkX11Window(
     : LvtkX11Window(window, WindowHandle(), parameters)
 {
 }
+
+
+std::string LvtkX11Window::GetX11ErrorText(int code)
+{
+    char buffer[1024];
+    XGetErrorText(x11Display,code,buffer,sizeof(buffer));
+    return buffer;
+}
+
 
 void LvtkX11Window::DestroyWindowAndSurface()
 {
@@ -384,7 +451,10 @@ void LvtkX11Window::DestroyWindowAndSurface()
 
     if (x11Window)
     {
-        XDestroyWindow(x11Display, x11Window);
+        auto rc = XDestroyWindow(x11Display, x11Window);
+        if (rc){
+            logDebug(x11Window,SS("XDestroyWindow error: " << GetX11ErrorText(rc)));
+        }
         x11Window = 0;
         x11ParentWindow = 0;
         x11RootWindow = 0;
@@ -562,6 +632,8 @@ void LvtkX11Window::CreateWindow(
         {
             std::runtime_error("Can't create X11 input context.");
         }
+
+        this->logDebug(0, "Created x11Display");
     }
 
     this->xAtoms = std::make_unique<XAtoms>(x11Display);
@@ -610,19 +682,15 @@ void LvtkX11Window::CreateWindow(
 
     XSizeHints *sizeHints = (XSizeHints *)GenerateNormalHints(parameters);
 
-    XSetWindowAttributes windowAttributes;
-    memset(&windowAttributes, 0, sizeof(windowAttributes));
-    // if (parameters.windowType == LvtkWindowType::Dialog)
-    // {
-    //     windowAttributes.do_not_propagate_mask = KeyPressMask | KeyReleaseMask | PointerMotionMask | ButtonPressMask | ButtonMotionMask | ButtonReleaseMask;
-    // }
-
     XColor color;
     memset(&color, 0, sizeof(color));
     Colormap colormap = 0;
+    (void)colormap;
+
     std::string backgroundColor = ToX11Color(parameters.backgroundColor);
 
     unsigned long backgroundPixel = BlackPixel(x11Display, DefaultScreen(x11Display));
+    unsigned long borderPixel = BlackPixel(x11Display, DefaultScreen(x11Display));
     {
         colormap = DefaultColormap(x11Display, 0);
         XParseColor(x11Display, colormap, backgroundColor.c_str(), &color);
@@ -630,60 +698,49 @@ void LvtkX11Window::CreateWindow(
         backgroundPixel = color.pixel;
     }
 
-    windowAttributes.override_redirect = false;
-    windowAttributes.background_pixel = backgroundPixel;
-    windowAttributes.event_mask =
+    this->x11Window = XCreateSimpleWindow(
+        x11Display,parentWindow,
+        sizeHints->x, sizeHints->y,
+        sizeHints->base_width, sizeHints->base_height,
+        0,backgroundPixel,borderPixel
+    );
+    auto event_mask =
         ExposureMask | KeyPressMask | KeyReleaseMask | VisibilityChangeMask | PointerMotionMask | EnterWindowMask |
         LeaveWindowMask | KeymapStateMask |
         ButtonPressMask | ButtonMotionMask | ButtonReleaseMask |
         FocusChangeMask | StructureNotifyMask | PropertyChangeMask;
     ;
 
-    this->x11Window = XCreateWindow(
-        x11Display,
-        parentWindow,
-        sizeHints->x, sizeHints->y,
-        sizeHints->base_width, sizeHints->base_height,
-        InputOutput,
-        DefaultDepth(x11Display, DefaultScreen(x11Display)),
-        CopyFromParent,
-        DefaultVisual(x11Display, DefaultScreen(x11Display)),
-        CWBackPixel | CWEventMask | CWDontPropagate,
-        &windowAttributes);
+    XSelectInput(x11Display, x11Window, event_mask);
 
-    // auto event_mask = ExposureMask | KeyPressMask | KeyReleaseMask | VisibilityChangeMask | PointerMotionMask | EnterWindowMask |
-    //                   LeaveWindowMask | KeymapStateMask |
-    //                   ButtonPressMask | ButtonMotionMask | ButtonReleaseMask |
-    //                   FocusChangeMask | StructureNotifyMask | PropertyChangeMask;
+    this->logDebug(0, SS( std::hex << this->x11Window << " = XCreateWindow " 
+        << parentWindow  << std::dec
+        << ", " << sizeHints->x 
+        << ", " << sizeHints->y
+        << ", " << sizeHints->base_width << ", " << sizeHints->base_height
+        << ")"
+          ).c_str());
 
-    // XSelectInput(x11Display, x11Window, event_mask);
 
-    // if (parameters.owner)
-    // {
-    //     Window frameWindow = GetTopLevelSibling(parameters.owner->Handle());
-    //     XSetTransientForHint(x11Display,x11Window,frameWindow);
-    // } else 
     if (x11LogicalParentWindow != parentWindow || windowType == LvtkWindowType::Dialog)
     {
         if (
             XSetTransientForHint(x11Display, x11Window, x11LogicalParentWindow) == 0)
         {
             logDebug(x11Window, "Failed to set WM_TRANSIENT_FOR");
+        } else {
+            logDebug(x11Window, SS("WM_TRANSIENT_FOR: " << x11LogicalParentWindow));
         }
     }
-    if (parameters.windowType == LvtkWindowType::Dialog)
-    {
-        // Abolute clown car of an implementation on Gnome desktop.
-        // We'll implemented it elsewhere.
-    }
-
     SetNormalHints(sizeHints);
 
     if (parameters.positioning != LvtkWindowPositioning::ChildWindow)
     {
+
         wmDeleteWindow = XInternAtom(x11Display, "WM_DELETE_WINDOW", False);
         wmProtocols = XInternAtom(x11Display, "WM_PROTOCOLS", False);
         XSetWMProtocols(x11Display, x11Window, &wmDeleteWindow, 1);
+
 
         SetStringProperty("_GTK_APPLICATION_ID", parameters.gtkApplicationId);
 
@@ -695,15 +752,18 @@ void LvtkX11Window::CreateWindow(
         this->res_name = parameters.x11WindowName;
 
         classHint->res_name = const_cast<char *>(this->res_name.c_str());
+
         XSetClassHint(x11Display, x11Window, classHint);
+
         // GetSynchronousFrameExtents();
     }
+
     SetWindowType(parameters.windowType);
     WindowTitle(parameters.title);
 
     XMapWindow(x11Display, x11Window);
 
-    XRaiseWindow(x11Display, x11Window);
+    // XRaiseWindow(x11Display, x11Window);
     XClearWindow(x11Display, x11Window);
 
     this->size = parameters.size;
@@ -712,6 +772,7 @@ void LvtkX11Window::CreateWindow(
     cairoWindow->OnX11SizeChanged(this->size);
 
     RegisterControllerMessages();
+    Sync();
 }
 
 void LvtkX11Window::CreateSurface(int w, int h)
@@ -1214,7 +1275,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
         break;
     }
     default:
-        logDebug(0, SS("Dropping unhandled XEevent.type = " << xEvent.type));
+        // logDebug(0, SS("Dropping unhandled XEevent.type = " << xEvent.type));
         break;
     }
 }
@@ -1319,8 +1380,8 @@ void LvtkX11Window::SendControlChangedMessage(int32_t control, float value)
 
 void LvtkX11Window::RegisterControllerMessages()
 {
-    controlMessage = XInternAtom(x11Display, "ControlMmsg", False);
-    animateMessage = XInternAtom(x11Display, "AnimateMsg", False);
+    controlMessage = XInternAtom(x11Display, "ControlMmsg", True);
+    animateMessage = XInternAtom(x11Display, "AnimateMsg", True);
 }
 
 WindowHandle LvtkX11Window::Handle()

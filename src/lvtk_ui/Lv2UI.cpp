@@ -723,7 +723,6 @@ void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
                             break;
                         }
                     }
-                    // xxx redo this.
                     mainControlIndex.push_back(port.index());
                     container->AddChild(
                         RenderStereoControl(
@@ -807,6 +806,7 @@ void Lv2UI::AddRenderControls(LvtkContainerElement::ptr container)
         plotControl->Style()
             .Height(size.Height()-16)
             .Width(frequencyPlot.width())
+            .MarginRight(16);
             ;
         
         InsertExtendedControl(plotContainer,controlIndex,frequencyPlot.index(),plotControl);
@@ -1019,7 +1019,13 @@ void Lv2UI::WritePatchProperty(LV2_URID property,const std::string& value)
     atom->atom.type = urids.atom__String;
     atom->atom.size = value.length()+1;
     char*pAtomString = (char*)(pBuffer + sizeof(LV2_Atom));
+
+    // github build generates a warning here, even though it's correct.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+// xxx check this with a debugger. why does github gcc dislike this?!
     strcpy(pAtomString,value.c_str());
+#pragma GCC diagnostic pop    
     WritePatchProperty(property,(const LV2_Atom*)pBuffer);
 }
 

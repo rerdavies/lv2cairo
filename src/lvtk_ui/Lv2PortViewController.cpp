@@ -455,6 +455,7 @@ namespace lvtk::ui
         this->DisplayValue(text);
     }
 
+
     Lv2PortViewController::Lv2PortViewController(const Lv2PortInfo &portInfo)
         : portInfo(portInfo)
     {
@@ -639,10 +640,6 @@ namespace lvtk::ui
             {
                 return Lv2PortViewType::StatusOutputMessage;
             }
-            if (IsToggle())
-            {
-                return Lv2PortViewType::Toggle;
-            }
             if (portInfo.designation() == LV2_PORT_GROUPS__left)
             {
                 return Lv2PortViewType::StereoVuMeter;
@@ -652,6 +649,10 @@ namespace lvtk::ui
                 return Lv2PortViewType::StereoVuMeterRight;
             }
             if (portInfo.max_value() == 1.0 && portInfo.min_value() == 0.0 && portInfo.integer_property())
+            {
+                return Lv2PortViewType::LED;
+            }
+            if (IsToggle() && portInfo.min_value() == 0.0)
             {
                 return Lv2PortViewType::LED;
             }

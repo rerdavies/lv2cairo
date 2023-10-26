@@ -26,6 +26,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using namespace lvtk;
 
+static std::string monoFontFamily = "Lucida Console,Consolas,Liberation Mono,Monaco,Courier,monospace";
+
 namespace lvtk::implementation
 {
     class MarkdownTypographyElement : public LvtkTypographyElement
@@ -280,9 +282,35 @@ static bool GetTitleChars(const std::string&text, int &titleChars,std::string&li
 void LvtkMarkdownElement::AddMarkdownLine(const std::string &text_)
 {
     std::string text = text_;
+    if (this->markdownVariant == MarkdownVariant::PreFormated)
+    {
+        if (text == "```")
+        {
+            FlushMarkdown();
+            this->markdownVariant = MarkdownVariant::Paragraph;
+            // fall through to add one more (empty) line.
+            text = "";
+        }
+        auto element = LvtkTypographyElement::Create();
+        element->Variant(TextVariant());
+        element->Text(text);
+        element->Style()
+            .SingleLine(true)
+            .MarginLeft(32)
+            .FontFamily(monoFontFamily);
+            ;
+        this->AddChild(element);
+        return;
+    }
     if (text.length() == 0)
     {
         FlushMarkdown();
+        return;
+    }
+    if (text == "```")
+    {
+        FlushMarkdown();
+        this->markdownVariant = MarkdownVariant::PreFormated;
         return;
     }
     if (IsRule(text))

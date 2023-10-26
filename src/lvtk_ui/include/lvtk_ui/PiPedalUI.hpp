@@ -148,7 +148,7 @@ namespace lvtk::ui {
         float yBottom_ = -30;
         bool xLog_ = true;
         bool yDb_ = true;
-        float width_ = 60;
+        float width_ = 200;
     };
     class UiFrequencyPlot: private UiFrequencyPlot_Init  {
         friend class LilvUiFrequencyPlot;

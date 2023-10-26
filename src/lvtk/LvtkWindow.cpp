@@ -201,6 +201,7 @@ void LvtkWindow::CloseRootWindow()
         auto t = this->nativeWindow;
         this->nativeWindow = nullptr;
         delete t; // also deletes this!
+        
         return;   // this may no longer be valid.
     }
 }
@@ -255,6 +256,8 @@ void LvtkWindow::CreateWindow(
     {
         rootElement->Mount(this);
     }
+    // pump messages once.
+    this->nativeWindow->ProcessEvents();
 }
 
 void LvtkWindow::CreateWindow(

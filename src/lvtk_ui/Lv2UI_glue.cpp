@@ -68,7 +68,6 @@ lv2_instantiate(const LV2UI_Descriptor *descriptor,
     }
     if (lv2UI != nullptr)
     {
-
         if (!lv2UI->instantiate(
                 descriptor->URI,
                 plugin_uri,
@@ -146,6 +145,7 @@ lv2_extension_data(const char *uri)
 
     return NULL;
 }
+
 
 static void
 lv2_port_event(LV2UI_Handle handle,

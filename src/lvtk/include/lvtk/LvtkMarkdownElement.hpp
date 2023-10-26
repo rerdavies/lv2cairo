@@ -26,6 +26,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iostream>
 
 namespace lvtk {
+    /// @brief Display text formated with Markdown (.md) code.
+    /// Currently supports a very limited subset of markdown codes.
+
     class LvtkMarkdownElement: public LvtkVerticalStackElement {
     public:
         using self=LvtkMarkdownElement;
@@ -49,7 +52,8 @@ namespace lvtk {
             H2,
             H3,
             H4,
-            Paragraph
+            Paragraph,
+            PreFormated,
         };
         struct HangingIndentState {
             double indentMargin;

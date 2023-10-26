@@ -140,7 +140,18 @@ namespace lvtk
 
         void Resize(int width, int height);
 
+
+        static void SetErrorHandler();
+        static void ReleaseErrorHandler();
+
+
     private:
+
+        std::string GetX11ErrorText(int code);
+
+        int CheckX11Error(int code);
+
+        void Sync();
 
         bool GetTopLevelWindows(std::vector<Window> &result);
         Window GetOwnerFrameWindow(Display *x11Display,Window win);
@@ -214,7 +225,7 @@ namespace lvtk
         Atom wmDeleteWindow;
         std::string res_name;
         std::string res_class;
-        void *xClassHint;
+        void *xClassHint = nullptr;
         bool traceEvents = false;
         bool quitting = false;
         cairo_surface_t *cairoSurface = nullptr;

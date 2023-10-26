@@ -155,14 +155,14 @@ LvtkColor::LvtkColor(const std::string &webColor)
         throw std::invalid_argument(SS("Web Color must start with #: " << webColor));
     }
     if (webColor.length() == 4)
-    { // #xxx
+    { // #rgb
         a = 1.0;
         r = readC1(s);
         g = readC1(s);
         b = readC1(s);
     }
     else if (webColor.length() == 5)
-    { // #xxx
+    { // #rgba
         r = readC1(s);
         g = readC1(s);
         b = readC1(s);
@@ -170,6 +170,7 @@ LvtkColor::LvtkColor(const std::string &webColor)
     }
     else if (webColor.length() == 7)
     {
+        //#rrggbb
         a = 1.0;
         r = readC2(s);
         g = readC2(s);
@@ -177,6 +178,7 @@ LvtkColor::LvtkColor(const std::string &webColor)
     }
     else if (webColor.length() == 9)
     {
+        //rrggbbaa
         r = readC2(s);
         g = readC2(s);
         b = readC2(s);
