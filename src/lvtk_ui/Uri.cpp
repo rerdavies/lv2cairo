@@ -23,10 +23,10 @@
 
 using namespace pipedal;
 
-std::string uri::segment(int index) const
+std::string uri::segment(size_t index) const
 {
     const char *p = path_start;
-    int segment = 0;
+    size_t segment = 0;
 
     if (p != path_end && *p == '/') ++p;
 
@@ -53,9 +53,9 @@ std::string uri::segment(int index) const
 };
 
 
-int uri::segment_count() const { 
+size_t uri::segment_count() const { 
     const char *p = path_start;
-    int segment = 0;
+    size_t segment = 0;
 
     if (p != path_end && *p == '/') ++p;
 
@@ -213,9 +213,9 @@ static bool compare_name(const char*start, const char*end, const char*szName)
     return *szName == 0;
 }
 
-int  uri::query_count() const
+size_t  uri::query_count() const
 {
-    int count = 0;
+    size_t count = 0;
     const char*p = query_start;
     while (p != query_end && *p != '#')
     {
@@ -260,10 +260,10 @@ bool  uri::has_query(const char*name) const
 
 }
 
-query_segment uri::query(int index) const
+query_segment uri::query(size_t index) const
 {
     const char*p = query_start;
-    int ix = 0;
+    size_t ix = 0;
     while (p != query_end && *p != '#')
     {
         const char*nameStart = p;
@@ -350,10 +350,10 @@ std::string uri::query(const char*name) const
     return "";
 }
 
-query_segment uri::query(int index)
+query_segment uri::query(size_t index)
 {
     const char*p = query_start;
-    int count = 0;
+    size_t count = 0;
     while (p != query_end && *p != '#')
     {
         if (count == index)
@@ -396,7 +396,7 @@ query_segment uri::query(int index)
 std::vector<std::string> uri::segments()
 {
     std::vector<std::string> result;
-    for (int i = 0; i < segment_count(); ++i)
+    for (size_t i = 0; i < segment_count(); ++i)
     {
         result.push_back(segment(i));
     }

@@ -81,21 +81,21 @@ namespace pipedal
 
         std::string path() const { return std::string(path_start, path_end); }
 
-        int segment_count() const;
+        size_t segment_count() const;
 
-        std::string segment(int n) const;
+        std::string segment(size_t n) const;
 
         std::vector<std::string> segments();
         const std::vector<std::string> segments() const;
 
-        int query_count() const;
+        size_t query_count() const;
 
-        query_segment query(int index);
+        query_segment query(size_t index);
 
         bool has_query(const char *name) const;
 
         std::string query(const char *name) const;
-        query_segment query(int index) const;
+        query_segment query(size_t index) const;
 
         std::string get_extension() const;
 
@@ -133,11 +133,11 @@ namespace pipedal
               isRelative_(uri.is_relative()),
               fragment_(uri.fragment())
         {
-            for (int i = 0; i < uri.segment_count(); ++i)
+            for (size_t i = 0; i < uri.segment_count(); ++i)
             {
                 segments_.push_back(uri.segment(i));
             }
-            for (int i = 0; i < uri.query_count(); ++i)
+            for (size_t i = 0; i < uri.query_count(); ++i)
             {
                 queries_.push_back(uri.query(i));
             }
@@ -171,27 +171,27 @@ namespace pipedal
         {
             this->isRelative_ = isRelative;
         }
-        int segment_count() const { return (int)segments_.size(); }
-        const std::string &segment(int i) const { return segments_[i]; }
+        size_t segment_count() const { return segments_.size(); }
+        const std::string &segment(size_t i) const { return segments_[i]; }
 
         void append_segment(const std::string &segment)
         {
             segments_.push_back(segment);
         }
-        void insert_segment(int position, std::string &segment)
+        void insert_segment(size_t position, std::string &segment)
         {
             segments_.insert(segments_.begin() + position, segment);
         }
-        void erase_segment(int position)
+        void erase_segment(size_t position)
         {
             segments_.erase(segments_.begin() + position);
         }
-        void replace_segment(int position, std::string &segment)
+        void replace_segment(size_t position, std::string &segment)
         {
             segments_[position] = segment;
         }
 
-        int query_count() const { return (int)(queries_.size()); }
+        size_t query_count() const { return (queries_.size()); }
 
         bool has_query(const std::string &key) const;
 
@@ -214,7 +214,7 @@ namespace pipedal
             }
             return result;
         }
-        const query_segment &query(int index)
+        const query_segment &query(size_t index)
         {
             return queries_[index];
         }
