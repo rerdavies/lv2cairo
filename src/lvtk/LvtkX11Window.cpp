@@ -33,9 +33,27 @@
 
 using namespace lvtk;
 
-static constexpr bool INTERCEPT_X_ERROR_HANDLER = true;
+#define DEBUG_ENABLE_EVENT_TRACING false
+
+static constexpr bool DEBUG_INTERCEPT_X_ERROR_HANDLER = false;
+
 static constexpr int ANIMATION_RATE = 60;
 static constexpr std::chrono::steady_clock::duration ANIMATION_DELAY = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::microseconds(1000000 / ANIMATION_RATE));
+
+
+void LvtkX11Window::logDebug(Window x11Window, const std::string &message)
+{
+    std::stringstream s;
+    s << "(" << x11Window << "): " << message;
+    lvtk::LogDebug(s.str());
+}
+#if (DEBUG_ENABLE_EVENT_TRACING)
+#define LOG_TRACE(window,message) logDebug(window,message)
+#else 
+    #define LOG_TRACE(window,message) {}
+#endif
+
+
 
 
 
@@ -80,7 +98,7 @@ static int Lvtk_ErrorHandler(Display*display, XErrorEvent*event)
 
 
 void LvtkX11Window::SetErrorHandler() {
-    if (INTERCEPT_X_ERROR_HANDLER)
+    if (DEBUG_INTERCEPT_X_ERROR_HANDLER)
     {
         if (old_handler == nullptr)
         {
@@ -91,7 +109,7 @@ void LvtkX11Window::SetErrorHandler() {
 
 void LvtkX11Window::ReleaseErrorHandler()
 {
-    if (INTERCEPT_X_ERROR_HANDLER)
+    if (DEBUG_INTERCEPT_X_ERROR_HANDLER)
     {
         if (old_handler != nullptr)
         {
@@ -214,6 +232,8 @@ static bool GetAtomArrayProperty(
     XFree(properties);
     return true;
 }
+#pragma GCC diagnostic ignored "-Wunused-function"
+
 static std::string toString(ModifierState modifierState)
 {
     std::stringstream s;
@@ -451,10 +471,8 @@ void LvtkX11Window::DestroyWindowAndSurface()
 
     if (x11Window)
     {
-        auto rc = XDestroyWindow(x11Display, x11Window);
-        if (rc){
-            logDebug(x11Window,SS("XDestroyWindow error: " << GetX11ErrorText(rc)));
-        }
+        XDestroyWindow(x11Display, x11Window);
+
         x11Window = 0;
         x11ParentWindow = 0;
         x11RootWindow = 0;
@@ -472,6 +490,7 @@ void LvtkX11Window::DestroyWindowAndSurface()
         //     XCloseIM(xim);
         //     xim = 0;
         // }
+
         if (x11Display)
         {
             XCloseDisplay(x11Display);
@@ -633,7 +652,7 @@ void LvtkX11Window::CreateWindow(
             std::runtime_error("Can't create X11 input context.");
         }
 
-        this->logDebug(0, "Created x11Display");
+        LOG_TRACE(0, "Created x11Display");
     }
 
     this->xAtoms = std::make_unique<XAtoms>(x11Display);
@@ -713,24 +732,11 @@ void LvtkX11Window::CreateWindow(
 
     XSelectInput(x11Display, x11Window, event_mask);
 
-    this->logDebug(0, SS( std::hex << this->x11Window << " = XCreateWindow " 
-        << parentWindow  << std::dec
-        << ", " << sizeHints->x 
-        << ", " << sizeHints->y
-        << ", " << sizeHints->base_width << ", " << sizeHints->base_height
-        << ")"
-          ).c_str());
 
 
     if (x11LogicalParentWindow != parentWindow || windowType == LvtkWindowType::Dialog)
     {
-        if (
-            XSetTransientForHint(x11Display, x11Window, x11LogicalParentWindow) == 0)
-        {
-            logDebug(x11Window, "Failed to set WM_TRANSIENT_FOR");
-        } else {
-            logDebug(x11Window, SS("WM_TRANSIENT_FOR: " << x11LogicalParentWindow));
-        }
+        XSetTransientForHint(x11Display, x11Window, x11LogicalParentWindow);
     }
     SetNormalHints(sizeHints);
 
@@ -1017,7 +1023,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
             {
                 window->Invalidate();
             }
-            logDebug(xEvent.xvisibility.window, "VisibilityNotify");
+            LOG_TRACE(xEvent.xvisibility.window, "VisibilityNotify");
         }
         break;
     }
@@ -1026,7 +1032,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
         {
             if (xEvent.xclient.data.l[0] == (long int)wmDeleteWindow)
             {
-                logDebug(xEvent.xclient.window, "wmDeleteWindow");
+                LOG_TRACE(xEvent.xclient.window, "wmDeleteWindow");
                 EraseChild(xEvent.xclient.window);
             }
         }
@@ -1049,7 +1055,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
                 xEvent.xexpose.y,
                 xEvent.xexpose.width,
                 xEvent.xexpose.height);
-            logDebug(xEvent.xexpose.window, "Expose");
+            LOG_TRACE(xEvent.xexpose.window, "Expose");
         }
         break;
     }
@@ -1077,7 +1083,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
     }
     case ReparentNotify:
     {
-        logDebug(xEvent.xreparent.window, "ReparentNotify");
+        LOG_TRACE(xEvent.xreparent.window, "ReparentNotify");
         break;
     }
     case ConfigureNotify:
@@ -1093,7 +1099,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
 
             LvtkSize size{(double)xEvent.xconfigure.width, (double)xEvent.xconfigure.height};
 
-            logDebug(xEvent.xconfigure.window, SS("ConfigureNotify ("
+            LOG_TRACE(xEvent.xconfigure.window, SS("ConfigureNotify ("
                                                   << xEvent.xconfigure.x << "," << xEvent.xconfigure.y
                                                   << "," << xEvent.xconfigure.width << "," << xEvent.xconfigure.height
                                                   << ") ("
@@ -1111,32 +1117,32 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
     break;
     case CreateNotify:
     {
-        logDebug(xEvent.xcreatewindow.window, "CreateNotify");
+        LOG_TRACE(xEvent.xcreatewindow.window, "CreateNotify");
         break;
     }
     case DestroyNotify:
     {
-        logDebug(xEvent.xdestroywindow.window, "DestroyNotify");
+        LOG_TRACE(xEvent.xdestroywindow.window, "DestroyNotify");
         EraseChild(xEvent.xdestroywindow.window);
         break;
     }
     case ConfigureRequest:
     {
-        logDebug(xEvent.xconfigurerequest.window, SS("ConfigureNotify " << xEvent.xconfigurerequest.width << "," << xEvent.xconfigurerequest.height));
+        LOG_TRACE(xEvent.xconfigurerequest.window, SS("ConfigureNotify " << xEvent.xconfigurerequest.width << "," << xEvent.xconfigurerequest.height));
         break;
     }
     case MapNotify:
-        logDebug(xEvent.xmap.window, "MapNotify");
+        LOG_TRACE(xEvent.xmap.window, "MapNotify");
         break;
     case KeymapNotify:
-        logDebug(xEvent.xkeymap.window, "KeymapNotify");
+        LOG_TRACE(xEvent.xkeymap.window, "KeymapNotify");
         break;
     case EnterNotify:
-        logDebug(xEvent.xcrossing.window, "EnterNotify");
+        LOG_TRACE(xEvent.xcrossing.window, "EnterNotify");
         break;
     case LeaveNotify:
     {
-        logDebug(xEvent.xcrossing.window, "LeaveNotify");
+        LOG_TRACE(xEvent.xcrossing.window, "LeaveNotify");
         LvtkWindow::ptr window = GetLvtkWindow(xEvent.xcrossing.window);
 
         if (window)
@@ -1147,15 +1153,15 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
     break;
     case ResizeRequest:
     {
-        logDebug(xEvent.xresizerequest.window, SS("ResizeRequest " << xEvent.xresizerequest.width << "," << xEvent.xresizerequest.height));
-        // logDebug(xEvent.xresizerequest.window, SS("cairo surface size:  " << cairo_xlib_surface_get_width(cairoSurface) << "," << cairo_xlib_surface_get_height(cairoSurface)));
+        LOG_TRACE(xEvent.xresizerequest.window, SS("ResizeRequest " << xEvent.xresizerequest.width << "," << xEvent.xresizerequest.height));
+        // LOG_TRACE(xEvent.xresizerequest.window, SS("cairo surface size:  " << cairo_xlib_surface_get_width(cairoSurface) << "," << cairo_xlib_surface_get_height(cairoSurface)));
 
         // this->size = LvtkSize(xEvent.xresizerequest.width, xEvent.xresizerequest.height);
         // cairo_xlib_surface_set_size(cairoSurface, size.Width(), size.Height());
         // {
         //     XWindowAttributes attributes;
         //     XGetWindowAttributes(x11Display, x11Window, &attributes);
-        //     logDebug(xEvent.xresizerequest.window, SS("X11 windows:  " << attributes.width << "," << attributes.height));
+        //     LOG_TRACE(xEvent.xresizerequest.window, SS("X11 windows:  " << attributes.width << "," << attributes.height));
         // }
         break;
     }
@@ -1196,14 +1202,14 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
                     LogError("X11 Keyboard buffer overflow.");
                     break;
                 case XLookupNone:
-                    logDebug(xEvent.xkey.window, "Keyboard lookup none");
+                    LOG_TRACE(xEvent.xkey.window, "Keyboard lookup none");
                     break;
                 case XLookupChars:
                     keybuf[rc] = '\0'; // return is lenght of string.
                     strncpy(eventArgs.text, keybuf, sizeof(eventArgs.text));
                     eventArgs.textValid = true;
                     eventArgs.modifierState = makeModifierState(xEvent.xkey.state);
-                    logDebug(xEvent.xkey.window, SS("Keyboard: " << keybuf << " " << toString(eventArgs.modifierState)));
+                    LOG_TRACE(xEvent.xkey.window, SS("Keyboard: " << keybuf << " " << toString(eventArgs.modifierState)));
                     window->OnKeyDown(eventArgs);
                     break;
                 case XLookupKeySym:
@@ -1211,7 +1217,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
                     eventArgs.keysymValid = true;
                     eventArgs.modifierState = makeModifierState(xEvent.xkey.state);
                     eventArgs.keysym = keySym;
-                    logDebug(xEvent.xkey.window, SS("Keyboard: sym: " << GetKeysymName(keySym) << " " << toString(eventArgs.modifierState)));
+                    LOG_TRACE(xEvent.xkey.window, SS("Keyboard: sym: " << GetKeysymName(keySym) << " " << toString(eventArgs.modifierState)));
                     window->OnKeyDown(eventArgs);
 
                     break;
@@ -1227,7 +1233,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
                     {
                         kbdText = (const char *)u8"\uFFFD";
                     }
-                    logDebug(xEvent.xkey.window, SS("Keyboard: " << kbdText << "  sym: " << GetKeysymName(keySym) << " " << toString(eventArgs.modifierState)));
+                    LOG_TRACE(xEvent.xkey.window, SS("Keyboard: " << kbdText << "  sym: " << GetKeysymName(keySym) << " " << toString(eventArgs.modifierState)));
                     window->OnKeyDown(eventArgs);
                     break;
                 }
@@ -1258,7 +1264,7 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
         {
             if (xEvent.xproperty.state == PropertyNewValue)
             {
-                logDebug(e.window, SS("PropertyNotify new value: " << XGetAtomName(x11Display, e.atom)));
+                LOG_TRACE(e.window, SS("PropertyNotify new value: " << XGetAtomName(x11Display, e.atom)));
                 if (e.atom == xAtoms->NET_FRAME_EXTENTS)
                 {
                     child->OnFrameExtentsUpdated();
@@ -1275,22 +1281,12 @@ void LvtkX11Window::ProcessEvent(XEvent &xEvent)
         break;
     }
     default:
-        // logDebug(0, SS("Dropping unhandled XEevent.type = " << xEvent.type));
+        // LOG_TRACE(0, SS("Dropping unhandled XEevent.type = " << xEvent.type));
         break;
     }
 }
 
-static constexpr bool ENABLE_EVENT_TRACING = true;
 
-void LvtkX11Window::logDebug(Window x11Window, const std::string &message)
-{
-    if (ENABLE_EVENT_TRACING)
-    {
-        std::stringstream s;
-        s << "(" << x11Window << "): " << message;
-        lvtk::LogDebug(s.str());
-    }
-}
 
 bool LvtkX11Window::GrabPointer()
 {
@@ -1723,7 +1719,7 @@ void LvtkX11Window::OnWmStateUpdated()
             {
                 s << " " << XGetAtomName(x11Display, atom);
             }
-            logDebug(x11Window, s.str());
+            LOG_TRACE(x11Window, s.str());
         }
         bool maximizedHorz = std::find(atoms.begin(), atoms.end(), xAtoms->NET_WM_STATE_MAXIMIZED_HORZ) != atoms.end();
         bool maximizedVert = std::find(atoms.begin(), atoms.end(), xAtoms->NET_WM_STATE_MAXIMIZED_VERT) != atoms.end();
