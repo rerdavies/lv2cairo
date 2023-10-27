@@ -50,7 +50,7 @@ std::string uri::segment(size_t index) const
         ++segment;
     }
     throw std::invalid_argument("Invalid segement number.");
-};
+}
 
 
 size_t uri::segment_count() const { 

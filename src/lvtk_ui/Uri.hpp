@@ -233,4 +233,4 @@ namespace pipedal
         std::vector<query_segment> queries_;
         std::string fragment_;
     };
-}; // namespace pipedal.
+} // namespace pipedal.

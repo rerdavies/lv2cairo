@@ -69,7 +69,7 @@ namespace lvtk
     {
         return Lv2UiTestPageImpl::Create();
     }
-};
+}
 
 UiContainerElement::UiContainerElement(LvtkTheme::ptr theme)
 {

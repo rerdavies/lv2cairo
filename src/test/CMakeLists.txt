@@ -50,7 +50,7 @@ target_include_directories(lvtk_demo PRIVATE
 )
 
 target_link_libraries(lvtk_demo 
-    lvtk lvtk_ui
+    lvtk lvtk_ui pthread
 )
 
 add_executable(CatchTest 
@@ -71,10 +71,10 @@ add_executable(CatchTest
 target_include_directories(CatchTest PRIVATE
     ${Lvtk_INCLUDE_DIRS}
     ${PROJECT_SOURCE_DIR}/src/lvtk_ui
-    lvtk_ui lvtk
+    lvtk_ui lvtk 
 )
 
-target_link_libraries(CatchTest lvtk lvtk_ui)
+target_link_libraries(CatchTest lvtk lvtk_ui pthread)
 
 
 add_test (NAME CatchTest COMMAND CatchTest)

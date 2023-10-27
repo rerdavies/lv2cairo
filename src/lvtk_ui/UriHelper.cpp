@@ -26,7 +26,7 @@ using namespace pipedal;
 
 
 // non-localizable. RFC 7231 Date Format
-;
+
 static const char*INVARIANT_WEEK_DAYS[] = 
     { "Sun","Mon", "Tue", "Wed","Thu", "Fri","Sat"};
 // non-localizable. RFC 7231 Date Format
