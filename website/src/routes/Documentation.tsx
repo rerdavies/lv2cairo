@@ -5,7 +5,7 @@ import pMinDelay from 'p-min-delay';
 
 
 const DocIndex = loadable(()=>pMinDelay(import('./documentation/DocIndex'),200));
-const WhyLv2Lv2c =loadable(()=>pMinDelay(import('./documentation/WhyLV2C'),200));
+const WhyLv2Lv2c =loadable(()=>pMinDelay(import('./documentation/WhyLv2Cario'),200));
 const DocOverview =loadable(()=>pMinDelay(import('./documentation/DocOverview'),200));
 const CodingConventions =loadable(()=>pMinDelay(import('./documentation/DocCodingStyle'),200));
 const DocNoMatch =loadable(()=>pMinDelay(import('./documentation/DocNoMatch'),200));

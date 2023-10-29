@@ -18,12 +18,12 @@ const Navbar = () => {
             <Toolbar>
 
                 <ButtonBase  sx={buttonStyle}  >
-                    <img width="40px" height="40px"  src="img/LvkLogoDark.svg" />
+                    <img width="40px" height="40px"  src="img/LvcLogoDark.svg" />
 
                     <Typography variant="h6" component="div" sx={{marginLeft: 1}}
                         onClick={() => navigate("/")}>
 
-                        LVtk
+                        Lv2Cairo
                     </Typography>
                 </ButtonBase>
                 <ButtonBase sx={buttonStyle}>

@@ -1,3 +1,36 @@
+## Building the Website
+
+The Website is currently built and publish by Github actions. Checking in any change 
+to the website will trigger a build action, and publish the changes to the github.io site.
+The website itself is a static website built using React+Vite.
+
+
+To build and run the website locally for development and test purposes, follow these steps.
+
+1. Update Node.js to the latest version.
+
+   https://github.com/nodesource/distributions  (for binary packages)
+
+            or 
+
+   https://nodejs.org/  (for source, or binary .tar packages).
+  
+
+2. Upgrade NPM to lastest version.
+
+3. To run the Vite development server:
+
+   cd website
+   ./start.sh
+
+
+   
+
+
+
+
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -25,3 +58,4 @@ If you are developing a production application, we recommend updating the config
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+

@@ -4,8 +4,8 @@ const lv2cVersion_ : string = "0.0.0-prerelease";
 export function Lv2cVersion(): string { return lv2cVersion_; };
 
 export function Lv2cVersionNotice() : string { return `
-In this pre-release version, LVtk APIs are still undergoing heavy revision while
-LVtk is being integrated into the Toob Amp project.
+In this pre-release version, Lv2Cairo APIs are still undergoing heavy revision while
+Lv2Cairo is being integrated into the Toob Amp project.
 
 Feel free to look araound; but it would be wise to wait a week or so for things to 
 settle down before using this project.

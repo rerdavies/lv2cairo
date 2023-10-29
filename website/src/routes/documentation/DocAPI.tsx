@@ -6,7 +6,7 @@ function DocAPI() {
 
     return (
         <Box className={"page_column"}>
-            <Heading >LVtk</Heading>
+            <Heading >Lv2Cairo</Heading>
             <Subheading>API Documentation</Subheading>
 
             <P>TBD</P>

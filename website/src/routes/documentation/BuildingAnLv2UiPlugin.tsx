@@ -22,11 +22,11 @@ function BuildingAnLv2UiPlugin() {
             <P>
                 To do all of this, Lv2UI needs a description of the ports on the LV2 audio plugin. This information
                 is generated using a command-line utility, <span className={"code"}>generate_lv2c_plugin_info</span>, which is built as
-                part of the LVtk build procedure. If you are building the project yourself, <span className={"code"}>generate_lv2c_plugin_info</span>
+                part of the Lv2Cairo build procedure. If you are building the project yourself, <span className={"code"}>generate_lv2c_plugin_info</span>
                 can be found in the <span className={"code"}>build/src/</span>
             </P>
             <P>
-                The test plugin, included in the LVtk project generates the neccessary file using the following command.
+                The test plugin, included in the Lv2Cairo project generates the neccessary file using the following command.
             </P>
             {PreformatedText(
                 `
@@ -107,7 +107,7 @@ set(LV2_UI_SO_NAME $\{LV2_SO_NAME}_ui)`)}
 <https://rerdavies.github.io/lvtk/test_plugin>
   a lv2:Plugin ,
     lv2:UtilityPlugin ;
-    doap:name "LVtk Demo Plugin" 
+    doap:name "Lv2Cairo Demo Plugin" 
     ;
     # VVVVV    Declare that the plugin has a UI   VVVVV
     ui:ui <https://rerdavies.github.io/lvtk/test_plugin-ui>;  
@@ -167,15 +167,16 @@ SamplePlugin::SamplePlugin()
 target_link_options(lvtk_test_plugin PRIVATE
     "-Wl,-z,nodelete "
 )
-`))
+`)}
             <P>The UI Plugin must statically link the liblvtk.a and liblvkt_ui.a libraries. In the sample plugin CMakeList.txt file, this is
                 performed by the following cmake commands:
+            </P>
                 {PreformatedText(
                 `
 target_link_libraries(
     ToobAmpUI PRIVATE lvtk_ui
 )
-`))
+`)}
             <P>cmake will automatically link dependent libraries required by lvtk_ui</P>
         </Box>
     );

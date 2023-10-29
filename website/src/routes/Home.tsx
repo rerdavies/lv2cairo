@@ -3,9 +3,9 @@ import Typography from '@mui/material/Typography';
 import ArchitectureDiagram from '../ArchitectureDiagram';
 import { Link} from "react-router-dom";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { FigureCaption,SmallPrint, P, Ul } from './documentation/StandardFormats';
+import { FigureCaption,SmallPrint, P, Ul,Subheading } from './documentation/StandardFormats';
 import { Lv2cCopyrightText, Lv2cVersion, Lv2cVersionNotice } from '../VersionInfo';
-import { LVtk } from './documentation/StandardFormats';
+import { Lv2Cairo } from './documentation/StandardFormats';
 
 
 const Home = () => {
@@ -14,7 +14,7 @@ const Home = () => {
     return (
         <Box className={"page_frame"}>
             <div className={"page_column"}>
-                <img src="img/LvkLogo.svg" 
+                <img src="img/LvcLogo.svg" 
                     style={{position: "absolute", left: -90,top: -2, height: 76, 
                         display: floatLogo? undefined: "none"}} />
 
@@ -28,7 +28,7 @@ const Home = () => {
                     { Lv2cVersionNotice() }
                 </SmallPrint>
                 <P>
-                    <LVtk/> is a C++ class library for building LV2 plugins with custom user 
+                    <Lv2Cairo/> is a C++ class library for building LV2 plugins with custom user 
                     interfaces, using Cairo/X11 as a graphics backend.</P>
                     <table>
                     <tr><td>
@@ -40,10 +40,19 @@ const Home = () => {
                         </FigureCaption>
                     </td></tr>
                 </table>
+                <P>Features:</P>
+                <Ul>
+                    <li><Typography>Light-weight graphical UI rendered using X11/Cairo.</Typography></li>
+                    <li><Typography>MIT Licensed.</Typography></li>
+                    <li><Typography>A rich set of input and output controls for use in LV2 plugins</Typography></li>
+                    <li><Typography>Support for LV2 path properties</Typography></li>
+                    <li><Typography>Host-independent file selection dialog.</Typography></li>
+                    <li><Typography>Automatic generation of UI from manifest.tll files.</Typography></li>
+                    <li><Typography>A rich set of features for producing customized plugin user interfaces.</Typography></li>
+                </Ul>
 
+                <Subheading>Architecture</Subheading>
                 <ArchitectureDiagram/>
-                <P><LVtk/> provides the folowing features:
-                </P>
                 <Ul>
                     <li><Typography>The <i>Lv2c</i> Element library provide a set of controls and widgets with layout, styling and theming that render user interfaces on a Cairo/X11 surface.</Typography> </li>
                     <li><Typography>The <i>Lv2UI</i> class is a base-class for implementing LV2 UI plugins.
@@ -57,12 +66,13 @@ const Home = () => {
                 </Ul>
                 <P>
                     The audio plugin and UI plugin implementations are completely independent. If you have an existing
-                    LV2 audio plugin (or prefer to use another library), <LVtk/> is still an entirely suitable choice for building a user interface for your plugin.
+                    LV2 audio plugin (or prefer to use another library), <Lv2Cairo/> is still an entirely suitable choice for building a user interface for your plugin.
                 </P>
 
+                <Subheading>Customization</Subheading>
                 <P>
-                    <LVtk/> can automatically generate serviceable custom user interfaces directly
-                    from  <span className={"code"}> manifest.tll</span> files. At the same time, LVtk makes it easy to customize your UI plugin interface as well.
+                    <Lv2Cairo/> can automatically generate serviceable custom user interfaces directly
+                    from  <span className={"code"}> manifest.tll</span> files. At the same time, Lv2Cairo makes it easy to customize your UI plugin interface as well.
                 </P>
                 <img src="img/Customization.png" style={{width: "60%",float: "right", marginLeft: 16, marginRight: 24}} />
                 <Typography paragraph style={{textAlign: "right", color: "#606060",fontSize: "0.9em", paddingTop: 24, paddingRight: 16}}>
@@ -89,12 +99,12 @@ const Home = () => {
                     <Link to="/documentation/build_an_lv2_audio_plugin"> <Typography>Building an LV2 Audio Plugin</Typography></Link>
                     <Link to="/documentation/build_an_lv2_ui_plugin"> <Typography>Building an LV2 UI Plugin</Typography></Link>
                     <br/>
-                    <a href="http://github.com/rerdavies/lvtk"> <Typography>The GitHub Repository</Typography></a>
+                    <a href="http://github.com/rerdavies/lv2cairo"> <Typography>The GitHub Repository</Typography></a>
                 </Box>
                 <div style={{height: 24}} />
                 <div style={{height: 1, background:"#606060",marginTop: 16, marginBottom: 16}} />
                 <Typography paragraph style={{fontSize: "0.8em"}}>
-                    LVtk is provided under the terms of 
+                    Lv2Cairo is provided under the terms of 
                     an <Link to="/license">MIT license</Link>.
                     <br/>{Lv2cCopyrightText()}
                 </Typography>

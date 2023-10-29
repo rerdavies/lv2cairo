@@ -40,7 +40,7 @@ const docIndex: NavPage =
             [
                 new NavPage(
                     "/documentation/why",
-                    "Why LVtk?",
+                    "Why Lv2Cairo?",
                     "WhyLv2Lv2c",
                     []
                 ),
@@ -76,7 +76,7 @@ const docIndex: NavPage =
                 ),
                 new NavPage(
                     "/documentation/coding_conventions",
-                    "LVtk Coding Conventions",
+                    "Lv2Cairo Coding Conventions",
                     "DocNoMatch",
                     []
                 )

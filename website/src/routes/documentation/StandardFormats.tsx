@@ -11,9 +11,9 @@ export function Code(props: React.PropsWithChildren<{}>)
     return (<span className="code">{props.children}</span>);
 }
 
-export function LVtk() // branded LVtk name.
+export function Lv2Cairo() // branded Lv2Cairo name.
 {
-    return (<span style={{fontWeight: 700}}>LVtk</span>);
+    return (<span style={{fontWeight: 700}}>Lv2Cairo</span>);
 }
 
 export function Heading(props: React.PropsWithChildren<{}>)

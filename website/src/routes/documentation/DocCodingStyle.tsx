@@ -6,16 +6,16 @@ import { PreformatedText } from "../../CodeFragment";
 function DocCodingStyle() {
     return (
         <Page>
-            <Heading>LVtk Coding Style Guidlines</Heading>
-            <P>These are the coding standards currently used by LVtk. Like all good coding standards,
+            <Heading>Lv2Cairo Coding Style Guidlines</Heading>
+            <P>These are the coding standards currently used by Lv2Cairo. Like all good coding standards,
                 these are guidelines. Violate them when good taste and judgement warrants. In particular,
-                LVtk coding style does vary when coding close to 3rd-party libraries. The Lv2cDrawingContext,
-                for example, uses snake-case method names that mirror the naming conventions of the underlying LVtk C APIs..
+                Lv2Cairo coding style does vary when coding close to 3rd-party libraries. The Lv2cDrawingContext,
+                for example, uses snake-case method names that mirror the naming conventions of the underlying Lv2Cairo C APIs..
             </P>
             <P>You are encouranged (but by no means required) to use these coding conventions when writing projects that
-                are based on LVtk.
+                are based on Lv2Cairo.
             </P>
-            <P>At present, there may be places where an older coding standard has leaked into LVtk code. These cases are being
+            <P>At present, there may be places where an older coding standard has leaked into Lv2Cairo code. These cases are being
                 dealt with as they are discovered; but this coding guideline reflects where the code should end up.
             </P>
             <Subheading >Formatting</Subheading>
@@ -93,8 +93,8 @@ Lv2cStyle style = Lv2cStyle()
             </Ul>
 
             <Subheading>Conventional Class Pre-amble</Subheading>
-            <P>Most classes in LVtk are referenced through <Code>std::shared_ptr&lt;&gt;</Code>s. </P>
-            <P>To make this easier, custom LVtk element classes should start with the following preamble.</P>
+            <P>Most classes in Lv2Cairo are referenced through <Code>std::shared_ptr&lt;&gt;</Code>s. </P>
+            <P>To make this easier, custom Lv2Cairo element classes should start with the following preamble.</P>
             {PreformatedText(`
 class ToobGraphElement: public Lv2cElement {
 public:
