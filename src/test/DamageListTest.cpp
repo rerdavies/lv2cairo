@@ -19,7 +19,7 @@
 
 #include <catch2/catch.hpp>
 
-#include "lvtk/LvtkDamageList.hpp"
+#include "lv2c/Lv2cDamageList.hpp"
 #include <stdexcept>
 #include <iostream>
 #include <cstdlib>
@@ -27,9 +27,9 @@ using namespace std;
 using namespace lvtk;
 
 
-void Check2RectComposition(const LvtkRectangle &c, const LvtkRectangle &c2, size_t expectedRects)
+void Check2RectComposition(const Lv2cRectangle &c, const Lv2cRectangle &c2, size_t expectedRects)
 {
-    LvtkDamageList list;
+    Lv2cDamageList list;
     list.SetSize(1000, 1000);
     list.GetDamageList();
 
@@ -54,26 +54,26 @@ void Check2RectComposition(const LvtkRectangle &c, const LvtkRectangle &c2, size
 void ColumnTests()
 {
 
-    Check2RectComposition(LvtkRectangle(1, 0, 3, 1), LvtkRectangle(3, 0, 3, 1), 1);
-    Check2RectComposition(LvtkRectangle(1, 0, 3, 1), LvtkRectangle(1, 0, 3, 1), 1);
-    Check2RectComposition(LvtkRectangle(3, 0, 3, 1), LvtkRectangle(1, 0, 3, 1), 1);
-    Check2RectComposition(LvtkRectangle(3, 0, 3, 1), LvtkRectangle(6, 0, 3, 1), 1);
-    Check2RectComposition(LvtkRectangle(3, 0, 3, 1), LvtkRectangle(3, 0, 6, 1), 1);
-    Check2RectComposition(LvtkRectangle(3, 0, 3, 1), LvtkRectangle(4, 0, 1, 1), 1);
-    Check2RectComposition(LvtkRectangle(2, 0, 3, 1), LvtkRectangle(1, 0, 7, 1), 1);
-    Check2RectComposition(LvtkRectangle(2, 0, 3, 1), LvtkRectangle(1, 0, 7, 1), 1);
+    Check2RectComposition(Lv2cRectangle(1, 0, 3, 1), Lv2cRectangle(3, 0, 3, 1), 1);
+    Check2RectComposition(Lv2cRectangle(1, 0, 3, 1), Lv2cRectangle(1, 0, 3, 1), 1);
+    Check2RectComposition(Lv2cRectangle(3, 0, 3, 1), Lv2cRectangle(1, 0, 3, 1), 1);
+    Check2RectComposition(Lv2cRectangle(3, 0, 3, 1), Lv2cRectangle(6, 0, 3, 1), 1);
+    Check2RectComposition(Lv2cRectangle(3, 0, 3, 1), Lv2cRectangle(3, 0, 6, 1), 1);
+    Check2RectComposition(Lv2cRectangle(3, 0, 3, 1), Lv2cRectangle(4, 0, 1, 1), 1);
+    Check2RectComposition(Lv2cRectangle(2, 0, 3, 1), Lv2cRectangle(1, 0, 7, 1), 1);
+    Check2RectComposition(Lv2cRectangle(2, 0, 3, 1), Lv2cRectangle(1, 0, 7, 1), 1);
 
-    Check2RectComposition(LvtkRectangle(2, 0, 3, 1), LvtkRectangle(8, 0, 7, 1), 2);
+    Check2RectComposition(Lv2cRectangle(2, 0, 3, 1), Lv2cRectangle(8, 0, 7, 1), 2);
 
-    Check2RectComposition(LvtkRectangle(2, 0, 3, 1), LvtkRectangle(8, 0, 7, 1), 2);
+    Check2RectComposition(Lv2cRectangle(2, 0, 3, 1), Lv2cRectangle(8, 0, 7, 1), 2);
 
-    Check2RectComposition(LvtkRectangle(9, 0, 3, 1), LvtkRectangle(1, 0, 1, 1), 2);
+    Check2RectComposition(Lv2cRectangle(9, 0, 3, 1), Lv2cRectangle(1, 0, 1, 1), 2);
 }
 
 // Perform tests on a 3x3 area. 
-void TicTacToeCheck(size_t expectedRectangles, double expectedArea, const std::vector<LvtkRectangle> &rectangles)
+void TicTacToeCheck(size_t expectedRectangles, double expectedArea, const std::vector<Lv2cRectangle> &rectangles)
 {
-    LvtkDamageList list;
+    Lv2cDamageList list;
     list.SetSize(3, 3);
     list.GetDamageList(); // clear initial damage.
 
@@ -97,19 +97,19 @@ void TicTacToeCheck(size_t expectedRectangles, double expectedArea, const std::v
 void RowTests()
 {
 
-    Check2RectComposition(LvtkRectangle(1, 0, 1, 5), LvtkRectangle(0, 1, 5, 1), 3);
-    Check2RectComposition(LvtkRectangle(0, 1, 5, 1), LvtkRectangle(1, 0, 1, 5), 3);
-    Check2RectComposition(LvtkRectangle(1, 0, 1, 5), LvtkRectangle(0, 0, 5, 1), 2);
-    Check2RectComposition(LvtkRectangle(1, 0, 1, 5), LvtkRectangle(2, 0, 5, 1), 2);
-    Check2RectComposition(LvtkRectangle(1, 0, 1, 5), LvtkRectangle(0, 0, 1, 1), 2);
-    Check2RectComposition(LvtkRectangle(1, 0, 1, 5), LvtkRectangle(0, 0, 2, 1), 2);
-    Check2RectComposition(LvtkRectangle(1, 0, 1, 5), LvtkRectangle(0, 2, 1, 1), 3);
+    Check2RectComposition(Lv2cRectangle(1, 0, 1, 5), Lv2cRectangle(0, 1, 5, 1), 3);
+    Check2RectComposition(Lv2cRectangle(0, 1, 5, 1), Lv2cRectangle(1, 0, 1, 5), 3);
+    Check2RectComposition(Lv2cRectangle(1, 0, 1, 5), Lv2cRectangle(0, 0, 5, 1), 2);
+    Check2RectComposition(Lv2cRectangle(1, 0, 1, 5), Lv2cRectangle(2, 0, 5, 1), 2);
+    Check2RectComposition(Lv2cRectangle(1, 0, 1, 5), Lv2cRectangle(0, 0, 1, 1), 2);
+    Check2RectComposition(Lv2cRectangle(1, 0, 1, 5), Lv2cRectangle(0, 0, 2, 1), 2);
+    Check2RectComposition(Lv2cRectangle(1, 0, 1, 5), Lv2cRectangle(0, 2, 1, 1), 3);
 }
 
 
-std::vector<LvtkRectangle> shuffleRects(const std::vector<LvtkRectangle> &rectangles)
+std::vector<Lv2cRectangle> shuffleRects(const std::vector<Lv2cRectangle> &rectangles)
 {
-    std::vector<LvtkRectangle> result = rectangles;
+    std::vector<Lv2cRectangle> result = rectangles;
     for (size_t i = 0; i < result.size(); ++i)
     {
         int rnd = std::rand() % (result.size()-i);
@@ -120,13 +120,13 @@ std::vector<LvtkRectangle> shuffleRects(const std::vector<LvtkRectangle> &rectan
     return result;
 }
 
-void TicTacToeShuffleCheck(size_t expectedRectangles, double expectedArea, const std::vector<LvtkRectangle> &rectangles)
+void TicTacToeShuffleCheck(size_t expectedRectangles, double expectedArea, const std::vector<Lv2cRectangle> &rectangles)
 {
     TicTacToeCheck(expectedRectangles, expectedArea, rectangles);
 
     for (int i = 0; i < 40; ++i)
     {
-        std::vector<LvtkRectangle> shuffledRects = shuffleRects(rectangles);
+        std::vector<Lv2cRectangle> shuffledRects = shuffleRects(rectangles);
         TicTacToeCheck(expectedRectangles, expectedArea, shuffledRects);
     }
 }
@@ -136,80 +136,80 @@ void TickTacToeTest()
 {
     // Results should be the same no matter which order.
     // Do random permutations of rectangles in order to provde better coverage of cases.
-    TicTacToeShuffleCheck(1, 4, {LvtkRectangle(0, 0, 2, 1), LvtkRectangle(0, 0, 1, 2), LvtkRectangle(1, 1, 1, 1)});
+    TicTacToeShuffleCheck(1, 4, {Lv2cRectangle(0, 0, 2, 1), Lv2cRectangle(0, 0, 1, 2), Lv2cRectangle(1, 1, 1, 1)});
     TicTacToeShuffleCheck(1, 9, {
-                                    LvtkRectangle(-1, 0, 5, 1), // donut
-                                    LvtkRectangle(0, 1, 1, 1), LvtkRectangle(2, 1, 1, 1), LvtkRectangle(0, 2, 5, 1),
+                                    Lv2cRectangle(-1, 0, 5, 1), // donut
+                                    Lv2cRectangle(0, 1, 1, 1), Lv2cRectangle(2, 1, 1, 1), Lv2cRectangle(0, 2, 5, 1),
 
-                                    LvtkRectangle(1, 1, 1, 1) // hole.
+                                    Lv2cRectangle(1, 1, 1, 1) // hole.
                                 });
     TicTacToeShuffleCheck(1, 9, {
-                                    LvtkRectangle(0, 0, 2, 1),
-                                    LvtkRectangle(1, 0, 2, 1),
-                                    LvtkRectangle(0, 1, 1, 1),
-                                    LvtkRectangle(2, 1, 1, 1),
-                                    LvtkRectangle(0, 2, 3, 1),
-                                    LvtkRectangle(1, 1, 1, 1),
-                                });
-
-    TicTacToeShuffleCheck(1, 9, {
-                                    LvtkRectangle(1, 0, 1, 3),
-                                    LvtkRectangle(0, 1, 3, 1),
-
-                                    LvtkRectangle(0, 0, 1, 1),
-                                    LvtkRectangle(2, 0, 1, 1),
-
-                                    LvtkRectangle(0, 2, 1, 1),
-                                    LvtkRectangle(2, 2, 1, 1),
-                                });
-    TicTacToeShuffleCheck(1, 9, {
-                                    LvtkRectangle(1, 0, 1, 3),
-                                    LvtkRectangle(0, 1, 3, 1),
-
-                                    LvtkRectangle(0, 0, 2, 1),
-                                    LvtkRectangle(2, 0, 1, 1),
-
-                                    LvtkRectangle(0, 2, 1, 1),
-                                    LvtkRectangle(1, 2, 2, 1),
+                                    Lv2cRectangle(0, 0, 2, 1),
+                                    Lv2cRectangle(1, 0, 2, 1),
+                                    Lv2cRectangle(0, 1, 1, 1),
+                                    Lv2cRectangle(2, 1, 1, 1),
+                                    Lv2cRectangle(0, 2, 3, 1),
+                                    Lv2cRectangle(1, 1, 1, 1),
                                 });
 
     TicTacToeShuffleCheck(1, 9, {
-                                    LvtkRectangle(2, 0, 1, 3),
-                                    LvtkRectangle(0, 1, 3, 1),
+                                    Lv2cRectangle(1, 0, 1, 3),
+                                    Lv2cRectangle(0, 1, 3, 1),
 
-                                    LvtkRectangle(0, 0, 1, 1),
-                                    LvtkRectangle(1, 0, 1, 1),
+                                    Lv2cRectangle(0, 0, 1, 1),
+                                    Lv2cRectangle(2, 0, 1, 1),
 
-                                    LvtkRectangle(0, 2, 1, 1),
-                                    LvtkRectangle(1, 2, 1, 1),
+                                    Lv2cRectangle(0, 2, 1, 1),
+                                    Lv2cRectangle(2, 2, 1, 1),
                                 });
     TicTacToeShuffleCheck(1, 9, {
-                                    LvtkRectangle(2, 0, 1, 3),
-                                    LvtkRectangle(0, 1, 3, 1),
+                                    Lv2cRectangle(1, 0, 1, 3),
+                                    Lv2cRectangle(0, 1, 3, 1),
 
-                                    LvtkRectangle(0, 0, 1, 1),
-                                    LvtkRectangle(1, 0, 1, 1),
+                                    Lv2cRectangle(0, 0, 2, 1),
+                                    Lv2cRectangle(2, 0, 1, 1),
 
-                                    LvtkRectangle(0, 2, 3, 1),
+                                    Lv2cRectangle(0, 2, 1, 1),
+                                    Lv2cRectangle(1, 2, 2, 1),
+                                });
+
+    TicTacToeShuffleCheck(1, 9, {
+                                    Lv2cRectangle(2, 0, 1, 3),
+                                    Lv2cRectangle(0, 1, 3, 1),
+
+                                    Lv2cRectangle(0, 0, 1, 1),
+                                    Lv2cRectangle(1, 0, 1, 1),
+
+                                    Lv2cRectangle(0, 2, 1, 1),
+                                    Lv2cRectangle(1, 2, 1, 1),
                                 });
     TicTacToeShuffleCheck(1, 9, {
-                                    LvtkRectangle(2, 0, 1, 3),
-                                    LvtkRectangle(0, 1, 3, 1),
+                                    Lv2cRectangle(2, 0, 1, 3),
+                                    Lv2cRectangle(0, 1, 3, 1),
 
-                                    LvtkRectangle(0, 0, 1, 1),
-                                    LvtkRectangle(1, 0, 2, 1),
+                                    Lv2cRectangle(0, 0, 1, 1),
+                                    Lv2cRectangle(1, 0, 1, 1),
 
-                                    LvtkRectangle(0, 2, 2, 1),
-                                    LvtkRectangle(1, 2, 1, 1),
+                                    Lv2cRectangle(0, 2, 3, 1),
                                 });
     TicTacToeShuffleCheck(1, 9, {
-                                    LvtkRectangle(0, 0, 3, 3),
-                                    LvtkRectangle(0, 1, 3, 1),
-                                    LvtkRectangle(0, 0, 1, 1),
-                                    LvtkRectangle(1, 0, 2, 1),
+                                    Lv2cRectangle(2, 0, 1, 3),
+                                    Lv2cRectangle(0, 1, 3, 1),
 
-                                    LvtkRectangle(0, 2, 2, 1),
-                                    LvtkRectangle(1, 2, 1, 1),
+                                    Lv2cRectangle(0, 0, 1, 1),
+                                    Lv2cRectangle(1, 0, 2, 1),
+
+                                    Lv2cRectangle(0, 2, 2, 1),
+                                    Lv2cRectangle(1, 2, 1, 1),
+                                });
+    TicTacToeShuffleCheck(1, 9, {
+                                    Lv2cRectangle(0, 0, 3, 3),
+                                    Lv2cRectangle(0, 1, 3, 1),
+                                    Lv2cRectangle(0, 0, 1, 1),
+                                    Lv2cRectangle(1, 0, 2, 1),
+
+                                    Lv2cRectangle(0, 2, 2, 1),
+                                    Lv2cRectangle(1, 2, 1, 1),
                                 });
 
 }

@@ -18,8 +18,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <catch2/catch.hpp>
-#include "lvtk/LvtkBindingProperty.hpp"
-#include "lvtk/LvtkElement.hpp"
+#include "lv2c/Lv2cBindingProperty.hpp"
+#include "lv2c/Lv2cElement.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <concepts>
@@ -28,9 +28,9 @@ using namespace std;
 using namespace lvtk;
 
 
-static_assert(std::same_as<LvtkArgumentTraits<double>::arg_t, double>);
+static_assert(std::same_as<Lv2cArgumentTraits<double>::arg_t, double>);
 
-class TestElement : public LvtkElement
+class TestElement : public Lv2cElement
 {
 public:
     TestElement()
@@ -47,16 +47,16 @@ public:
     bool observerFired = false;
     observer_handle_t observerHandle;
 
-    LvtkBindingProperty<double> ValueProperty{0.0};
+    Lv2cBindingProperty<double> ValueProperty{0.0};
 
     bool valueChanged = false;
     void OnValueChanged(double value)
     {
         valueChanged = true;
     }
-    LvtkBindingProperty<LvtkAlignment> AlignmentProperty;
+    Lv2cBindingProperty<Lv2cAlignment> AlignmentProperty;
     bool alignmentChanged = false;
-    void OnAlignmentChanged(LvtkAlignment value)
+    void OnAlignmentChanged(Lv2cAlignment value)
     {
         REQUIRE(value == AlignmentProperty.get());
         alignmentChanged = true;
@@ -78,7 +78,7 @@ void ElementBindingTest()
     testElement.ValueProperty.set(1.0);
     REQUIRE(testElement.valueChanged == true);
 
-    testElement.AlignmentProperty.set(LvtkAlignment::Center);
+    testElement.AlignmentProperty.set(Lv2cAlignment::Center);
     REQUIRE(testElement.alignmentChanged == true);
 
     // test for movabilty.
@@ -124,9 +124,9 @@ void BindingTest()
 
     // deleting an Binding removes the bindings and observers.
     {
-        LvtkBindingProperty<double> source;
+        Lv2cBindingProperty<double> source;
         {
-            LvtkBindingProperty<double> target;
+            Lv2cBindingProperty<double> target;
             source.Bind(target);
             source.set(1);
             REQUIRE(target.get() == 1);
@@ -148,9 +148,9 @@ void BindingTest()
 
     // Binding target destroyed before Binding source.
     {
-        LvtkBindingProperty<double> target;
+        Lv2cBindingProperty<double> target;
         {
-            LvtkBindingProperty<double> source;
+            Lv2cBindingProperty<double> source;
             source.Bind(target);
             source.set(1);
             REQUIRE(target.get() == 1);
@@ -211,7 +211,7 @@ void BindingTest()
 
     ElementBindingTest();
 }
-TEST_CASE("LvtkBindingProperty test", "[binding_properties]")
+TEST_CASE("Lv2cBindingProperty test", "[binding_properties]")
 {
 
     BindingTest();

@@ -19,8 +19,8 @@
 
 #include "Lv2UiTestPage.hpp"
 #include "SamplePluginInfo.hpp"
-#include "lvtk_ui/Lv2UI.hpp"
-#include "lvtk/LvtkScrollContainerElement.hpp"
+#include "lv2c_ui/Lv2UI.hpp"
+#include "lv2c/Lv2cScrollContainerElement.hpp"
 
 using namespace lvtk::ui;
 
@@ -31,19 +31,19 @@ namespace lvtk
     {
     public:
         SamplePluginUI()
-            : Lv2UI(SamplePluginInfo::Create(), LvtkCreateWindowParameters())
+            : Lv2UI(SamplePluginInfo::Create(), Lv2cCreateWindowParameters())
         {
         }
     };
 
-    class UiContainerElement : public LvtkContainerElement
+    class UiContainerElement : public Lv2cContainerElement
     {
     public:
         using self = UiContainerElement;
-        using super = LvtkContainerElement;
+        using super = Lv2cContainerElement;
         using ptr = std::shared_ptr<self>;
-        static ptr Create(LvtkTheme::ptr theme) { return std::make_shared<self>(theme); }
-        UiContainerElement(LvtkTheme::ptr theme);
+        static ptr Create(Lv2cTheme::ptr theme) { return std::make_shared<self>(theme); }
+        UiContainerElement(Lv2cTheme::ptr theme);
 
     private:
         SamplePluginUI pluginUi;
@@ -58,7 +58,7 @@ namespace lvtk
 
         static ptr Create() { return std::make_shared<self>(); }
 
-        LvtkElement::ptr CreatePageView(LvtkTheme::ptr theme) override
+        Lv2cElement::ptr CreatePageView(Lv2cTheme::ptr theme) override
         {
 
             return UiContainerElement::Create(theme);
@@ -71,11 +71,11 @@ namespace lvtk
     }
 }
 
-UiContainerElement::UiContainerElement(LvtkTheme::ptr theme)
+UiContainerElement::UiContainerElement(Lv2cTheme::ptr theme)
 {
     this->Style()
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .VerticalAlignment(LvtkAlignment::Stretch);
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
+        .VerticalAlignment(Lv2cAlignment::Stretch);
 
     {
         pluginUi.Theme(theme);

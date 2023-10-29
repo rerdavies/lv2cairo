@@ -21,7 +21,7 @@
 #include <string>
 #include <sstream>
 #include <locale>
-#include "lvtk/IcuString.hpp"
+#include "lv2c/IcuString.hpp"
 #include <iostream>
 
 

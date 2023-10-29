@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import { P } from './StandardFormats';
 
 
-function WhyLVTK() {
+function WhyLV2C() {
 
     return (
         <Box className={"page_column"}>
@@ -74,4 +74,4 @@ function WhyLVTK() {
 }
 
 
-export default WhyLVTK;
+export default WhyLV2C;

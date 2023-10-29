@@ -18,46 +18,46 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ScrollBarTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
-#include "lvtk/LvtkScrollBarElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk/LvtkScrollContainerElement.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
+#include "lv2c/Lv2cScrollBarElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c/Lv2cScrollContainerElement.hpp"
 
 using namespace lvtk;
 
-LvtkElement::ptr Label(LvtkElement::ptr element, const std::string &label)
+Lv2cElement::ptr Label(Lv2cElement::ptr element, const std::string &label)
 {
-    auto container = LvtkFlexGridElement::Create();
+    auto container = Lv2cFlexGridElement::Create();
     container->Style()
-        .FlexDirection(LvtkFlexDirection::Column)
-        .FlexWrap(LvtkFlexWrap::NoWrap)
-        .FlexAlignItems(LvtkAlignment::Center)
+        .FlexDirection(Lv2cFlexDirection::Column)
+        .FlexWrap(Lv2cFlexWrap::NoWrap)
+        .FlexAlignItems(Lv2cAlignment::Center)
         .Width(200);
     {
         container->AddChild(element);
     }
     {
-        auto element = LvtkTypographyElement::Create();
-        element->Text(label).Variant(LvtkTypographyVariant::BodySecondary);
+        auto element = Lv2cTypographyElement::Create();
+        element->Text(label).Variant(Lv2cTypographyVariant::BodySecondary);
         element->Style()
-            .TextAlign(LvtkTextAlign::Center)
+            .TextAlign(Lv2cTextAlign::Center)
             .SingleLine(false)
-            .FontSize(LvtkMeasurement::Point(9))
+            .FontSize(Lv2cMeasurement::Point(9))
             .Padding({4})
-            .HorizontalAlignment(LvtkAlignment::Stretch);
+            .HorizontalAlignment(Lv2cAlignment::Stretch);
         container->AddChild(element);
     }
     return container;
 }
 
-LvtkElement::ptr IpsemLorem()
+Lv2cElement::ptr IpsemLorem()
 {
-    auto element = LvtkTypographyElement::Create();
-    element->Variant(LvtkTypographyVariant::BodySecondary);
+    auto element = Lv2cTypographyElement::Create();
+    element->Variant(Lv2cTypographyVariant::BodySecondary);
     ;
     element->Style()
-        .HorizontalAlignment(LvtkAlignment::Stretch)
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
         .SingleLine(false)
         .Padding({24, 16, 24, 24});
     element->Text(
@@ -73,14 +73,14 @@ LvtkElement::ptr IpsemLorem()
     return element;
 }
 
-LvtkElement::ptr IpsemLoremWide()
+Lv2cElement::ptr IpsemLoremWide()
 {
-    auto container = LvtkFlexGridElement::Create();
+    auto container = Lv2cFlexGridElement::Create();
     container->Style()
-        .FlexDirection(LvtkFlexDirection::Row)
-        .FlexWrap(LvtkFlexWrap::NoWrap)
+        .FlexDirection(Lv2cFlexDirection::Row)
+        .FlexWrap(Lv2cFlexWrap::NoWrap)
         .ColumnGap(16)
-        .FlexAlignItems(LvtkAlignment::Start)
+        .FlexAlignItems(Lv2cAlignment::Start)
         .Padding({16,16,0,16})
         ;
 
@@ -98,8 +98,8 @@ LvtkElement::ptr IpsemLoremWide()
     };
     for (auto& line : lines )
     {
-        auto element = LvtkTypographyElement::Create();
-        element->Variant(LvtkTypographyVariant::BodySecondary);
+        auto element = Lv2cTypographyElement::Create();
+        element->Variant(Lv2cTypographyVariant::BodySecondary);
         ;
         element->Style()
             .SingleLine(false)
@@ -111,14 +111,14 @@ LvtkElement::ptr IpsemLoremWide()
     }
     return container;
 }
-LvtkElement::ptr IpsemLoremWideAndTall()
+Lv2cElement::ptr IpsemLoremWideAndTall()
 {
-    auto container = LvtkFlexGridElement::Create();
+    auto container = Lv2cFlexGridElement::Create();
     container->Style()
-        .FlexDirection(LvtkFlexDirection::Row)
-        .FlexWrap(LvtkFlexWrap::NoWrap)
+        .FlexDirection(Lv2cFlexDirection::Row)
+        .FlexWrap(Lv2cFlexWrap::NoWrap)
         .ColumnGap(16)
-        .FlexAlignItems(LvtkAlignment::Start)
+        .FlexAlignItems(Lv2cAlignment::Start)
         .Padding({16,16,0,16})
         ;
 
@@ -136,8 +136,8 @@ LvtkElement::ptr IpsemLoremWideAndTall()
     };
     for (auto& line : lines )
     {
-        auto element = LvtkTypographyElement::Create();
-        element->Variant(LvtkTypographyVariant::BodySecondary);
+        auto element = Lv2cTypographyElement::Create();
+        element->Variant(Lv2cTypographyVariant::BodySecondary);
         ;
         element->Style()
             .SingleLine(false)
@@ -150,60 +150,60 @@ LvtkElement::ptr IpsemLoremWideAndTall()
     return container;
 }
 
-LvtkElement::ptr ScrollBarTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr ScrollBarTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    auto main = LvtkFlexGridElement::Create();
+    auto main = Lv2cFlexGridElement::Create();
     main->Style()
-        .FlexAlignItems(LvtkAlignment::Start)
-        .FlexDirection(LvtkFlexDirection::Row)
-        .FlexWrap(LvtkFlexWrap::Wrap)
+        .FlexAlignItems(Lv2cAlignment::Start)
+        .FlexDirection(Lv2cFlexDirection::Row)
+        .FlexWrap(Lv2cFlexWrap::Wrap)
         .ColumnGap(16)
         .Background(theme->paper)
         .Padding({24, 16, 24, 16})
-        .VerticalAlignment(LvtkAlignment::Stretch)
-        .HorizontalAlignment(LvtkAlignment::Stretch);
+        .VerticalAlignment(Lv2cAlignment::Stretch)
+        .HorizontalAlignment(Lv2cAlignment::Stretch);
     if (true)
     {
-        auto container = LvtkContainerElement::Create();
+        auto container = Lv2cContainerElement::Create();
         container->Style()
             .Width(200)
             .Height(200)
             .BorderWidth(1)
             .BorderColor(theme->secondaryTextColor);
         {
-            auto element = LvtkScrollBarElement::Create();
+            auto element = Lv2cScrollBarElement::Create();
             element->ScrollOffset(0)
                 .WindowSize(200)
                 .DocumentSize(1400);
-            element->Orientation(LvtkScrollBarOrientation::Vertical);
+            element->Orientation(Lv2cScrollBarOrientation::Vertical);
             container->AddChild(element);
         }
         main->AddChild(
             Label(container,
-                  "LvtkVerticalScrollbarElement"));
+                  "Lv2cVerticalScrollbarElement"));
     }
     if (true)
     {
-        auto container = LvtkContainerElement::Create();
+        auto container = Lv2cContainerElement::Create();
         container->Style()
             .Width(200)
             .Height(200)
             .BorderWidth(1)
             .BorderColor(theme->secondaryTextColor);
         {
-            auto element = LvtkScrollBarElement::Create();
+            auto element = Lv2cScrollBarElement::Create();
             element->ScrollOffset(0)
                 .WindowSize(200)
                 .DocumentSize(1400);
-            element->Orientation(LvtkScrollBarOrientation::Horizontal);
+            element->Orientation(Lv2cScrollBarOrientation::Horizontal);
             container->AddChild(element);
         }
-        main->AddChild(Label(container, "LvtkHorizontalScrollBarElement"));
+        main->AddChild(Label(container, "Lv2cHorizontalScrollBarElement"));
     }
 
     {
-        auto element = LvtkScrollContainerElement::Create();
+        auto element = Lv2cScrollContainerElement::Create();
         element->Style()
             .Width(200)
             .Height(200)
@@ -214,10 +214,10 @@ LvtkElement::ptr ScrollBarTestPage::CreatePageView(LvtkTheme::ptr theme)
             .VerticalScrollEnabled(true);
         element->Child(IpsemLorem());
         main->AddChild(
-            Label(element, "LvtkScrollContainerElement\n(Vertical scroll)"));
+            Label(element, "Lv2cScrollContainerElement\n(Vertical scroll)"));
     }
     {
-        auto element = LvtkScrollContainerElement::Create();
+        auto element = Lv2cScrollContainerElement::Create();
         element->Style()
             .Width(200)
             .Height(200)
@@ -228,10 +228,10 @@ LvtkElement::ptr ScrollBarTestPage::CreatePageView(LvtkTheme::ptr theme)
             .VerticalScrollEnabled(false);
         element->Child(IpsemLoremWide());
         main->AddChild(
-            Label(element, "LvtkScrollContainerElement\n(Horizontal scroll)"));
+            Label(element, "Lv2cScrollContainerElement\n(Horizontal scroll)"));
     }
     {
-        auto element = LvtkScrollContainerElement::Create();
+        auto element = Lv2cScrollContainerElement::Create();
         element->Style()
             .Width(200)
             .Height(200)
@@ -242,7 +242,7 @@ LvtkElement::ptr ScrollBarTestPage::CreatePageView(LvtkTheme::ptr theme)
             .VerticalScrollEnabled(true);
         element->Child(IpsemLoremWideAndTall());
         main->AddChild(
-            Label(element, "LvtkScrollContainerElement\n(both)"));
+            Label(element, "Lv2cScrollContainerElement\n(both)"));
     }
 
     return (main);

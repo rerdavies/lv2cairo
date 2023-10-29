@@ -19,47 +19,47 @@
 
 #include "Lv2ControlTestPage.hpp"
 
-#include "lvtk_ui/Lv2PortView.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkDialElement.hpp"
+#include "lv2c_ui/Lv2PortView.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cDialElement.hpp"
 #include "lv2/port-groups/port-groups.h"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk/LvtkGroupElement.hpp"
-#include "lvtk/LvtkScrollContainerElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c/Lv2cGroupElement.hpp"
+#include "lv2c/Lv2cScrollContainerElement.hpp"
 
 using namespace lvtk;
 using namespace lvtk::ui;
 
-LvtkElement::ptr Lv2ControlTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr Lv2ControlTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    auto scroll = LvtkScrollContainerElement::Create();
+    auto scroll = Lv2cScrollContainerElement::Create();
     scroll->HorizontalScrollEnabled(false)
         .VerticalScrollEnabled(true);
         
     scroll->Style()
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .VerticalAlignment(LvtkAlignment::Stretch)
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
+        .VerticalAlignment(Lv2cAlignment::Stretch)
 //        .Background(theme->paper)
     ;
     {
 
-        auto main = LvtkFlexGridElement::Create();
+        auto main = Lv2cFlexGridElement::Create();
         main->Style()
             .Theme(theme)
             .Padding({16, 8, 16, 8})
-            .Width(LvtkMeasurement::Percent(100))
-            .Height(LvtkMeasurement::Percent(100))
-            .FlexWrap(LvtkFlexWrap::Wrap)
-            .FlexAlignItems(LvtkAlignment::Center)
+            .Width(Lv2cMeasurement::Percent(100))
+            .Height(Lv2cMeasurement::Percent(100))
+            .FlexWrap(Lv2cFlexWrap::Wrap)
+            .FlexAlignItems(Lv2cAlignment::Center)
             .RowGap(16);
 
         {
-            auto element = LvtkTypographyElement::Create();
+            auto element = Lv2cTypographyElement::Create();
             main->AddChild(element);
-            element->Text("Input Port Controls").Variant(LvtkTypographyVariant::Heading);
+            element->Text("Input Port Controls").Variant(Lv2cTypographyVariant::Heading);
             element->Style()
-                .Width(LvtkMeasurement::Percent(100))
+                .Width(Lv2cMeasurement::Percent(100))
                 .Margin({0, 16, 0, 16});
         }
         if (true)
@@ -152,15 +152,15 @@ LvtkElement::ptr Lv2ControlTestPage::CreatePageView(LvtkTheme::ptr theme)
                 scalePoints.push_back(Lv2ScalePoint(1.0, "Marshall 4x4"));
                 portInfo.scale_points(scalePoints);
 
-                LvtkBindingProperty<double> t;
+                Lv2cBindingProperty<double> t;
 
                 auto portView = CreatePortView(t, portInfo);
                 main->AddChild(portView);
             }
 
-            auto outputPortLabel = LvtkTypographyElement::Create();
-            outputPortLabel->Text("Output Port Controls").Variant(LvtkTypographyVariant::Heading);
-            outputPortLabel->Style().Width(LvtkMeasurement::Percent(100)).Margin({0, 16, 0, 16});
+            auto outputPortLabel = Lv2cTypographyElement::Create();
+            outputPortLabel->Text("Output Port Controls").Variant(Lv2cTypographyVariant::Heading);
+            outputPortLabel->Style().Width(Lv2cMeasurement::Percent(100)).Margin({0, 16, 0, 16});
             main->AddChild(outputPortLabel);
 
             Lv2PortInfo dialPortInfo;
@@ -175,7 +175,7 @@ LvtkElement::ptr Lv2ControlTestPage::CreatePageView(LvtkTheme::ptr theme)
             dialPortInfo.name("(VAL R)");
             auto dialR = CreatePortView(dialPortInfo);
 
-            LvtkValueElement::ptr lampToggle;
+            Lv2cValueElement::ptr lampToggle;
             {
                 Lv2PortInfo portInfo;
                 portInfo.name("(Lamp)");
@@ -249,7 +249,7 @@ LvtkElement::ptr Lv2ControlTestPage::CreatePageView(LvtkTheme::ptr theme)
                 portView = CreateStereoPortView("OUT",dialLdb->ValueProperty,dialRdb->ValueProperty, portInfo);
                 main->AddChild(portView);
             }
-            LvtkValueElement::ptr statusDial;
+            Lv2cValueElement::ptr statusDial;
             {
                 Lv2PortInfo portInfo; 
                 portInfo.name("STATUS");
@@ -280,7 +280,7 @@ LvtkElement::ptr Lv2ControlTestPage::CreatePageView(LvtkTheme::ptr theme)
             }
 
             {
-                auto portGroup = LvtkGroupElement::Create();
+                auto portGroup = Lv2cGroupElement::Create();
                 portGroup->Text("Port Group");
                 Lv2PortInfo portInfo;
                 portInfo.name("BASS");
@@ -297,21 +297,21 @@ LvtkElement::ptr Lv2ControlTestPage::CreatePageView(LvtkTheme::ptr theme)
                 portInfo.name("TREBLE");
                 portGroup->AddChild(CreatePortView(portInfo));
 
-                auto frame = LvtkContainerElement::Create();
-                // frame->Style().Background(LvtkColor(0.5,1,0.5,0.2));
+                auto frame = Lv2cContainerElement::Create();
+                // frame->Style().Background(Lv2cColor(0.5,1,0.5,0.2));
                 frame->AddChild(portGroup);
                 main->AddChild(frame);
             }
             {
-                auto div = LvtkElement::Create();
+                auto div = Lv2cElement::Create();
                 div->Style()
-                    .Width(LvtkMeasurement::Percent(100))
+                    .Width(Lv2cMeasurement::Percent(100))
                     .Height(1);
                 main->AddChild(div);
             }
 
             {
-                auto portGroup = LvtkGroupElement::Create();
+                auto portGroup = Lv2cGroupElement::Create();
                 portGroup->Text("VU Values");
                 main->AddChild(portGroup);
 

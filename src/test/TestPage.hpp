@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include "lvtk/LvtkElement.hpp"
-#include "lvtk/LvtkTheme.hpp"
+#include "lv2c/Lv2cElement.hpp"
+#include "lv2c/Lv2cTheme.hpp"
 #include <string>
 
 using namespace lvtk;
@@ -33,14 +33,14 @@ namespace lvtk
         TestPage(const std::string &title) : title(title) {}
         virtual ~TestPage() {}
 
-        virtual LvtkTheme::ptr GetTheme()
+        virtual Lv2cTheme::ptr GetTheme()
         {
-            return LvtkTheme::Create(true);
+            return Lv2cTheme::Create(true);
         }
 
         const std::string &Title() { return title; }
 
-        virtual LvtkElement::ptr CreatePageView(LvtkTheme::ptr theme) = 0;
+        virtual Lv2cElement::ptr CreatePageView(Lv2cTheme::ptr theme) = 0;
 
     private:
         std::string title;

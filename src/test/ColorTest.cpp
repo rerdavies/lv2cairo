@@ -18,7 +18,7 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <catch2/catch.hpp>
-#include "lvtk/LvtkTypes.hpp"
+#include "lv2c/Lv2cTypes.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -30,7 +30,7 @@ static bool ApproxEqual(double v1, double v2)
     return std::abs(v1-v2) < 1E-5;
 }
 
-static bool ColorEqual(const LvtkColor& v1, const LvtkColor& v2)
+static bool ColorEqual(const Lv2cColor& v1, const Lv2cColor& v2)
 {
     if (std::abs(v1.R()-v2.R()) > 1E-5) 
         return true;
@@ -42,34 +42,34 @@ static bool ColorEqual(const LvtkColor& v1, const LvtkColor& v2)
 }
 
 
-static void TestLvtkColorBlending()
+static void TestLv2cColorBlending()
 {
     {
-        LvtkColor c0 { 1,0.5,0.25,1};
+        Lv2cColor c0 { 1,0.5,0.25,1};
 
         for (double blend = 0; blend <= 1.0; blend += 1.0/8)
         {
-            LvtkColor result = LvtkColor::Blend(blend,c0,c0);
+            Lv2cColor result = Lv2cColor::Blend(blend,c0,c0);
             REQUIRE(result == c0);
         }
     }
     {
-        LvtkColor c0 { 1,0.5,0.25,0.5};
+        Lv2cColor c0 { 1,0.5,0.25,0.5};
 
         for (double blend = 0; blend <= 1.0; blend += 1.0/8)
         {
-            LvtkColor result = LvtkColor::Blend(blend,c0,c0);
+            Lv2cColor result = Lv2cColor::Blend(blend,c0,c0);
             REQUIRE(true ==  ColorEqual(result,c0));
         }
     }
     {
-        LvtkColor c0 { 1,0.5,0.25,0};
-        LvtkColor c1 { 1,0.5,0.25,1};
+        Lv2cColor c0 { 1,0.5,0.25,0};
+        Lv2cColor c1 { 1,0.5,0.25,1};
 
         for (double blend = 0; blend <= 1.0; blend += 1.0/8)
         {
-            LvtkColor result = LvtkColor::Blend(blend,c0,c1);
-            LvtkLinearColor lcResult { result };
+            Lv2cColor result = Lv2cColor::Blend(blend,c0,c1);
+            Lv2cLinearColor lcResult { result };
             REQUIRE(true ==  ApproxEqual(lcResult.a,blend));
             if (blend != 0)
             {
@@ -80,15 +80,15 @@ static void TestLvtkColorBlending()
         }
     }
     {
-        LvtkColor c0 { 0,0.0,0.0,0};
-        LvtkColor c1 { 1,0.5,0.25,1};
+        Lv2cColor c0 { 0,0.0,0.0,0};
+        Lv2cColor c1 { 1,0.5,0.25,1};
 
         for (double blend = 0; blend <= 1.0; blend += 1.0/8)
         {
             if (blend != 0)
             {
-                LvtkColor result = LvtkColor::Blend(blend,c0,c1);
-                LvtkLinearColor lcResult { result };
+                Lv2cColor result = Lv2cColor::Blend(blend,c0,c1);
+                Lv2cLinearColor lcResult { result };
 
                 REQUIRE(true ==  ApproxEqual(lcResult.a,blend));
                 REQUIRE(true ==  ApproxEqual(result.R(),c1.R()));
@@ -98,17 +98,17 @@ static void TestLvtkColorBlending()
         }
     }
     {
-        LvtkColor c0 { 0.1,.2,0.3,0.25};
-        LvtkColor c1 { 0.4,0.5,0.6,0.75};
+        Lv2cColor c0 { 0.1,.2,0.3,0.25};
+        Lv2cColor c1 { 0.4,0.5,0.6,0.75};
 
-        REQUIRE(true ==  ColorEqual(c0, LvtkColor::Blend(0,c0,c1)));
-        REQUIRE(true ==  ColorEqual(c1, LvtkColor::Blend(1,c0,c1)));
+        REQUIRE(true ==  ColorEqual(c0, Lv2cColor::Blend(0,c0,c1)));
+        REQUIRE(true ==  ColorEqual(c1, Lv2cColor::Blend(1,c0,c1)));
     }
 }
 
 using namespace lvtk::implementation;
 
-static void TestLvtkLinearColor()
+static void TestLv2cLinearColor()
 {
     double maxError = 0;
     // test round-trip errors for 
@@ -129,10 +129,10 @@ static void TestLvtkLinearColor()
 
     std::cout  << "Max rountrip error for SrgbToI/IToSrgb: " << maxError << std::endl;
 }
-TEST_CASE("LvtkColor blend test", "[color_blend]")
+TEST_CASE("Lv2cColor blend test", "[color_blend]")
 {
-    TestLvtkColorBlending();
-    TestLvtkLinearColor();
+    TestLv2cColorBlending();
+    TestLv2cLinearColor();
 }
 
 

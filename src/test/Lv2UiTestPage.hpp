@@ -33,7 +33,7 @@ public:
     Lv2UiTestPage() : TestPage("Sample Plugin UI")
     {
     }
-    LvtkElement::ptr CreatePageView(LvtkTheme::ptr theme) override = 0;
+    Lv2cElement::ptr CreatePageView(Lv2cTheme::ptr theme) override = 0;
 
 };
 } // namespace

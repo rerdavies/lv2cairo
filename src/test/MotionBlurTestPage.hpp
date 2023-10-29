@@ -20,7 +20,7 @@
 #pragma once
 
 #include "TestPage.hpp"
-#include "lvtk/LvtkBindingProperty.hpp"
+#include "lv2c/Lv2cBindingProperty.hpp"
 
 namespace lvtk {
 class MotionBlurTestPage : public TestPage
@@ -34,7 +34,7 @@ public:
     MotionBlurTestPage() : TestPage("Motion Blur")
     {
     }
-    LvtkElement::ptr CreatePageView(LvtkTheme::ptr theme) override;
+    Lv2cElement::ptr CreatePageView(Lv2cTheme::ptr theme) override;
 private:
     observer_handle_t selectSlideAnimationObserverHandle;
 

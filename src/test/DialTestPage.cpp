@@ -18,71 +18,71 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "DialTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk/LvtkDialElement.hpp"
-#include "lvtk/LvtkPngDialElement.hpp"
-#include "lvtk/LvtkPngStripElement.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c/Lv2cDialElement.hpp"
+#include "lv2c/Lv2cPngDialElement.hpp"
+#include "lv2c/Lv2cPngStripElement.hpp"
 
-#include "lvtk/LvtkVerticalStackElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
 
 using namespace lvtk;
 
-static LvtkElement::ptr TitleBox(const std::string &title, LvtkElement::ptr control)
+static Lv2cElement::ptr TitleBox(const std::string &title, Lv2cElement::ptr control)
 {
-    auto stack = LvtkVerticalStackElement::Create();
+    auto stack = Lv2cVerticalStackElement::Create();
     stack->Style()
-        .HorizontalAlignment(LvtkAlignment::Start)
+        .HorizontalAlignment(Lv2cAlignment::Start)
         .Margin(8);
 
     {
-        auto element = LvtkTypographyElement::Create();
-        element->Text(title).Variant(LvtkTypographyVariant::Caption);
-        element->Style().HorizontalAlignment(LvtkAlignment::Center).Margin({0, 0, 0, 8});
+        auto element = Lv2cTypographyElement::Create();
+        element->Text(title).Variant(Lv2cTypographyVariant::Caption);
+        element->Style().HorizontalAlignment(Lv2cAlignment::Center).Margin({0, 0, 0, 8});
         stack->AddChild(element);
     }
     {
-        auto element = LvtkContainerElement::Create();
+        auto element = Lv2cContainerElement::Create();
         stack->AddChild(element);
         element->AddChild(control);
-        element->Style().HorizontalAlignment(LvtkAlignment::Center);
+        element->Style().HorizontalAlignment(Lv2cAlignment::Center);
     }
     return stack;
 }
 
-LvtkElement::ptr DialTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr DialTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    LvtkFlexGridElement::ptr main = LvtkFlexGridElement::Create();
-    main->Style().FlexWrap(LvtkFlexWrap::Wrap);
+    Lv2cFlexGridElement::ptr main = Lv2cFlexGridElement::Create();
+    main->Style().FlexWrap(Lv2cFlexWrap::Wrap);
     main->Style().Background(theme->paper).Padding({24, 16, 24, 16});
     {
-        LvtkTypographyElement::ptr title = LvtkTypographyElement::Create();
-        title->Variant(LvtkTypographyVariant::Title).Text("Dial Test");
+        Lv2cTypographyElement::ptr title = Lv2cTypographyElement::Create();
+        title->Variant(Lv2cTypographyVariant::Title).Text("Dial Test");
         title->Style()
             .Padding({4})
             .Margin({0, 0, 0, 16})
             .BorderWidth({0, 0, 0, 1})
-            .HorizontalAlignment(LvtkAlignment::Stretch)
-            .BorderColor(LvtkColor(1, 1, 1, 0.25));
+            .HorizontalAlignment(Lv2cAlignment::Stretch)
+            .BorderColor(Lv2cColor(1, 1, 1, 0.25));
         main->AddChild(title);
     }
     {
-        auto element = LvtkDialElement::Create();
+        auto element = Lv2cDialElement::Create();
         element->Style().Margin(8);
         main->AddChild(
             TitleBox("DEFAULT", element));
     }
     {
-        auto element = LvtkDialElement::Create();
-        element->Style().Color(LvtkColor(0.5, 0.5, 1.0));
+        auto element = Lv2cDialElement::Create();
+        element->Style().Color(Lv2cColor(0.5, 0.5, 1.0));
         element->Style().Margin(8);
         main->AddChild(
             TitleBox("TINTED", element));
     }
 
     {
-        auto element = LvtkPngDialElement::Create();
+        auto element = Lv2cPngDialElement::Create();
         element->Source("dial_strip.png");
         element->Style().Margin(8);
         main->AddChild(
@@ -90,7 +90,7 @@ LvtkElement::ptr DialTestPage::CreatePageView(LvtkTheme::ptr theme)
     }
 
     {
-        auto element = LvtkPngDialElement::Create();
+        auto element = Lv2cPngDialElement::Create();
         element->Source("FenderDial.png");
         element->Style().Margin(8).Width(96).Height(96);
         main->AddChild(
@@ -98,7 +98,7 @@ LvtkElement::ptr DialTestPage::CreatePageView(LvtkTheme::ptr theme)
         if (!theme->isDarkTheme)
         {
             // disable hover opacity.
-            LvtkHoverOpacity hoverOpacity { 1.0f,1.0f,1.0f,1.0f};
+            Lv2cHoverOpacity hoverOpacity { 1.0f,1.0f,1.0f,1.0f};
             element->HoverOpacity(hoverOpacity);
         }
     }
@@ -106,7 +106,7 @@ LvtkElement::ptr DialTestPage::CreatePageView(LvtkTheme::ptr theme)
     // {
     //     for (double value : std::vector<double>{0, 0.2, 0.9, 1.0})
     //     {
-    //         auto element = LvtkPngStripElement::Create();
+    //         auto element = Lv2cPngStripElement::Create();
     //         element->Style().Width(52.0).Opacity(0.75);
     //         element->Source("dial_strip.png");
     //         element->Value(value);
@@ -115,5 +115,5 @@ LvtkElement::ptr DialTestPage::CreatePageView(LvtkTheme::ptr theme)
     //     }
     // }
 
-    return std::static_pointer_cast<LvtkElement>(main);
+    return std::static_pointer_cast<Lv2cElement>(main);
 }

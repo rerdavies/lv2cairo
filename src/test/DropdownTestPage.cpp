@@ -18,24 +18,24 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "DropdownTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkDropdownElement.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cDropdownElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
 
 using namespace lvtk;
 
-LvtkElement::ptr DropdownTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr DropdownTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
-    auto main = LvtkFlexGridElement::Create();
+    auto main = Lv2cFlexGridElement::Create();
     main->Style()
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .VerticalAlignment(LvtkAlignment::Stretch)
-        .FlexWrap(LvtkFlexWrap::Wrap)
-        .FlexDirection(LvtkFlexDirection::Column)
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
+        .VerticalAlignment(Lv2cAlignment::Stretch)
+        .FlexWrap(Lv2cFlexWrap::Wrap)
+        .FlexDirection(Lv2cFlexDirection::Column)
         .Background(theme->paper)
         .Padding({24, 16, 24, 16});
     {
-        auto element = LvtkDropdownElement::Create();
+        auto element = Lv2cDropdownElement::Create();
         main->AddChild(element);
         element->UnselectedText("Test dropdown");
         element->Style().Margin({4, 4, 4, 4}).Width(120);

@@ -18,25 +18,25 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "TunerTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk_ui/Lv2TunerElement.hpp"
-#include "lvtk/LvtkWindow.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c_ui/Lv2TunerElement.hpp"
+#include "lv2c/Lv2cWindow.hpp"
 #include <chrono>
 
-#include "lvtk/LvtkVerticalStackElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
 
 using namespace lvtk;
 using namespace lvtk::ui;
 
 
 
-class TunerTestElement : public LvtkContainerElement {
+class TunerTestElement : public Lv2cContainerElement {
 public:
     using clock_t = std::chrono::steady_clock;
 
     using self = TunerTestElement;
-    using super = LvtkContainerElement;
+    using super = Lv2cContainerElement;
     using ptr = std::shared_ptr<self>;
     static ptr Create() { return std::make_shared<self>(); }
 
@@ -92,16 +92,16 @@ private:
     clock_t::time_point clockStartTime;
     double animationValue = 0;
     AnimationHandle tickHandle = AnimationHandle::InvalidHandle;
-    LvtkBindingProperty<double> tunerFrequency;
+    Lv2cBindingProperty<double> tunerFrequency;
 
     Lv2TunerElement::ptr tuner;
 };
 
-LvtkElement::ptr TunerTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr TunerTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    LvtkFlexGridElement::ptr main = LvtkFlexGridElement::Create();
-    main->Style().FlexWrap(LvtkFlexWrap::Wrap);
+    Lv2cFlexGridElement::ptr main = Lv2cFlexGridElement::Create();
+    main->Style().FlexWrap(Lv2cFlexWrap::Wrap);
     main->Style().Background(theme->paper).Padding({24, 16, 24, 16});
     {
         auto element = TunerTestElement::Create();

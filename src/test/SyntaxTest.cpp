@@ -21,8 +21,8 @@
 
 #include <vector>
 #include <string>
-#include "lvtk/LvtkTypes.hpp"
-#include "lvtk/LvtkElement.hpp"
+#include "lv2c/Lv2cTypes.hpp"
+#include "lv2c/Lv2cElement.hpp"
 #include <iostream>
 #include <type_traits>
 #include <concepts>
@@ -33,25 +33,25 @@ using namespace lvtk;
 namespace test
 {
 
-    void MeasurementConversion(const LvtkThicknessMeasurement &v)
+    void MeasurementConversion(const Lv2cThicknessMeasurement &v)
     {
     }
 
     void TestEventSyntax()
     {
-        using MouseEvent = LvtkEvent<LvtkMouseEventArgs>;
+        using MouseEvent = Lv2cEvent<Lv2cMouseEventArgs>;
 
         MouseEvent e;
 
         MouseEvent::EventListener handler =
-            [](const LvtkMouseEventArgs &e) -> bool
+            [](const Lv2cMouseEventArgs &e) -> bool
         {
             cout << "Event received." << endl;
             return true;
         };
 
         EventHandle h = e.AddListener(handler);
-        LvtkMouseEventArgs args;
+        Lv2cMouseEventArgs args;
         e.Fire(args);
         if (!e.RemoveListener(h))
         {
@@ -71,13 +71,13 @@ namespace test
 
         x = T{.a=0,.b=0};
 
-        LvtkThicknessMeasurement test{1};
+        Lv2cThicknessMeasurement test{1};
         MeasurementConversion(4);
 
-        LvtkThicknessMeasurement test2{4};
+        Lv2cThicknessMeasurement test2{4};
         (void)test2;
 
-        auto style = LvtkStyle().Margin(4.0).Margin(4).BorderWidth(1);
+        auto style = Lv2cStyle().Margin(4.0).Margin(4).BorderWidth(1);
     }
 
 }

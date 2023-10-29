@@ -18,7 +18,7 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "SamplePluginInfo.hpp"
-#include "lvtk_ui/Lv2UI.hpp"
+#include "lv2c_ui/Lv2UI.hpp"
 
 using namespace lvtk::ui;
 using namespace lvtk;
@@ -33,11 +33,11 @@ public:
 
 SamplePlugin::SamplePlugin() : super(
     SamplePluginInfo::Create(),
-    LvtkSize(490,360) // default window size.
+    Lv2cSize(490,360) // default window size.
     )
 {
-    LvtkTheme::ptr theme = LvtkTheme::Create(true); // start with dark theme.
-    theme->paper = LvtkColor("#080818"); // something dark.
+    Lv2cTheme::ptr theme = Lv2cTheme::Create(true); // start with dark theme.
+    theme->paper = Lv2cColor("#080818"); // something dark.
     this->Theme(theme);
 }
 

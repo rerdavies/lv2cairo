@@ -1,8 +1,8 @@
 #include <catch2/catch.hpp>
-#include "lvtk/LvtkTypes.hpp"
+#include "lv2c/Lv2cTypes.hpp"
 #include <cmath>
 #include <iostream>
-#include "lvtk/LvtkCieColors.hpp"
+#include "lv2c/Lv2cCieColors.hpp"
 
 using namespace lvtk;
 using namespace std;
@@ -20,11 +20,11 @@ static void TestMaterialPalette(
 
     for (size_t i = 0; i < mainColors.size(); ++i)
     {
-        LvtkColor cc {mainColors[i]};
-        LvtkLinearColor lcc {cc};
+        Lv2cColor cc {mainColors[i]};
+        Lv2cLinearColor lcc {cc};
 
-        LvtkCieLCh  lch (cc);
-        LvtkLinearColor lc { cc};
+        Lv2cCieLCh  lch (cc);
+        Lv2cLinearColor lc { cc};
 
         cout << variantIndexes[i] << " " << mainColors[i]
              << " RGB: " << cc.R()
@@ -56,10 +56,10 @@ static void CieRoundTripTest()
 
     for (auto&color: colors)
     {
-        LvtkColor cc { color};
-        LvtkCieLCh lch { cc};
+        Lv2cColor cc { color};
+        Lv2cCieLCh lch { cc};
 
-        LvtkColor ccOut = lch.ToLvtkColor();
+        Lv2cColor ccOut = lch.ToLv2cColor();
 
         CHECK(approxEqual(ccOut.R(),cc.R()));
         CHECK(approxEqual(ccOut.G(),cc.G()));
@@ -73,16 +73,16 @@ TEST_CASE("Material Colortest", "[material_color_blend]")
 
     {
         // color difference from Lab
-        LvtkCieLab c1 { 50.0, 2.6772,-79.7751};
-        LvtkCieLab c2 { 50.0, 0.0,-82.7485};
+        Lv2cCieLab c1 { 50.0, 2.6772,-79.7751};
+        Lv2cCieLab c2 { 50.0, 0.0,-82.7485};
 
         double result = CieColorDifference(c1,c2);
         REQUIRE (std::abs(result-2.0425) < 1E-2);
     }
     {
         // color difference from Lab
-        LvtkCieLab c1 { 50.0, 2.5,0};
-        LvtkCieLab c2 { 73.0, 25.0,-18};
+        Lv2cCieLab c1 { 50.0, 2.5,0};
+        Lv2cCieLab c2 { 73.0, 25.0,-18};
 
         double result = CieColorDifference(c1,c2);
         REQUIRE (std::abs(result-27.1492) < 1E-2);
@@ -90,15 +90,15 @@ TEST_CASE("Material Colortest", "[material_color_blend]")
     {
         // color difference.
 
-        LvtkColor c1 { 200/255.0f,100/255.0f,20/255.0f };
+        Lv2cColor c1 { 200/255.0f,100/255.0f,20/255.0f };
 
-        LvtkCieXyz xyz1 { c1};
+        Lv2cCieXyz xyz1 { c1};
         REQUIRE ((
             std::abs(xyz1.x - 28.51) < 0.1
             && std::abs(xyz1.y - 21.45) < 0.1
             && std::abs(xyz1.z-3.30) < 0.01
         ));
-        LvtkColor c1RoundTrip = xyz1.ToLvtkColor();
+        Lv2cColor c1RoundTrip = xyz1.ToLv2cColor();
 
         REQUIRE ((
             std::abs(c1.R()-c1RoundTrip.R()) < 0.1
@@ -106,9 +106,9 @@ TEST_CASE("Material Colortest", "[material_color_blend]")
             && std::abs(c1.B()-c1RoundTrip.B()) < 0.1
         ));
 
-        LvtkCieLab lab1 { c1};
+        Lv2cCieLab lab1 { c1};
 
-        LvtkColor c2 { 100/255.0f,200/255.0f,50/255.0f };
+        Lv2cColor c2 { 100/255.0f,200/255.0f,50/255.0f };
 
         REQUIRE((
             std::abs(lab1.L - 53.44) < 0.1

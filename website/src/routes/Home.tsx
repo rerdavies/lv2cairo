@@ -45,7 +45,7 @@ const Home = () => {
                 <P><LVtk/> provides the folowing features:
                 </P>
                 <Ul>
-                    <li><Typography>The <i>Lvtk</i> Element library provide a set of controls and widgets with layout, styling and theming that render user interfaces on a Cairo/X11 surface.</Typography> </li>
+                    <li><Typography>The <i>Lv2c</i> Element library provide a set of controls and widgets with layout, styling and theming that render user interfaces on a Cairo/X11 surface.</Typography> </li>
                     <li><Typography>The <i>Lv2UI</i> class is a base-class for implementing LV2 UI plugins.
                     </Typography></li>
                     <li><Typography>The <i>Lv2Plugin</i> class is a base-class for implementing LV2 audio plugins.</Typography></li>

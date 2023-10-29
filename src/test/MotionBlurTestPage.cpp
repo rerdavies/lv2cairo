@@ -18,61 +18,61 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "MotionBlurTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkButtonElement.hpp"
-#include "lvtk/LvtkMotionBlurElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk/LvtkSlideInOutAnimationElement.hpp"
-#include "lvtk/LvtkDropdownElement.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cButtonElement.hpp"
+#include "lv2c/Lv2cMotionBlurElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c/Lv2cSlideInOutAnimationElement.hpp"
+#include "lv2c/Lv2cDropdownElement.hpp"
 
 using namespace lvtk;
 
-static LvtkElement::ptr Frame(LvtkElement::ptr element)
+static Lv2cElement::ptr Frame(Lv2cElement::ptr element)
 {
-    auto container = LvtkContainerElement::Create();
+    auto container = Lv2cContainerElement::Create();
     container->Style()
-        .BorderColor(LvtkColor("#808080"))
+        .BorderColor(Lv2cColor("#808080"))
         .BorderWidth({1});
     container->AddChild(element);
     return container;
 }
 
-LvtkElement::ptr MotionBlurTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr MotionBlurTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    auto main = LvtkFlexGridElement::Create();
+    auto main = Lv2cFlexGridElement::Create();
     main->Style()
         .Background(theme->paper)
         .Padding({24, 16, 24, 16})
-        .VerticalAlignment(LvtkAlignment::Stretch)
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .FlexDirection(LvtkFlexDirection::Row)
-        .FlexWrap(LvtkFlexWrap::Wrap)
+        .VerticalAlignment(Lv2cAlignment::Stretch)
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
+        .FlexDirection(Lv2cFlexDirection::Row)
+        .FlexWrap(Lv2cFlexWrap::Wrap)
         .ColumnGap(16)
         .RowGap(16);
 
 
-    LvtkSlideInOutAnimationElement::ptr slide;
+    Lv2cSlideInOutAnimationElement::ptr slide;
     {
-        auto container = LvtkContainerElement::Create();
+        auto container = Lv2cContainerElement::Create();
         container->Style()
             .BorderWidth({1})
             .BorderColor(theme->secondaryTextColor);
 
         {
-            slide = LvtkSlideInOutAnimationElement::Create();
+            slide = Lv2cSlideInOutAnimationElement::Create();
 
             {
-                auto typography = LvtkTypographyElement::Create();
+                auto typography = Lv2cTypographyElement::Create();
                 typography->Text("The quick brown fox jumped over the lazy dog.");
-                typography->Variant(LvtkTypographyVariant::BodySecondary);
+                typography->Variant(Lv2cTypographyVariant::BodySecondary);
                 typography->Style()
                     .Width(300)
                     .Height(300)
-                    .FontSize(LvtkMeasurement::Point(22))
+                    .FontSize(Lv2cMeasurement::Point(22))
                     .Padding(30)
                     .SingleLine(false)
-                    .Background(LvtkColor{"#000000"});
+                    .Background(Lv2cColor{"#000000"});
                 ;
                 slide->AddChild(typography);
             }
@@ -83,14 +83,14 @@ LvtkElement::ptr MotionBlurTestPage::CreatePageView(LvtkTheme::ptr theme)
     }
 
     {
-        auto dropdown = LvtkDropdownElement::Create();
+        auto dropdown = Lv2cDropdownElement::Create();
         #define SLIDE_ITEM(x) \
-            LvtkDropdownItem {\
-                (selection_id_t)(int)LvtkSlideAnimationType::x,\
+            Lv2cDropdownItem {\
+                (selection_id_t)(int)Lv2cSlideAnimationType::x,\
                 #x\
             },
 
-        std::vector<LvtkDropdownItem> items {
+        std::vector<Lv2cDropdownItem> items {
             SLIDE_ITEM(None)
             SLIDE_ITEM(SlideInStart)
             SLIDE_ITEM(SlideInEnd)
@@ -108,7 +108,7 @@ LvtkElement::ptr MotionBlurTestPage::CreatePageView(LvtkTheme::ptr theme)
         selectSlideAnimationObserverHandle = dropdown->SelectedIdProperty.addObserver(
             [slide=slide.get()](selection_id_t selection)
             {
-                slide->StartAnimation((LvtkSlideAnimationType)selection,150);
+                slide->StartAnimation((Lv2cSlideAnimationType)selection,150);
             }
         );
         main->AddChild(dropdown);
@@ -116,156 +116,156 @@ LvtkElement::ptr MotionBlurTestPage::CreatePageView(LvtkTheme::ptr theme)
 
     {
         // divider.
-        auto element = LvtkElement::Create();
+        auto element = Lv2cElement::Create();
         element->Style()
-            .Width(LvtkMeasurement::Percent(100))
+            .Width(Lv2cMeasurement::Percent(100))
             .Height(1)
-            .Background(LvtkColor(0.5,0.5,0.5,0.1));
+            .Background(Lv2cColor(0.5,0.5,0.5,0.1));
         main->AddChild(element);
     }
 
     {
-        auto container = LvtkContainerElement::Create();
+        auto container = Lv2cContainerElement::Create();
         container->Style()
-            .Background(LvtkColor("#FFFFFF"))
+            .Background(Lv2cColor("#FFFFFF"))
             .Padding({4});
         {
-            auto blur = LvtkMotionBlurElement::Create();
+            auto blur = Lv2cMotionBlurElement::Create();
             blur->Style()
                 .Background(theme->background);
             {
-                auto element = LvtkMotionBlurElement::Create();
+                auto element = Lv2cMotionBlurElement::Create();
                 {
-                    auto typography = LvtkTypographyElement::Create();
+                    auto typography = Lv2cTypographyElement::Create();
                     typography->Text("The quick brown fox jumped over the lazy dog.");
-                    typography->Variant(LvtkTypographyVariant::BodySecondary);
+                    typography->Variant(Lv2cTypographyVariant::BodySecondary);
                     typography->Style()
                         .Width(100)
                         .SingleLine(false)
-                        .Background(LvtkColor{"#000000"});
+                        .Background(Lv2cColor{"#000000"});
                     ;
                     element->AddChild(typography);
                 }
                 blur->AddChild(element);
             }
-            blur->Blur(LvtkPoint(0, 0), LvtkPoint(0, 0));
+            blur->Blur(Lv2cPoint(0, 0), Lv2cPoint(0, 0));
             container->AddChild(Frame(blur));
         }
         main->AddChild(container);
     }
      {
-        auto container = LvtkContainerElement::Create();
+        auto container = Lv2cContainerElement::Create();
         container->Style()
-            .Background(LvtkColor("#FFFFFF"))
+            .Background(Lv2cColor("#FFFFFF"))
             .BorderColor(theme->secondaryTextColor)
             .Padding(4);
         {
-            auto element = LvtkMotionBlurElement::Create();
+            auto element = Lv2cMotionBlurElement::Create();
 
             {
-                auto typography = LvtkTypographyElement::Create();
+                auto typography = Lv2cTypographyElement::Create();
                 typography->Text("The quick brown fox jumped over the lazy dog.");
-                typography->Variant(LvtkTypographyVariant::BodySecondary);
+                typography->Variant(Lv2cTypographyVariant::BodySecondary);
                 typography->Style()
                     .Width(100)
                     .SingleLine(false)
-                    .Background(LvtkColor("#000000"));
+                    .Background(Lv2cColor("#000000"));
                 ;
                 element->AddChild(typography);
             }
-            element->Blur(LvtkPoint(-23, 0), LvtkPoint(-18, 0));
+            element->Blur(Lv2cPoint(-23, 0), Lv2cPoint(-18, 0));
             container->AddChild(element);
         }
         main->AddChild(Frame(container));
     }
     {
-        auto container = LvtkContainerElement::Create();
+        auto container = Lv2cContainerElement::Create();
         container->Style()
-            .Background(LvtkColor("#FFFFFF"))
+            .Background(Lv2cColor("#FFFFFF"))
             .BorderColor(theme->secondaryTextColor)
             .Padding(4);
         {
-            auto element = LvtkMotionBlurElement::Create();
+            auto element = Lv2cMotionBlurElement::Create();
 
             {
-                auto typography = LvtkTypographyElement::Create();
+                auto typography = Lv2cTypographyElement::Create();
                 typography->Text("The quick brown fox jumped over the lazy dog.");
-                typography->Variant(LvtkTypographyVariant::BodySecondary);
+                typography->Variant(Lv2cTypographyVariant::BodySecondary);
                 typography->Style()
                     .Width(100)
                     .SingleLine(false)
-                    .Color(LvtkColor("#FF0000"))
-                    .Background(LvtkColor("#000000"));
+                    .Color(Lv2cColor("#FF0000"))
+                    .Background(Lv2cColor("#000000"));
                 ;
                 element->AddChild(typography);
             }
-            element->Blur(LvtkPoint(0, -23), LvtkPoint(0, -18));
+            element->Blur(Lv2cPoint(0, -23), Lv2cPoint(0, -18));
             container->AddChild(element);
         }
         main->AddChild(Frame(container));
     }
     {
-        auto container = LvtkContainerElement::Create();
+        auto container = Lv2cContainerElement::Create();
         container->Style()
-            .Background(LvtkColor("#FFFFFF"))
+            .Background(Lv2cColor("#FFFFFF"))
             .BorderColor(theme->secondaryTextColor)
             .Padding(4);
         {
-            auto element = LvtkMotionBlurElement::Create();
+            auto element = Lv2cMotionBlurElement::Create();
 
             {
-                auto typography = LvtkTypographyElement::Create();
+                auto typography = Lv2cTypographyElement::Create();
                 typography->Text("The quick brown fox jumped over the lazy dog.");
-                typography->Variant(LvtkTypographyVariant::BodySecondary);
+                typography->Variant(Lv2cTypographyVariant::BodySecondary);
                 typography->Style()
                     .Width(100)
                     .SingleLine(false)
-                    .Background(LvtkColor("#000000"));
+                    .Background(Lv2cColor("#000000"));
                 ;
                 element->AddChild(typography);
             }
-            element->Blur(LvtkPoint(0, 23), LvtkPoint(0, 18));
+            element->Blur(Lv2cPoint(0, 23), Lv2cPoint(0, 18));
             container->AddChild(element);
         }
         main->AddChild(Frame(container));
     }
     {
-        auto container = LvtkContainerElement::Create();
+        auto container = Lv2cContainerElement::Create();
         container->Style()
-            .Background(LvtkColor("#000000"))
+            .Background(Lv2cColor("#000000"))
             .BorderColor(theme->secondaryTextColor)
             .Padding(4);
 
 
         {
-            auto element = LvtkMotionBlurElement::Create();
+            auto element = Lv2cMotionBlurElement::Create();
 
             {
-                auto typography = LvtkTypographyElement::Create();
+                auto typography = Lv2cTypographyElement::Create();
                 typography->Text("The quick brown fox jumped over the lazy dog.");
-                typography->Variant(LvtkTypographyVariant::BodySecondary);
+                typography->Variant(Lv2cTypographyVariant::BodySecondary);
                 typography->Style()
                     .Width(100)
                     .SingleLine(false)
-                    .Color(LvtkColor("#202080"))
-                    .Background(LvtkColor("#E0E0E0"));
+                    .Color(Lv2cColor("#202080"))
+                    .Background(Lv2cColor("#E0E0E0"));
                 ;
                 element->AddChild(typography);
             }
-            element->Blur(LvtkPoint(20, 0), LvtkPoint(24, 0));
+            element->Blur(Lv2cPoint(20, 0), Lv2cPoint(24, 0));
             container->AddChild(element);
         }
         main->AddChild(Frame(container));
     }
     {
-        auto typography = LvtkTypographyElement::Create();
+        auto typography = Lv2cTypographyElement::Create();
         typography->Text("The quick brown fox jumped over the lazy dog.");
-        typography->Variant(LvtkTypographyVariant::BodySecondary);
+        typography->Variant(Lv2cTypographyVariant::BodySecondary);
         typography->Style()
             .Width(100)
             .SingleLine(false)
-            .Color(LvtkColor("#602020"))
-            .Background(LvtkColor("#E0E0E0"));
+            .Color(Lv2cColor("#602020"))
+            .Background(Lv2cColor("#E0E0E0"));
         ;
         main->AddChild(Frame(typography));
     }

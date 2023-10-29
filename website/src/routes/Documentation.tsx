@@ -5,7 +5,7 @@ import pMinDelay from 'p-min-delay';
 
 
 const DocIndex = loadable(()=>pMinDelay(import('./documentation/DocIndex'),200));
-const WhyLv2Lvtk =loadable(()=>pMinDelay(import('./documentation/WhyLVTK'),200));
+const WhyLv2Lv2c =loadable(()=>pMinDelay(import('./documentation/WhyLV2C'),200));
 const DocOverview =loadable(()=>pMinDelay(import('./documentation/DocOverview'),200));
 const CodingConventions =loadable(()=>pMinDelay(import('./documentation/DocCodingStyle'),200));
 const DocNoMatch =loadable(()=>pMinDelay(import('./documentation/DocNoMatch'),200));
@@ -27,7 +27,7 @@ function Documentation()
                 <Box className={"page_frame"} >
                     <Routes>
                         <Route path="index" element={<DocIndex/>} />
-                        <Route path="why" element={<WhyLv2Lvtk/>} />
+                        <Route path="why" element={<WhyLv2Lv2c/>} />
                         <Route path="getting_started" element={<DocGettingStarted/>} />
                         <Route path="building_an_lv2_audio_plugin" element={<BuildingAnLv2AudioPlugin/>} />
                         <Route path="building_an_lv2_ui_plugin" element={<BuildingAnLv2UiPlugin/>} />

@@ -18,78 +18,78 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "VerticalStackTest.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
 
 using namespace lvtk;
 
-LvtkElement::ptr VerticalStackTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr VerticalStackTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
-    auto result = std::make_shared<LvtkVerticalStackElement>();
+    auto result = std::make_shared<Lv2cVerticalStackElement>();
     result->Style()
-        .Background(LvtkPattern(LvtkColor(1, 0.5, 0.5)))
-        .BorderColor(LvtkColor(0, 0, 0, 0.6))
+        .Background(Lv2cPattern(Lv2cColor(1, 0.5, 0.5)))
+        .BorderColor(Lv2cColor(0, 0, 0, 0.6))
         .BorderWidth(4.0)
         .Margin(4)
         .Padding(4)
         .FontFamily("Roboto,Noto,Piboto,Arial,Helvetica,Sans")
-        .Color(LvtkColor(0, 0, 0, 0.6))
-        .FontSize(LvtkMeasurement::Point(12))
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .VerticalAlignment(LvtkAlignment::Stretch);
+        .Color(Lv2cColor(0, 0, 0, 0.6))
+        .FontSize(Lv2cMeasurement::Point(12))
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
+        .VerticalAlignment(Lv2cAlignment::Stretch);
 
-    auto inner = std::make_shared<LvtkVerticalStackElement>();
+    auto inner = std::make_shared<Lv2cVerticalStackElement>();
     inner->Style()
-        .Background(LvtkPattern(LvtkColor(0, 0.5, 0.5)))
-        .BorderColor(LvtkColor(0, 0, 0.5, 0.6))
+        .Background(Lv2cPattern(Lv2cColor(0, 0.5, 0.5)))
+        .BorderColor(Lv2cColor(0, 0, 0.5, 0.6))
         .BorderWidth(4)
         .Margin(4)
         .Padding(4)
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .VerticalAlignment(LvtkAlignment::Stretch);
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
+        .VerticalAlignment(Lv2cAlignment::Stretch);
     result->AddChild(inner);
 
-    auto inner2 = std::make_shared<LvtkVerticalStackElement>();
+    auto inner2 = std::make_shared<Lv2cVerticalStackElement>();
     inner2->Style()
-        .Background(LvtkPattern(LvtkColor(0.5, 0.0, 0.5)))
-        .BorderColor(LvtkColor(0, 0, 0.0, 0.6))
+        .Background(Lv2cPattern(Lv2cColor(0.5, 0.0, 0.5)))
+        .BorderColor(Lv2cColor(0, 0, 0.0, 0.6))
         .BorderWidth(4)
         .Margin(4)
         .Padding(4)
-        .HorizontalAlignment(LvtkAlignment::End);
+        .HorizontalAlignment(Lv2cAlignment::End);
     inner->AddChild(inner2);
 
-    auto text = std::make_shared<LvtkTypographyElement>();
+    auto text = std::make_shared<Lv2cTypographyElement>();
 
     text->Text("Abc <b>def</b> ghi");
     text->Style()
-        .Background(LvtkColor(1, 1, 1, 0.5))
+        .Background(Lv2cColor(1, 1, 1, 0.5))
         .Margin(4)
         .BorderWidth(4)
         .Padding(4)
-        .BorderColor(LvtkColor(0, 0, 0, 0.6));
+        .BorderColor(Lv2cColor(0, 0, 0, 0.6));
 
     text->MouseDown.AddListener(
-        [text]( const LvtkMouseEventArgs &event) -> bool
+        [text]( const Lv2cMouseEventArgs &event) -> bool
         {
-            text->Style().Color(LvtkColor(1, 0, 0, 1.0));
+            text->Style().Color(Lv2cColor(1, 0, 0, 1.0));
             text->Invalidate();
             text->CaptureMouse();
             return true;
         });
     text->MouseUp.AddListener(
-        [text]( const LvtkMouseEventArgs &event) -> bool
+        [text]( const Lv2cMouseEventArgs &event) -> bool
         {
-            text->Style().Color(LvtkColor(0, 0, 0, 0.6));
+            text->Style().Color(Lv2cColor(0, 0, 0, 0.6));
             text->Invalidate();
             text->ReleaseCapture();
             return true;
         });
 
     text->MouseOver.AddListener(
-        [text]( const LvtkMouseOverEventArgs &event) -> bool
+        [text]( const Lv2cMouseOverEventArgs &event) -> bool
         {
-            text->Style().Background(LvtkColor(1, 1, 1, 1));
+            text->Style().Background(Lv2cColor(1, 1, 1, 1));
             text->Invalidate();
             text->ReleaseCapture();
             return true;
@@ -97,9 +97,9 @@ LvtkElement::ptr VerticalStackTestPage::CreatePageView(LvtkTheme::ptr theme)
 
     );
     text->MouseOut.AddListener(
-        [text]( const LvtkMouseOverEventArgs &event) -> bool
+        [text]( const Lv2cMouseOverEventArgs &event) -> bool
         {
-            text->Style().Background(LvtkColor(1, 1, 1, 0.6));
+            text->Style().Background(Lv2cColor(1, 1, 1, 0.6));
             text->Invalidate();
             text->ReleaseCapture();
             return true;
@@ -107,43 +107,43 @@ LvtkElement::ptr VerticalStackTestPage::CreatePageView(LvtkTheme::ptr theme)
 
     inner2->AddChild(text);
 
-    auto  percent = LvtkVerticalStackElement::Create();
+    auto  percent = Lv2cVerticalStackElement::Create();
     inner->AddChild(percent);
     percent->Style()
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .VerticalAlignment(LvtkAlignment::Stretch)
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
+        .VerticalAlignment(Lv2cAlignment::Stretch)
         .Margin({4})
         .Padding({4})
         .BorderWidth(4)
-        .BorderColor(LvtkColor(0,0,0,0.4))
-        .Background(LvtkColor(0.5,0.5,0.0,1));
+        .BorderColor(Lv2cColor(0,0,0,0.4))
+        .Background(Lv2cColor(0.5,0.5,0.0,1));
 
-    auto percent2 = LvtkVerticalStackElement::Create();
+    auto percent2 = Lv2cVerticalStackElement::Create();
     percent->AddChild(percent2);
     percent2->Style()
-        .HorizontalAlignment(LvtkAlignment::Start)
-        .VerticalAlignment(LvtkAlignment::Start)
-        .Width(LvtkMeasurement::Percent(100))
-        .Height(LvtkMeasurement::Percent(100))
+        .HorizontalAlignment(Lv2cAlignment::Start)
+        .VerticalAlignment(Lv2cAlignment::Start)
+        .Width(Lv2cMeasurement::Percent(100))
+        .Height(Lv2cMeasurement::Percent(100))
         .Margin({4})
         .Padding({4})
         .BorderWidth(4)
-        .BorderColor(LvtkColor(0,0,0,0.4))
-        .Background(LvtkColor(0.1,0.5,0.0,1));
+        .BorderColor(Lv2cColor(0,0,0,0.4))
+        .Background(Lv2cColor(0.1,0.5,0.0,1));
 
-    auto percent3 = LvtkVerticalStackElement::Create();
+    auto percent3 = Lv2cVerticalStackElement::Create();
     percent2->AddChild(percent3);
     percent3->Style()
-        .HorizontalAlignment(LvtkAlignment::End)
-        .VerticalAlignment(LvtkAlignment::Center)
-        .Width(LvtkMeasurement::Percent(50))
-        .Height(LvtkMeasurement::Percent(50))
+        .HorizontalAlignment(Lv2cAlignment::End)
+        .VerticalAlignment(Lv2cAlignment::Center)
+        .Width(Lv2cMeasurement::Percent(50))
+        .Height(Lv2cMeasurement::Percent(50))
         .Margin({4})
         .Padding({4})
         .BorderWidth(4)
-        .BorderColor(LvtkColor(0,0,0,1.0))
-        .Background(LvtkColor(0.1,0.0,0.75,1));
+        .BorderColor(Lv2cColor(0,0,0,1.0))
+        .Background(Lv2cColor(0.1,0.0,0.75,1));
 
 
-    return std::static_pointer_cast<LvtkElement>(result);
+    return std::static_pointer_cast<Lv2cElement>(result);
 }

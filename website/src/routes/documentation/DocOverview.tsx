@@ -65,7 +65,7 @@ function DocOverview() {
             </Ul>
             <P>
                 Lv2UI needs a description of the ports on the LV2 audio plugin. This information
-                is generated using a command-line utility, <span className={"code"}>generate_lvtk_plugin_info</span>, which is provided as
+                is generated using a command-line utility, <span className={"code"}>generate_lv2c_plugin_info</span>, which is provided as
                 part of the LVtk package.
             </P>
             <P>
@@ -105,14 +105,14 @@ function DocOverview() {
                 The LVtk Elements library provides graphical layout and rendering on 
                 X11/Cairo surfaces.
             </P>
-            <P>LvtkElements are similar in concept to HTML elements.
+            <P>Lv2cElements are similar in concept to HTML elements.
                 They provide both layout and rendering. They also have a style system that's very loosely similar to HTML css.
             </P>
             {PreformatedText(
                 `
-LvtkElement::ptr Render() {
+Lv2cElement::ptr Render() {
     auto stackElement 
-        = LvtkVerticalStackElement::Create();
+        = Lv2cVerticalStackElement::Create();
 
     stackElement->Style()
          .BorderWidth(1)
@@ -123,10 +123,10 @@ LvtkElement::ptr Render() {
 
     {
         auto typography 
-            = LvtkTypographyElement::Create();
+            = Lv2cTypographyElement::Create();
 
         typography->Style()
-            .FontStyle(LvtkFontStyle::Italic);
+            .FontStyle(Lv2cFontStyle::Italic);
         typography->Text("Hello world!");
         
         stackElement.AddChild(typography);
@@ -138,23 +138,23 @@ LvtkElement::ptr Render() {
                 There are a few things that are worth pointing out in this code fragment.
             </P>
             <P>
-                All LVtk elements inherit from the  <span className="code">LvtkElement</span> class. The lifetime of
+                All LVtk elements inherit from the  <span className="code">Lv2cElement</span> class. The lifetime of
                 LVtk Elements is managed using <span className="code">std::shared_ptr&lt;&gt;</span> pointers. Each element
                 has a <span className="code">Create</span> method that returns
-                a <span className="code">shared_ptr</span>. <span className="code">LvtkVerticalStackElement::Create()</span>, for example, has a return type
-                of <span className="code">LvtkVerticalStackElement::ptr</span>, which is equivalent to <span className="code">std::shared_ptr&lt;Lv2kVerticalStackElement&gt;</span>.
+                a <span className="code">shared_ptr</span>. <span className="code">Lv2cVerticalStackElement::Create()</span>, for example, has a return type
+                of <span className="code">Lv2cVerticalStackElement::ptr</span>, which is equivalent to <span className="code">std::shared_ptr&lt;Lv2kVerticalStackElement&gt;</span>.
             </P>
             <P>
-                Every <span className="code">LvtkElement</span> has a style object, which is conceptually similar (but not slavishly identical) to a CSS style. An object's
-                style is accessible via the <span className="code">LvtkElement::Style()</span> method. Like CSS, some style attributes are inherited from parent objects, and
-                some are not. In the example above, the <span className="code">LvtkStyle::Color</span> attribute set on the parent container is inherited by
-                the <span className="code">LvtkTypographyElement</span>.
+                Every <span className="code">Lv2cElement</span> has a style object, which is conceptually similar (but not slavishly identical) to a CSS style. An object's
+                style is accessible via the <span className="code">Lv2cElement::Style()</span> method. Like CSS, some style attributes are inherited from parent objects, and
+                some are not. In the example above, the <span className="code">Lv2cStyle::Color</span> attribute set on the parent container is inherited by
+                the <span className="code">Lv2cTypographyElement</span>.
             </P>
             <P>
                 LVtk's layout system borrows from the HTML box model. Each element has a margin,
                 border, and padding that are used to calculate layout. Child elements are placed entirely within the client area
-                 of a LvtkElement (the area left over after
-                margins, border width and padding are removed). The same is true when drawing: when drawing in an LvtkElement's OnDraw method, the point (0,0) is located 
+                 of a Lv2cElement (the area left over after
+                margins, border width and padding are removed). The same is true when drawing: when drawing in an Lv2cElement's OnDraw method, the point (0,0) is located 
                 at the top left corner of the client area. Unlike HTML, percentage measurements
                 are taken with respect to the available client area, (as opposed to HTML in which percentage values are calculated with respect to the closest parent with relative
                 or absolute positioning). In theory, percentage values in margin, borderwidth and padding properties are calculated relative to the client area of the element's
@@ -165,72 +165,72 @@ LvtkElement::ptr Render() {
             </P>
             {PreformatedText(
                 `
-auto style = LvtkStyle::Create();
-style->HorizontalAlignment(LvtkAlignment::Stretch)
-    .TextAlignment(LvtkAlignment::Center)
+auto style = Lv2cStyle::Create();
+style->HorizontalAlignment(Lv2cAlignment::Stretch)
+    .TextAlignment(Lv2cAlignment::Center)
     .FontFamily("Piboto Condendsed")
     ;
 
-auto element1 = LvtkTypographyElement::Create();
-auto element1 = LvtkTypographyElement::Create();
+auto element1 = Lv2cTypographyElement::Create();
+auto element1 = Lv2cTypographyElement::Create();
 element1->AddClass(style);
 element1->AddClass(style);
 `)}
             <P>
-                This feature is particularly useful when styles are stored in a LvtkTheme.
+                This feature is particularly useful when styles are stored in a Lv2cTheme.
             </P>
 
             <P>
-                Resolution of style attributes is similar to HTML. When fetching a style attribute from a LvtkStyle object, LvtkStyle first checks to see if the attribute is set
+                Resolution of style attributes is similar to HTML. When fetching a style attribute from a Lv2cStyle object, Lv2cStyle first checks to see if the attribute is set
                 on itself; and if not set, checks each of the class styles on its parent element, and then (if it is an inherited attribute)
                 repeats the same operation each of the element's parents until a style is found on which the attribute is set.
             </P>
             {/****************************************************/}
             <Typography variant="h6" paragraph>
-                LvtkElement Elements
+                Lv2cElement Elements
             </Typography>
             <P>
-                The LvtkElement library provides the following Container elements.
+                The Lv2cElement library provides the following Container elements.
                 <ul>
-                    <li>LvtkContainerElement: the base class for all containers. By default, child elements are stacked one on top of another.</li>
-                    <li>LvtkVerticalStackElement: child elements stack vertically.</li>
-                    <li>LvtkHorizontalStackElement: child elements stack horizontally.</li>
-                    <li>LvtkFlexGridElement: similar to a HTML flex-grid layout.</li>
-                    <li>LvtkDropShadowElement: renders a drop-shadow under all child elements, or an inset shadow over all child elements.</li>
+                    <li>Lv2cContainerElement: the base class for all containers. By default, child elements are stacked one on top of another.</li>
+                    <li>Lv2cVerticalStackElement: child elements stack vertically.</li>
+                    <li>Lv2cHorizontalStackElement: child elements stack horizontally.</li>
+                    <li>Lv2cFlexGridElement: similar to a HTML flex-grid layout.</li>
+                    <li>Lv2cDropShadowElement: renders a drop-shadow under all child elements, or an inset shadow over all child elements.</li>
                 </ul>
             </P>
             <P>
-                The LvtkElement library provides the following UI controls.
+                The Lv2cElement library provides the following UI controls.
             </P>
             <Ul>
-                <li>LvtkDialElement: A knob control.</li>
-                <li>LvtkPngDialElement: A knob control that uses a pre-rendered PNG animation strip.</li>
-                <li>LvtkSvgDialElement: A rotating knob control that uses a PNG image.</li>
-                <li>LvtkEditBoxElement: An edit box.</li>
-                <li>LvtkNumericEditBoxElement: An edit box for editing numeric values, with validation and range-checking.</li>
-                <li>LvtkDropdownElement: An dropdown listbox control.</li>
-                <li>LvtkSwitchElement: A switch</li>
-                <li>LvtkOnOffSwitchElement: A switch that is grayed out in OFF state.</li>
-                <li>LvtkVuElement: a customizable VU meter.</li>
-                <li>LvtkLedElement: an LED lamp.</li>
+                <li>Lv2cDialElement: A knob control.</li>
+                <li>Lv2cPngDialElement: A knob control that uses a pre-rendered PNG animation strip.</li>
+                <li>Lv2cSvgDialElement: A rotating knob control that uses a PNG image.</li>
+                <li>Lv2cEditBoxElement: An edit box.</li>
+                <li>Lv2cNumericEditBoxElement: An edit box for editing numeric values, with validation and range-checking.</li>
+                <li>Lv2cDropdownElement: An dropdown listbox control.</li>
+                <li>Lv2cSwitchElement: A switch</li>
+                <li>Lv2cOnOffSwitchElement: A switch that is grayed out in OFF state.</li>
+                <li>Lv2cVuElement: a customizable VU meter.</li>
+                <li>Lv2cLedElement: an LED lamp.</li>
             </Ul>
             <P>
-                The LvtkElement library provides the following elements for displaying content:
+                The Lv2cElement library provides the following elements for displaying content:
             </P>
                 <Ul>
-                    <li>LvtkTypographyElement: display text.</li>
-                    <li>LvtkSvgElement: Render an SVG file to the display.</li>
-                    <li>LvtkPngElement: Display a PNG file to the display.</li>
-                    <li>LvtkElement: The base class for all Lvtk elements. Draws a background (if any), and borders (if any) by default.</li>
+                    <li>Lv2cTypographyElement: display text.</li>
+                    <li>Lv2cSvgElement: Render an SVG file to the display.</li>
+                    <li>Lv2cPngElement: Display a PNG file to the display.</li>
+                    <li>Lv2cElement: The base class for all Lv2c elements. Draws a background (if any), and borders (if any) by default.</li>
                 </Ul>
 
             {/****************************************************/}
             <Typography variant="h6">
-                LvtkElement Binding Properties
+                Lv2cElement Binding Properties
             </Typography>
             <P>
-                The LvtkElement library uses a property-binding mechanism for binding display values of LvtkElements to
-                values in object models. Property binding is implemented by the LvtkBindingSite&gt;T&lt; class. When two or more
+                The Lv2cElement library uses a property-binding mechanism for binding display values of Lv2cElements to
+                values in object models. Property binding is implemented by the Lv2cBindingSite&gt;T&lt; class. When two or more
                 properties are bound together, setting the value of one property will change the value of the others.
             </P>
             {PreformatedText(
@@ -255,7 +255,7 @@ assert(targetProperty.get() == 3.0); // the same value!.
 `)}
 
             <P>
-                LvtkBindingSite properties are also observable: it's possible to register a callback that will
+                Lv2cBindingSite properties are also observable: it's possible to register a callback that will
                 be called whenever the value of the property changes.
             </P>
             {PreformatedText(
@@ -297,17 +297,17 @@ BindingSite<double> sourceProperty { 1.0};
                 well as for the display values settings such as Lv2PortInfo::Units().
             </P>
             <P>
-                These properties will have been bound to Properties on LvtkElement objectes in the view tree. So when Lv2PortModel updates its internal properties,
+                These properties will have been bound to Properties on Lv2cElement objectes in the view tree. So when Lv2PortModel updates its internal properties,
                 the dial position and display values will change appropriately.
             </P>
             <P>
-                The process works in reverse as follows. The rendered LvtkDialElement updates its ValueProperty. This updates the corresponding property on Lv2ViewModel.
+                The process works in reverse as follows. The rendered Lv2cDialElement updates its ValueProperty. This updates the corresponding property on Lv2ViewModel.
                 Lv2ViewModel maps the dial value based on Lv2PortInfo settings, and sets its ValueProperty. This property will have been bound to the Lv2PortView element's
                 ValueProperty, which in turn has been bound to the Lv2UI's port property. Lv2UI detects the change, and sends the new value to the host.
             </P>
             <P>
                 If that's not clear, don't worry. There are simpler examples in the Developer's Guide section on data binding. From an overview perspective,
-                what you need to know is that the LvtkElement library is designed to use property binding, and uses property binding internally
+                what you need to know is that the Lv2cElement library is designed to use property binding, and uses property binding internally
                 to bind port properties on the host to values in the rendered display. (And yes, I know, Lv2PortModel is really a ViewController. But that's
                 probably too abstruse a point to deal with here).
             </P>
@@ -315,24 +315,24 @@ BindingSite<double> sourceProperty { 1.0};
                 Themes
             </Typography>
             <P>
-                The LvtkTheme object provides colors, styles and other attributes that are used to control themed rendering.
-                You can customize a theme, but setting a new theme on the root LvtkWindow (Lv2UI::Window()), or setting
-                a theme on any LvtkElement in the view tree (LvtkElement::Theme(LvtkTheme::ptr)).
-                The current theme is accessible via the LvtkElement::Theme() property. If not set, Theme() inherits the
-                theme of its parent element. And if no element has a set theme, LvtkWindow::Theme() is used. This allows themes
-                to be swapped at any point in the view tree, by calling LvtkElement::Theme(). After calling LvtkElement::Theme(), the current
+                The Lv2cTheme object provides colors, styles and other attributes that are used to control themed rendering.
+                You can customize a theme, but setting a new theme on the root Lv2cWindow (Lv2UI::Window()), or setting
+                a theme on any Lv2cElement in the view tree (Lv2cElement::Theme(Lv2cTheme::ptr)).
+                The current theme is accessible via the Lv2cElement::Theme() property. If not set, Theme() inherits the
+                theme of its parent element. And if no element has a set theme, Lv2cWindow::Theme() is used. This allows themes
+                to be swapped at any point in the view tree, by calling Lv2cElement::Theme(). After calling Lv2cElement::Theme(), the current
                 element and all its children will use the new theme.
             </P>
             <P>
-                If you are implementing themed custom controls that need theme values beyond the standard theme properties, LvtkTheme
-                provides dictionaries of colors and styles that are keyed by a string value. See LvtkTheme::setColor, and LvtkTheme::Style.
+                If you are implementing themed custom controls that need theme values beyond the standard theme properties, Lv2cTheme
+                provides dictionaries of colors and styles that are keyed by a string value. See Lv2cTheme::setColor, and Lv2cTheme::Style.
             </P>
             <P>
                 Note that Theme() cannot be called before an element is mounted. If you need to calculate values based on theme values,
-                you should do those calculations in an override of LvtkElement::OnMount().
+                you should do those calculations in an override of Lv2cElement::OnMount().
             </P>
             <P>
-                An obvious customization point would be to set LvtkTheme::paperColor, which will change the background of the UI.
+                An obvious customization point would be to set Lv2cTheme::paperColor, which will change the background of the UI.
             </P>
 
             <Typography paragraph variant="h6">
@@ -346,7 +346,7 @@ BindingSite<double> sourceProperty { 1.0};
             </P>
 
             <P>
-                The Lv2ControlView element takes a reference to a LvtkBindingSite (nominally, the property for the LV2 Port provided by Lv2UI), and
+                The Lv2ControlView element takes a reference to a Lv2cBindingSite (nominally, the property for the LV2 Port provided by Lv2UI), and
                 an Lv2PortInfo object that encapsulates all of the properties of a port object as captured from its TTL description (more on this
                 later). Lv2ControlView manages rendering of the controls, as well of binding of the port property with controls in the generated view tree.
             </P>
@@ -376,13 +376,13 @@ BindingSite<double> sourceProperty { 1.0};
                 a an LV2 UI plugin.
             </P>
             <P>
-                The <span className="code">generate_lvtk_plugin_info</span> command-line utility generates the necessary header file, using either
+                The <span className="code">generate_lv2c_plugin_info</span> command-line utility generates the necessary header file, using either
                 information from a currently-installed LV2 audio plugin, using .ttl files found in <span className="code">/usr/bin/lv2</span>, or
                 from a <span className="code">manifest.ttl</span> file provided as an argument.
             </P>``
             <P>
 
-                The <span className="code">generate_lvtk_plugin_info</span> executable is generated by the LVtk project build procedure. The SamplePlugin project
+                The <span className="code">generate_lv2c_plugin_info</span> executable is generated by the LVtk project build procedure. The SamplePlugin project
                 demonstrates how to automate the build procedure for the Lv2PluginInfo file in a CMake project.
             </P>
             <P>

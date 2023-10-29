@@ -18,50 +18,50 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "TypographyTestPage.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
 
 using namespace lvtk;
 
-LvtkElement::ptr TypographyTestPage::CreatePageView(LvtkTheme::ptr theme) 
+Lv2cElement::ptr TypographyTestPage::CreatePageView(Lv2cTheme::ptr theme) 
 {
 
-    LvtkVerticalStackElement::ptr main = LvtkVerticalStackElement::Create();
+    Lv2cVerticalStackElement::ptr main = Lv2cVerticalStackElement::Create();
     main->Style().Background(theme->paper).Padding({16, 8, 16, 8});
 
     {
-        LvtkTypographyElement::ptr title = LvtkTypographyElement::Create();
-        title->Variant(LvtkTypographyVariant::Title).Text("Typography Theme Styles Test");
+        Lv2cTypographyElement::ptr title = Lv2cTypographyElement::Create();
+        title->Variant(Lv2cTypographyVariant::Title).Text("Typography Theme Styles Test");
 
         title->Style().Padding({0, 8, 0, 8});
 
         main->AddChild(title);
     }
     {
-        LvtkTypographyElement::ptr heading = LvtkTypographyElement::Create();
-        heading->Variant(LvtkTypographyVariant::Heading).Text("Heading");
+        Lv2cTypographyElement::ptr heading = Lv2cTypographyElement::Create();
+        heading->Variant(Lv2cTypographyVariant::Heading).Text("Heading");
         heading->Style().Padding({0, 8, 0, 8});
 
         main->AddChild(heading);
     }
     {
-        LvtkTypographyElement::ptr body = LvtkTypographyElement::Create();
-        body->Variant(LvtkTypographyVariant::BodyPrimary).Text("Body primary");
+        Lv2cTypographyElement::ptr body = Lv2cTypographyElement::Create();
+        body->Variant(Lv2cTypographyVariant::BodyPrimary).Text("Body primary");
         body->Style().Padding({0, 8, 0, 8});
 
         main->AddChild(body);
     }
     {
-        LvtkTypographyElement::ptr body = LvtkTypographyElement::Create();
-        body->Variant(LvtkTypographyVariant::BodySecondary).Text("Body secondary");
+        Lv2cTypographyElement::ptr body = Lv2cTypographyElement::Create();
+        body->Variant(Lv2cTypographyVariant::BodySecondary).Text("Body secondary");
         body->Style().Padding({0, 8, 0, 8});
 
         main->AddChild(body);
     }
     {
-        LvtkTypographyElement::ptr body = LvtkTypographyElement::Create();
-        body->Variant(LvtkTypographyVariant::Caption).Text("CAPTION TEXT");
-        // body->Style().BorderColor(LvtkColor{1, 1, 1, 0.4}).BorderWidth({1});
+        Lv2cTypographyElement::ptr body = Lv2cTypographyElement::Create();
+        body->Variant(Lv2cTypographyVariant::Caption).Text("CAPTION TEXT");
+        // body->Style().BorderColor(Lv2cColor{1, 1, 1, 0.4}).BorderWidth({1});
         body->Style().Padding({0, 8, 0, 8});
 
         main->AddChild(body);
@@ -69,52 +69,52 @@ LvtkElement::ptr TypographyTestPage::CreatePageView(LvtkTheme::ptr theme)
     }
 
     {
-        LvtkTypographyElement::ptr element = LvtkTypographyElement::Create();
-        element->Variant(LvtkTypographyVariant::BodyPrimary).Text("Small caps");
-        // body->Style().BorderColor(LvtkColor{1, 1, 1, 0.4}).BorderWidth({1});
-        element->Style().Padding({0, 8, 0, 8}).FontVariant(LvtkFontVariant::SmallCaps);
+        Lv2cTypographyElement::ptr element = Lv2cTypographyElement::Create();
+        element->Variant(Lv2cTypographyVariant::BodyPrimary).Text("Small caps");
+        // body->Style().BorderColor(Lv2cColor{1, 1, 1, 0.4}).BorderWidth({1});
+        element->Style().Padding({0, 8, 0, 8}).FontVariant(Lv2cFontVariant::SmallCaps);
 
         main->AddChild(element);
 
     }
 
     {
-        LvtkTypographyElement::ptr element = LvtkTypographyElement::Create();
-        element->Variant(LvtkTypographyVariant::BodyPrimary).Text("Italic");
-        // body->Style().BorderColor(LvtkColor{1, 1, 1, 0.4}).BorderWidth({1});
-        element->Style().Padding({0, 8, 0, 8}).FontStyle(LvtkFontStyle::Italic);
+        Lv2cTypographyElement::ptr element = Lv2cTypographyElement::Create();
+        element->Variant(Lv2cTypographyVariant::BodyPrimary).Text("Italic");
+        // body->Style().BorderColor(Lv2cColor{1, 1, 1, 0.4}).BorderWidth({1});
+        element->Style().Padding({0, 8, 0, 8}).FontStyle(Lv2cFontStyle::Italic);
 
         main->AddChild(element);
 
     }
     {
-        LvtkTypographyElement::ptr element = LvtkTypographyElement::Create();
-        element->Variant(LvtkTypographyVariant::BodyPrimary).Text("Condensed");
-        // body->Style().BorderColor(LvtkColor{1, 1, 1, 0.4}).BorderWidth({1});
-        element->Style().Padding({0, 8, 0, 8}).FontStretch(LvtkFontStretch::Condensed);
+        Lv2cTypographyElement::ptr element = Lv2cTypographyElement::Create();
+        element->Variant(Lv2cTypographyVariant::BodyPrimary).Text("Condensed");
+        // body->Style().BorderColor(Lv2cColor{1, 1, 1, 0.4}).BorderWidth({1});
+        element->Style().Padding({0, 8, 0, 8}).FontStretch(Lv2cFontStretch::Condensed);
 
         main->AddChild(element);
 
     }
     {
-        LvtkTypographyElement::ptr element = LvtkTypographyElement::Create();
-        element->Variant(LvtkTypographyVariant::BodyPrimary).Text("Light");
-        // body->Style().BorderColor(LvtkColor{1, 1, 1, 0.4}).BorderWidth({1});
-        element->Style().Padding({0, 8, 0, 8}).FontWeight(LvtkFontWeight::Light).FontSize(LvtkMeasurement::Point(14));
+        Lv2cTypographyElement::ptr element = Lv2cTypographyElement::Create();
+        element->Variant(Lv2cTypographyVariant::BodyPrimary).Text("Light");
+        // body->Style().BorderColor(Lv2cColor{1, 1, 1, 0.4}).BorderWidth({1});
+        element->Style().Padding({0, 8, 0, 8}).FontWeight(Lv2cFontWeight::Light).FontSize(Lv2cMeasurement::Point(14));
 
         main->AddChild(element);
 
     }
     {
-        LvtkTypographyElement::ptr element = LvtkTypographyElement::Create();
-        element->Variant(LvtkTypographyVariant::BodyPrimary).Text("Thin");
-        // body->Style().BorderColor(LvtkColor{1, 1, 1, 0.4}).BorderWidth({1});
-        element->Style().Padding({0, 8, 0, 8}).FontWeight(LvtkFontWeight::Thin);
+        Lv2cTypographyElement::ptr element = Lv2cTypographyElement::Create();
+        element->Variant(Lv2cTypographyVariant::BodyPrimary).Text("Thin");
+        // body->Style().BorderColor(Lv2cColor{1, 1, 1, 0.4}).BorderWidth({1});
+        element->Style().Padding({0, 8, 0, 8}).FontWeight(Lv2cFontWeight::Thin);
 
         main->AddChild(element);
 
     }
 
 
-    return std::static_pointer_cast<LvtkElement>(main);
+    return std::static_pointer_cast<Lv2cElement>(main);
 }

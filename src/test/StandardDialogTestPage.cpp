@@ -18,26 +18,26 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "StandardDialogTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkButtonElement.hpp"
-#include "lvtk/LvtkMessageDialog.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
-#include "lvtk_ui/Lv2FileDialog.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cButtonElement.hpp"
+#include "lv2c/Lv2cMessageDialog.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
+#include "lv2c_ui/Lv2FileDialog.hpp"
 
 using namespace lvtk;
 using namespace lvtk::ui;
 
 
-class CustomMessageDialog: public LvtkMessageDialog {
+class CustomMessageDialog: public Lv2cMessageDialog {
     public:
     using self=CustomMessageDialog;
-    using super=LvtkMessageDialog;
+    using super=Lv2cMessageDialog;
     using ptr = std::shared_ptr<self>;
     static ptr Create() { return std::make_shared<self>(); }
 
     CustomMessageDialog()
     {
-        DefaultSize(LvtkSize(480,0)); // adjust the width. Leave the height at 0 in order to fit to size.
+        DefaultSize(Lv2cSize(480,0)); // adjust the width. Leave the height at 0 in order to fit to size.
         PrimaryButtonStyle().Width(100);  // widen thebuttons a bit.
         SecondaryButtonStyle().Width(100);
         IconStyle().Width(48).Height(48); // make the icon larger.
@@ -47,43 +47,43 @@ class CustomMessageDialog: public LvtkMessageDialog {
         Text("Are you sure you want to wash your socks? This action may be irreversable.");
         PrimaryButtonText("Wash them!");
 
-        PrimaryButtonColor(LvtkColor("#E04040"));
+        PrimaryButtonColor(Lv2cColor("#E04040"));
         SecondaryButtonText("Cancel");
         IconSource("laundry.svg");
-        IconTintColor(LvtkColor("#7070A0"));
+        IconTintColor(Lv2cColor("#7070A0"));
 
 
     }
 };
 
-static LvtkButtonElement::ptr MakeButton(const std::string&text)
+static Lv2cButtonElement::ptr MakeButton(const std::string&text)
 {
-    auto result = LvtkButtonElement::Create();
-    result->Variant(LvtkButtonVariant::Dialog);
+    auto result = Lv2cButtonElement::Create();
+    result->Variant(Lv2cButtonVariant::Dialog);
     result->Style().Margin({0,0,0,16});
     result->Text(text);
     result->Style().Width(140);
     return result;
 }
-class MessageBoxTestElement: public LvtkContainerElement {
+class MessageBoxTestElement: public Lv2cContainerElement {
 public:
     using self = MessageBoxTestElement;
-    using super = LvtkContainerElement;
+    using super = Lv2cContainerElement;
     using ptr = std::shared_ptr<self>;
 
     static ptr Create() { return std::make_shared<self>(); }
 
     MessageBoxTestElement()
     {
-        auto container = LvtkVerticalStackElement::Create();
-        container->Style().HorizontalAlignment(LvtkAlignment::Start);
+        auto container = Lv2cVerticalStackElement::Create();
+        container->Style().HorizontalAlignment(Lv2cAlignment::Start);
         {
             auto button = MakeButton("INFO");
 
-            button->Clicked.AddListener([this](const LvtkMouseEventArgs&)
+            button->Clicked.AddListener([this](const Lv2cMouseEventArgs&)
             {
                 Window()->MessageBox(
-                    LvtkMessageDialogType::Info,
+                    Lv2cMessageDialogType::Info,
                     "Info",
                     "The capital of Wisconsin is Madison."
                 );
@@ -95,10 +95,10 @@ public:
         {
             auto button = MakeButton("WARNING");
 
-            warningEventHandle = button->Clicked.AddListener([this](const LvtkMouseEventArgs&)
+            warningEventHandle = button->Clicked.AddListener([this](const Lv2cMouseEventArgs&)
             {
                 Window()->MessageBox(
-                    LvtkMessageDialogType::Warning,
+                    Lv2cMessageDialogType::Warning,
                     "Warning",
                     "Do not set yourself on fire."
                 );
@@ -110,10 +110,10 @@ public:
         {
             auto button = MakeButton("ERROR");
 
-            button->Clicked.AddListener([this](const LvtkMouseEventArgs&)
+            button->Clicked.AddListener([this](const Lv2cMouseEventArgs&)
             {
                 Window()->MessageBox(
-                    LvtkMessageDialogType::Error,
+                    Lv2cMessageDialogType::Error,
                     "Error",
                     "<b>Nam</b> <s>libero</s> <sub>tempore</sub>, <sup>cum</sup> <span color='#FF8080'>soluta</span> <i>nobis</i> "
                     "<span variant='small-caps'>est</span> <tt>eligendi</tt> optio, cumque <u>nihil</u> impedit, quo minus id, "
@@ -130,7 +130,7 @@ public:
         {
             auto button = MakeButton("Custom");
 
-            button->Clicked.AddListener([this](const LvtkMouseEventArgs&)
+            button->Clicked.AddListener([this](const Lv2cMouseEventArgs&)
             {
                 auto dlg = CustomMessageDialog::Create();
                 dlg->Show(Window());
@@ -142,7 +142,7 @@ public:
         {
             auto button = MakeButton("File dialog");
 
-            button->Clicked.AddListener([this](const LvtkMouseEventArgs&)
+            button->Clicked.AddListener([this](const Lv2cMouseEventArgs&)
             {
                 auto dlg = Lv2FileDialog::Create("Open","TestFileDialog");
                 std::vector<Lv2FileFilter> fileTypes
@@ -173,14 +173,14 @@ private:
 
 };
 
-LvtkElement::ptr StandardDialogTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr StandardDialogTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
-    auto main = LvtkFlexGridElement::Create();
+    auto main = Lv2cFlexGridElement::Create();
     main->Style()
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .VerticalAlignment(LvtkAlignment::Stretch)
-        .FlexWrap(LvtkFlexWrap::Wrap)
-        .FlexDirection(LvtkFlexDirection::Column)
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
+        .VerticalAlignment(Lv2cAlignment::Stretch)
+        .FlexWrap(Lv2cFlexWrap::Wrap)
+        .FlexDirection(Lv2cFlexDirection::Column)
         .Background(theme->paper)
         .Padding({24, 16, 24, 16});
     {

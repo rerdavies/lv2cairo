@@ -41,7 +41,7 @@ const docIndex: NavPage =
                 new NavPage(
                     "/documentation/why",
                     "Why LVtk?",
-                    "WhyLv2Lvtk",
+                    "WhyLv2Lv2c",
                     []
                 ),
                 new NavPage(

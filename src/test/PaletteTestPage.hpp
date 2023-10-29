@@ -33,7 +33,7 @@ public:
     PaletteTestPage() : TestPage("Color Palettes")
     {
     }
-    LvtkElement::ptr CreatePageView(LvtkTheme::ptr theme) override;
+    Lv2cElement::ptr CreatePageView(Lv2cTheme::ptr theme) override;
 
 };
 } // namespace

@@ -18,117 +18,117 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "PngTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkButtonElement.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
-#include "lvtk/LvtkPngElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cButtonElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
+#include "lv2c/Lv2cPngElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
 
 using namespace lvtk;
 
-LvtkElement::ptr PngTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr PngTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    LvtkVerticalStackElement::ptr main = LvtkVerticalStackElement::Create();
-    main->Style().Background(theme->paper).Padding({24, 16, 24, 16}).VerticalAlignment(LvtkAlignment::Stretch).HorizontalAlignment(LvtkAlignment::Stretch);
+    Lv2cVerticalStackElement::ptr main = Lv2cVerticalStackElement::Create();
+    main->Style().Background(theme->paper).Padding({24, 16, 24, 16}).VerticalAlignment(Lv2cAlignment::Stretch).HorizontalAlignment(Lv2cAlignment::Stretch);
 
     {
-        auto flexGrid = LvtkFlexGridElement::Create();
+        auto flexGrid = Lv2cFlexGridElement::Create();
         main->AddChild(flexGrid);
         flexGrid->Style()
-            .FlexWrap(LvtkFlexWrap::Wrap)
-            .FlexDirection(LvtkFlexDirection::Row)
-            .HorizontalAlignment(LvtkAlignment::Stretch)
-            .VerticalAlignment(LvtkAlignment::Stretch)
-            .FlexAlignItems(LvtkAlignment::Center);
+            .FlexWrap(Lv2cFlexWrap::Wrap)
+            .FlexDirection(Lv2cFlexDirection::Row)
+            .HorizontalAlignment(Lv2cAlignment::Stretch)
+            .VerticalAlignment(Lv2cAlignment::Stretch)
+            .FlexAlignItems(Lv2cAlignment::Center);
         {
             for (double size : std::vector<double>{100, 20, 18, 24, 36, 48})
             {
-                auto png = LvtkPngElement::Create();
+                auto png = Lv2cPngElement::Create();
                 png->Style()
                     .Width(size)
                     .Height(size)
                     .Margin({8})
-                    .HorizontalAlignment(LvtkAlignment::Start)
-                    .VerticalAlignment(LvtkAlignment::Start);
+                    .HorizontalAlignment(Lv2cAlignment::Start)
+                    .VerticalAlignment(Lv2cAlignment::Start);
                 png->Source("Lv2C-Logo-white-512.png");
                 flexGrid->AddChild(png);
             }
-            auto divider = LvtkElement::Create();
+            auto divider = Lv2cElement::Create();
             flexGrid->AddChild(divider);
             divider->Style()
-                .Width(LvtkMeasurement::Percent(100))
-                .Background(LvtkColor("#FFFFFF20"))
+                .Width(Lv2cMeasurement::Percent(100))
+                .Background(Lv2cColor("#FFFFFF20"))
                 .Height(1);
             double angle = 14;
             for (double size : std::vector<double>{100, 20, 18, 24, 36, 48})
             {
-                auto png = LvtkPngElement::Create();
+                auto png = Lv2cPngElement::Create();
                 png->Style()
                     .Width(size + 32)
                     .Height(size + 32)
                     .Padding({16})
-                    .HorizontalAlignment(LvtkAlignment::Start)
-                    .VerticalAlignment(LvtkAlignment::Start);
+                    .HorizontalAlignment(Lv2cAlignment::Start)
+                    .VerticalAlignment(Lv2cAlignment::Start);
                 png->Source("Lv2C-Logo-white-512.png")
                     .Rotation(angle);
                 angle += 23;
                 flexGrid->AddChild(png);
             }
 
-            auto AddFitOptions = [&flexGrid](const std::string label, LvtkImageAlignment alignment) mutable
+            auto AddFitOptions = [&flexGrid](const std::string label, Lv2cImageAlignment alignment) mutable
             {
-                auto divider = LvtkElement::Create();
+                auto divider = Lv2cElement::Create();
                 flexGrid->AddChild(divider);
                 divider->Style()
-                    .Width(LvtkMeasurement::Percent(100))
-                    .Background(LvtkColor("#FFFFFF20"))
+                    .Width(Lv2cMeasurement::Percent(100))
+                    .Background(Lv2cColor("#FFFFFF20"))
                     .Height(1)
                     .Margin(8);
-                auto typography = LvtkTypographyElement::Create();
+                auto typography = Lv2cTypographyElement::Create();
                 typography->Text(label);
                 flexGrid->AddChild(typography);
 
 
-                auto png = LvtkPngElement::Create();
+                auto png = Lv2cPngElement::Create();
                 png->Style()
                     .Width(44)
                     .Height(64)
                     .Margin(8)
                     .Padding(4)
-                    .Background(LvtkColor("#F00"))
+                    .Background(Lv2cColor("#F00"))
                     ;
                 png->ImageAlignment(alignment).Source("scale-test.png");
                 flexGrid->AddChild(png);
 
-                png = LvtkPngElement::Create();
+                png = Lv2cPngElement::Create();
                 png->Style()
                     .Width(64)
                     .Height(34)
                     .Margin(8)
                     .Padding(4)
-                    .Background(LvtkColor("#F00"))
+                    .Background(Lv2cColor("#F00"))
 
                     ;
                 png->ImageAlignment(alignment).Source("scale-test.png");
                 flexGrid->AddChild(png);
 
-                png = LvtkPngElement::Create();
+                png = Lv2cPngElement::Create();
                 png->Style()
                     .Width(64)
                     .Height(64)
                     .Margin(8)
                     .Padding(4)
-                    .Background(LvtkColor("#F00"))
+                    .Background(Lv2cColor("#F00"))
 
                     ;
                 png->ImageAlignment(alignment).Source("scale-test.png");
                 flexGrid->AddChild(png);
             };
 
-            AddFitOptions("Fit", LvtkImageAlignment::Fit);
-            AddFitOptions("Stretch", LvtkImageAlignment::Stretch);
-            AddFitOptions("Fill", LvtkImageAlignment::Fill);
+            AddFitOptions("Fit", Lv2cImageAlignment::Fit);
+            AddFitOptions("Stretch", Lv2cImageAlignment::Stretch);
+            AddFitOptions("Fill", Lv2cImageAlignment::Fill);
         }
     }
 

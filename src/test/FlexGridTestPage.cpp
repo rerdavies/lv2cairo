@@ -18,39 +18,39 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "FlexGridTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkDropdownElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
-#include "lvtk/LvtkBindingProperty.hpp"
-#include "lvtk/LvtkNumericEditBoxElement.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cDropdownElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
+#include "lv2c/Lv2cBindingProperty.hpp"
+#include "lv2c/Lv2cNumericEditBoxElement.hpp"
 
 using namespace lvtk;
 
-static std::vector<LvtkElement::ptr> MakeFlexChildren()
+static std::vector<Lv2cElement::ptr> MakeFlexChildren()
 {
-    std::vector<LvtkElement::ptr> result;
+    std::vector<Lv2cElement::ptr> result;
     std::vector<std::string> data{"Sed", "ut", "perspiciatis", "unde",
                                   "omnis", "iste", "natus", "error", "sit",
                                   "voluptatem", "accusantium", "doloremque", "laudantium"};
 
-    auto style = LvtkStyle::Create();
-    style->FontSize(LvtkMeasurement::Point(15))
+    auto style = Lv2cStyle::Create();
+    style->FontSize(Lv2cMeasurement::Point(15))
         .Margin({1})
         .BorderWidth({1})
-        .BorderColor(LvtkColor(1, 1, 1, 0.3))
+        .BorderColor(Lv2cColor(1, 1, 1, 0.3))
         .Padding({4})
-        .Color(LvtkColor(1, 1, 1))
-        .TextAlign(LvtkTextAlign::Start);
+        .Color(Lv2cColor(1, 1, 1))
+        .TextAlign(Lv2cTextAlign::Start);
 
     for (auto &word : data)
     {
-        auto typography = LvtkTypographyElement::Create();
+        auto typography = Lv2cTypographyElement::Create();
         typography->Text(word).AddClass(style);
         typography->Style()
             .Margin({1})
             .BorderWidth({1})
-            .BorderColor(LvtkColor(1, 1, 1, 0.3))
+            .BorderColor(Lv2cColor(1, 1, 1, 0.3))
             .Padding({4});
         result.push_back(typography);
     }
@@ -58,13 +58,13 @@ static std::vector<LvtkElement::ptr> MakeFlexChildren()
 }
 
 template <typename T>
-class VariantDropdownElement : public LvtkDropdownElement
+class VariantDropdownElement : public Lv2cDropdownElement
 {
 public:
     using self = VariantDropdownElement<T>;
-    using super = LvtkDropdownElement;
+    using super = Lv2cDropdownElement;
     using ptr = std::shared_ptr<self>;
-    static ptr Create(const std::vector<LvtkDropdownItem> &items)
+    static ptr Create(const std::vector<Lv2cDropdownItem> &items)
     {
         auto result = std::make_shared<self>();
         result->DropdownItems(items);
@@ -98,28 +98,28 @@ protected:
 };
 
 #define V_DROPDOWN_ENTRY(VARIANT, MEMBER) \
-    LvtkDropdownItem((int64_t)(VARIANT::MEMBER), (#MEMBER))
+    Lv2cDropdownItem((int64_t)(VARIANT::MEMBER), (#MEMBER))
 
-class FlexTestElement : public LvtkContainerElement
+class FlexTestElement : public Lv2cContainerElement
 {
 public:
     using self = FlexTestElement;
-    using super = LvtkContainerElement;
+    using super = Lv2cContainerElement;
     using ptr = std::shared_ptr<self>;
     static ptr Create() { return std::make_shared<self>(); }
     FlexTestElement();
 
 private:
-    LvtkFlexGridElement::ptr MakeGrid();
-    LvtkFlexGridElement::ptr grid;
+    Lv2cFlexGridElement::ptr MakeGrid();
+    Lv2cFlexGridElement::ptr grid;
     std::vector<observer_handle_t> observerHandles;
 };
 
-static LvtkElement::ptr LabeledControl(const std::string &label_, LvtkElement::ptr control)
+static Lv2cElement::ptr LabeledControl(const std::string &label_, Lv2cElement::ptr control)
 {
-    auto container = LvtkVerticalStackElement::Create();
-    container->Style().HorizontalAlignment(LvtkAlignment::Start);
-    auto label = LvtkTypographyElement::Create();
+    auto container = Lv2cVerticalStackElement::Create();
+    container->Style().HorizontalAlignment(Lv2cAlignment::Start);
+    auto label = Lv2cTypographyElement::Create();
     label->Text(label_);
     label->Style().FontSize(11)
         .Margin({6,0,0,0});
@@ -128,11 +128,11 @@ static LvtkElement::ptr LabeledControl(const std::string &label_, LvtkElement::p
     container->Style().Margin({4});
     return container;
 }
-static LvtkElement::ptr LabeledEditControl(const std::string &label_, LvtkElement::ptr control)
+static Lv2cElement::ptr LabeledEditControl(const std::string &label_, Lv2cElement::ptr control)
 {
-    auto container = LvtkVerticalStackElement::Create();
-    container->Style().HorizontalAlignment(LvtkAlignment::Start);
-    auto label = LvtkTypographyElement::Create();
+    auto container = Lv2cVerticalStackElement::Create();
+    container->Style().HorizontalAlignment(Lv2cAlignment::Start);
+    auto label = Lv2cTypographyElement::Create();
     label->Text(label_);
     label->Style().FontSize(11)
         .Margin({4,0,0,8});
@@ -143,88 +143,88 @@ static LvtkElement::ptr LabeledEditControl(const std::string &label_, LvtkElemen
 }
 FlexTestElement::FlexTestElement()
 {
-    auto stack = LvtkFlexGridElement::Create();
-    stack->Style().FlexDirection(LvtkFlexDirection::Column).FlexWrap(LvtkFlexWrap::NoWrap).HorizontalAlignment(LvtkAlignment::Stretch).VerticalAlignment(LvtkAlignment::Stretch);
+    auto stack = Lv2cFlexGridElement::Create();
+    stack->Style().FlexDirection(Lv2cFlexDirection::Column).FlexWrap(Lv2cFlexWrap::NoWrap).HorizontalAlignment(Lv2cAlignment::Stretch).VerticalAlignment(Lv2cAlignment::Stretch);
     {
         this->grid = MakeGrid();
         stack->AddChild(grid);
 
         {
-            auto element = LvtkElement::Create();
+            auto element = Lv2cElement::Create();
             element->Style()
-                .Width(LvtkMeasurement::Percent(100))
+                .Width(Lv2cMeasurement::Percent(100))
                 .Height(1)
                 .Margin({0,8,0,0})
-                .Background(LvtkColor(0.3,0.3,0.3));
+                .Background(Lv2cColor(0.3,0.3,0.3));
             stack->AddChild(element);
         }
 
-        auto controlGrid = LvtkFlexGridElement::Create();
+        auto controlGrid = Lv2cFlexGridElement::Create();
         controlGrid->Style()
-            .VerticalAlignment(LvtkAlignment::End)
-            .FlexWrap(LvtkFlexWrap::Wrap);
+            .VerticalAlignment(Lv2cAlignment::End)
+            .FlexWrap(Lv2cFlexWrap::Wrap);
         {
-            auto element = VariantDropdownElement<LvtkFlexDirection>::Create({V_DROPDOWN_ENTRY(LvtkFlexDirection, Row),
-                                                                               V_DROPDOWN_ENTRY(LvtkFlexDirection, Column)});
+            auto element = VariantDropdownElement<Lv2cFlexDirection>::Create({V_DROPDOWN_ENTRY(Lv2cFlexDirection, Row),
+                                                                               V_DROPDOWN_ENTRY(Lv2cFlexDirection, Column)});
             this->observerHandles.push_back(
-                element->ValueProperty.addObserver([this](LvtkFlexDirection value)
+                element->ValueProperty.addObserver([this](Lv2cFlexDirection value)
                                                    {
                 grid->Style().FlexDirection(value);
                 grid->InvalidateLayout(); }));
             element->Style().Margin({8});
-            element->Value(LvtkFlexDirection::Row);
+            element->Value(Lv2cFlexDirection::Row);
             controlGrid->AddChild(LabeledControl("FlexDirection", element));
         }
         {
-            auto element = VariantDropdownElement<LvtkFlexWrap>::Create(
-                {V_DROPDOWN_ENTRY(LvtkFlexWrap, Wrap),
-                 V_DROPDOWN_ENTRY(LvtkFlexWrap, NoWrap)});
+            auto element = VariantDropdownElement<Lv2cFlexWrap>::Create(
+                {V_DROPDOWN_ENTRY(Lv2cFlexWrap, Wrap),
+                 V_DROPDOWN_ENTRY(Lv2cFlexWrap, NoWrap)});
             this->observerHandles.push_back(
-                element->ValueProperty.addObserver([this](LvtkFlexWrap value)
+                element->ValueProperty.addObserver([this](Lv2cFlexWrap value)
                                                    {
                 grid->Style().FlexWrap(value);
                 grid->InvalidateLayout(); }));
             element->Style().Margin({8});
             controlGrid->AddChild(LabeledControl("FlexWrap", element));
-            element->Value(LvtkFlexWrap::Wrap);
+            element->Value(Lv2cFlexWrap::Wrap);
         }
         {
-            auto element = VariantDropdownElement<LvtkFlexJustification>::Create(
+            auto element = VariantDropdownElement<Lv2cFlexJustification>::Create(
                 {
-                    V_DROPDOWN_ENTRY(LvtkFlexJustification, Start),
-                    V_DROPDOWN_ENTRY(LvtkFlexJustification, End),
-                    V_DROPDOWN_ENTRY(LvtkFlexJustification, Center),
-                    V_DROPDOWN_ENTRY(LvtkFlexJustification, SpaceBetween),
-                    V_DROPDOWN_ENTRY(LvtkFlexJustification, SpaceAround),
+                    V_DROPDOWN_ENTRY(Lv2cFlexJustification, Start),
+                    V_DROPDOWN_ENTRY(Lv2cFlexJustification, End),
+                    V_DROPDOWN_ENTRY(Lv2cFlexJustification, Center),
+                    V_DROPDOWN_ENTRY(Lv2cFlexJustification, SpaceBetween),
+                    V_DROPDOWN_ENTRY(Lv2cFlexJustification, SpaceAround),
                 });
             this->observerHandles.push_back(
-                element->ValueProperty.addObserver([this](LvtkFlexJustification value)
+                element->ValueProperty.addObserver([this](Lv2cFlexJustification value)
                                                    {
                 grid->Style().FlexJustification(value);
                 grid->InvalidateLayout(); }));
             element->Style().Margin({8});
             controlGrid->AddChild(LabeledControl("FlexJustification", element));
-            element->Value(LvtkFlexJustification::Start);
+            element->Value(Lv2cFlexJustification::Start);
         }
         {
-            auto element = VariantDropdownElement<LvtkAlignment>::Create(
+            auto element = VariantDropdownElement<Lv2cAlignment>::Create(
                 {
-                    V_DROPDOWN_ENTRY(LvtkAlignment, Start),
-                    V_DROPDOWN_ENTRY(LvtkAlignment, End),
-                    V_DROPDOWN_ENTRY(LvtkAlignment, Center),
+                    V_DROPDOWN_ENTRY(Lv2cAlignment, Start),
+                    V_DROPDOWN_ENTRY(Lv2cAlignment, End),
+                    V_DROPDOWN_ENTRY(Lv2cAlignment, Center),
                 });
             this->observerHandles.push_back(
-                element->ValueProperty.addObserver([this](LvtkAlignment value)
+                element->ValueProperty.addObserver([this](Lv2cAlignment value)
                                                    {
                 grid->Style().FlexAlignItems(value);
                 grid->InvalidateLayout(); }));
             element->Style().Margin({8});
             controlGrid->AddChild(LabeledControl("FlexAlignItems", element));
-            element->Value(LvtkAlignment::Start);
+            element->Value(Lv2cAlignment::Start);
         }
         {
-            auto element = LvtkNumericEditBoxElement::Create();
-            element->ValueType(LvtkValueType::Int16)
+            auto element = Lv2cNumericEditBoxElement::Create();
+            element->ValueType(Lv2cValueType::Int16)
                 .MinValue(0)
                 .MaxValue(20000);
             element->Value(0);
@@ -240,8 +240,8 @@ FlexTestElement::FlexTestElement()
             controlGrid->AddChild(LabeledEditControl("RowGap", element));
         }
         {
-            auto element = LvtkNumericEditBoxElement::Create();
-            element->ValueType(LvtkValueType::Int16)
+            auto element = Lv2cNumericEditBoxElement::Create();
+            element->ValueType(Lv2cValueType::Int16)
                 .MinValue(0)
                 .MaxValue(20000);
             element->Style().Width(100);
@@ -262,27 +262,27 @@ FlexTestElement::FlexTestElement()
     AddChild(stack);
 }
 
-LvtkFlexGridElement::ptr FlexTestElement::MakeGrid()
+Lv2cFlexGridElement::ptr FlexTestElement::MakeGrid()
 {
 
-    Style().HorizontalAlignment(LvtkAlignment::Stretch);
-    Style().VerticalAlignment(LvtkAlignment::Stretch);
+    Style().HorizontalAlignment(Lv2cAlignment::Stretch);
+    Style().VerticalAlignment(Lv2cAlignment::Stretch);
 
-    auto element = LvtkFlexGridElement::Create();
+    auto element = Lv2cFlexGridElement::Create();
     auto &style = element->Style();
     style
-        .FlexWrap(LvtkFlexWrap::Wrap)
-        .FlexDirection(LvtkFlexDirection::Row)
-        .FlexJustification(LvtkFlexJustification::Start)
-        .FlexAlignItems(LvtkAlignment::Start)
+        .FlexWrap(Lv2cFlexWrap::Wrap)
+        .FlexDirection(Lv2cFlexDirection::Row)
+        .FlexJustification(Lv2cFlexJustification::Start)
+        .FlexAlignItems(Lv2cAlignment::Start)
         .BorderWidth({1})
-        .BorderColor(LvtkColor(1, 1, 1, 0.2))
+        .BorderColor(Lv2cColor(1, 1, 1, 0.2))
         .Padding({1})
-        .VerticalAlignment(LvtkAlignment::Stretch)
-        .HorizontalAlignment(LvtkAlignment::Stretch);
+        .VerticalAlignment(Lv2cAlignment::Stretch)
+        .HorizontalAlignment(Lv2cAlignment::Stretch);
 
-    std::vector<LvtkElement::ptr> flexChildren = MakeFlexChildren();
-    flexChildren[9]->Style().FontSize(LvtkMeasurement::Point(17));
+    std::vector<Lv2cElement::ptr> flexChildren = MakeFlexChildren();
+    flexChildren[9]->Style().FontSize(Lv2cMeasurement::Point(17));
 
     for (auto &child : flexChildren)
     {
@@ -291,21 +291,21 @@ LvtkFlexGridElement::ptr FlexTestElement::MakeGrid()
     return element;
 }
 
-LvtkElement::ptr FlexGridTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr FlexGridTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    LvtkVerticalStackElement::ptr main = LvtkVerticalStackElement::Create();
+    Lv2cVerticalStackElement::ptr main = Lv2cVerticalStackElement::Create();
 
     main->Style()
-        .HorizontalAlignment(LvtkAlignment::Start)
+        .HorizontalAlignment(Lv2cAlignment::Start)
         .Background(theme->paper)
         .Padding({16, 8, 16, 8})
-        .VerticalAlignment(LvtkAlignment::Stretch)
-        .HorizontalAlignment(LvtkAlignment::Stretch);
+        .VerticalAlignment(Lv2cAlignment::Stretch)
+        .HorizontalAlignment(Lv2cAlignment::Stretch);
 
     {
-        LvtkTypographyElement::ptr title = LvtkTypographyElement::Create();
-        title->Variant(LvtkTypographyVariant::Title).Text("Flex-Grid Test");
+        Lv2cTypographyElement::ptr title = Lv2cTypographyElement::Create();
+        title->Variant(Lv2cTypographyVariant::Title).Text("Flex-Grid Test");
 
         title->Style().Padding({0, 8, 0, 8});
         main->AddChild(title);

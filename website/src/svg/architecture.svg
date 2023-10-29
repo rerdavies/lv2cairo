@@ -73,9 +73,9 @@ fwIMAE53TgxbXv7rAAAAAElFTkSuQmCC" transform="matrix(1 0 0 1 -17.8999 56.2002)">
 <text transform="matrix(1 0 0 1 49.271 219.5254)"><tspan x="0" y="0"  font-size="13">Lv2UI </tspan><tspan x="0" y="12"  font-size="10">Lv2 UI Plugin implementation</tspan></text>
 <rect x="90" y="96.5" fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" width="133" height="35"/>
 <rect x="119" y="148.5" fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" width="104" height="35"/>
-<text transform="matrix(1 0 0 1 177.271 31.5254)"><tspan x="0" y="0" fill="#808080"  font-size="13">X11/Lvtk </tspan><tspan x="0" y="12" fill="#808080"  font-size="10">Graphics rendering</tspan></text>
+<text transform="matrix(1 0 0 1 177.271 31.5254)"><tspan x="0" y="0" fill="#808080"  font-size="13">X11/Lv2c </tspan><tspan x="0" y="12" fill="#808080"  font-size="10">Graphics rendering</tspan></text>
 <rect x="168" y="16.5" fill="none" stroke="#999999" stroke-miterlimit="10" width="167" height="35"/>
-<text transform="matrix(1 0 0 1 101.2998 111.5254)"><tspan x="0" y="0"  font-size="13">Lvtk </tspan><tspan x="0" y="12"  font-size="10">Layout, Widgets</tspan></text>
+<text transform="matrix(1 0 0 1 101.2998 111.5254)"><tspan x="0" y="0"  font-size="13">Lv2c </tspan><tspan x="0" y="12"  font-size="10">Layout, Widgets</tspan></text>
 <text transform="matrix(1 0 0 1 128.271 163.5254)"><tspan x="0" y="0"  font-size="13">Lv2ControlView </tspan><tspan x="0" y="12"  font-size="10">Lv2 port controls</tspan></text>
 <text transform="matrix(1 0 0 1 177.0049 323.667)" fill="#808080"  font-size="13">Lv2 Host </text>
 <g>
@@ -125,7 +125,7 @@ fwIMAE53TgxbXv7rAAAAAElFTkSuQmCC" transform="matrix(1 0 0 1 -17.8999 56.2002)">
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 273.8496 89)" font-size="14">Lvtk Library</text>
+<text transform="matrix(1 0 0 1 273.8496 89)" font-size="14">Lv2c Library</text>
 <text transform="matrix(1 0 0 1 226.271 219.5254)"><tspan x="0" y="0"  font-size="13">Lv2Plugin </tspan><tspan x="0" y="12"  font-size="10">Lv2 Audio Plugin implementation</tspan></text>
 <g>
 	<g>

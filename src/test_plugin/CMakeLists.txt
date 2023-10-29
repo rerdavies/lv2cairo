@@ -3,7 +3,7 @@
 #
 cmake_minimum_required (VERSION 3.18)
 
-set(PLUGIN_URI https://rerdavies.github.io/lvtk/test_plugin)
+set(PLUGIN_URI https://rerdavies.github.io/lv2c/test_plugin)
 set(LV2_INSTALL_PATH lv2tk_test.lv2)  # relative to /usr/lib/lv2, or /usr/local/lib/lv2.
 set(PLUGIN_UI_URI ${PLUGIN_URI}-ui )
 set(LV2_SO_NAME lv2tk_test)
@@ -32,7 +32,7 @@ add_custom_target(INSTALL_TEST_PLUGIN
 
 add_custom_command(
     OUTPUT  SamplePluginInfo.hpp          # Treated as relative to CMAKE_CURRENT_BINARY_DIR
-    COMMAND generate_lvtk_plugin_info 
+    COMMAND generate_lv2c_plugin_info 
             ${PLUGIN_URI}
               --ttl ${CMAKE_CURRENT_BINARY_DIR}/manifest.ttl
               --out ${CMAKE_CURRENT_BINARY_DIR}/SamplePluginInfo.hpp 
@@ -40,7 +40,7 @@ add_custom_command(
     DEPENDS 
         ${CMAKE_CURRENT_BINARY_DIR}/manifest.ttl 
         ${CMAKE_CURRENT_BINARY_DIR}/${LV2_SO_NAME}.ttl    
-        generate_lvtk_plugin_info
+        generate_lv2c_plugin_info
 )
 
 add_library(lv2tk_test SHARED
@@ -66,7 +66,7 @@ target_link_directories(
 )
 
 add_library(lv2tk_test_ui SHARED
-    $<TARGET_OBJECTS:lvtk> $<TARGET_OBJECTS:lvtk_ui>
+    $<TARGET_OBJECTS:lv2c> $<TARGET_OBJECTS:lv2c_ui>
 
     SamplePluginUi.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/SamplePluginInfo.hpp 
@@ -89,7 +89,7 @@ target_compile_definitions(
 target_include_directories(lv2tk_test_ui PRIVATE 
     ${CMAKE_CURRENT_BINARY_DIR}
 )
-target_link_libraries(lv2tk_test_ui lvtk lvtk_ui)
+target_link_libraries(lv2tk_test_ui lv2c lv2c_ui)
 
 
 set(INSTALL_DIR /usr/lib/lv2/${LV2_INSTALL_PATH})

@@ -18,42 +18,42 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "PaletteTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkButtonElement.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
-#include "lvtk/LvtkPngElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk/LvtkScrollContainerElement.hpp"
-#include "lvtk/LvtkCieColors.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cButtonElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
+#include "lv2c/Lv2cPngElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c/Lv2cScrollContainerElement.hpp"
+#include "lv2c/Lv2cCieColors.hpp"
 #include "ss.hpp"
 
 using namespace lvtk;
 
-LvtkElement::ptr MakePalette(LvtkTheme::ptr theme,const std::string &color)
+Lv2cElement::ptr MakePalette(Lv2cTheme::ptr theme,const std::string &color)
 {
-    LvtkColor cc{color};
+    Lv2cColor cc{color};
 
     std::vector<int> steps { 50,100,200,300,400,500,600,700,800,900};
 
-    auto main = LvtkFlexGridElement::Create();
+    auto main = Lv2cFlexGridElement::Create();
     main->Style()
-        .FlexDirection(LvtkFlexDirection::Column)
-        .FlexWrap(LvtkFlexWrap::NoWrap)
+        .FlexDirection(Lv2cFlexDirection::Column)
+        .FlexWrap(Lv2cFlexWrap::NoWrap)
         .Width(220)
         ;
 
-    LvtkColor text = LvtkColor(1,1,1);
-    LvtkColor invertedText = LvtkColor(0,0,0);
+    Lv2cColor text = Lv2cColor(1,1,1);
+    Lv2cColor invertedText = Lv2cColor(0,0,0);
 
     for (auto step: steps)
     {
-        LvtkColor currentColor = cc.PaletteColor(step);
-        LvtkHsvColor hsv { currentColor};
-        LvtkColor textColor;
-        LvtkCieLCh cieCurrentColor {currentColor};
+        Lv2cColor currentColor = cc.PaletteColor(step);
+        Lv2cHsvColor hsv { currentColor};
+        Lv2cColor textColor;
+        Lv2cCieLCh cieCurrentColor {currentColor};
 
-        double textDiff = LvtkColor::ColorDifference(text,currentColor);
-        double invertedTextDiff = LvtkColor::ColorDifference(invertedText,currentColor);
+        double textDiff = Lv2cColor::ColorDifference(text,currentColor);
+        double invertedTextDiff = Lv2cColor::ColorDifference(invertedText,currentColor);
 
         if (textDiff > invertedTextDiff)
         {
@@ -61,28 +61,28 @@ LvtkElement::ptr MakePalette(LvtkTheme::ptr theme,const std::string &color)
         } else {
             textColor = invertedText;
         }
-        auto element = LvtkFlexGridElement::Create();
+        auto element = Lv2cFlexGridElement::Create();
         element->Style()
             .Background(currentColor)
             .Color(textColor)
-            .HorizontalAlignment(LvtkAlignment::Stretch)
-            .FlexDirection(LvtkFlexDirection::Row)
-            .FlexWrap(LvtkFlexWrap::NoWrap)
-            .FlexJustification(LvtkFlexJustification::SpaceBetween)
-            .FlexAlignItems(LvtkAlignment::Center)
+            .HorizontalAlignment(Lv2cAlignment::Stretch)
+            .FlexDirection(Lv2cFlexDirection::Row)
+            .FlexWrap(Lv2cFlexWrap::NoWrap)
+            .FlexJustification(Lv2cFlexJustification::SpaceBetween)
+            .FlexAlignItems(Lv2cAlignment::Center)
             .Padding({16});
         {
-            auto textElement = LvtkTypographyElement::Create();
-            textElement->Variant(LvtkTypographyVariant::BodyPrimary)
+            auto textElement = Lv2cTypographyElement::Create();
+            textElement->Variant(Lv2cTypographyVariant::BodyPrimary)
                 .Text(SS(step));
             textElement->Style()
                 .Color(textColor);
             element->AddChild(textElement);
         }
         {
-            auto textElement = LvtkTypographyElement::Create();
+            auto textElement = Lv2cTypographyElement::Create();
 
-            textElement->Variant(LvtkTypographyVariant::BodyPrimary)
+            textElement->Variant(Lv2cTypographyVariant::BodyPrimary)
             .Text(currentColor.ToWebString());
 
             textElement->Style()
@@ -95,26 +95,26 @@ LvtkElement::ptr MakePalette(LvtkTheme::ptr theme,const std::string &color)
     return main;
 }
 
-LvtkElement::ptr PaletteTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr PaletteTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
 
-    auto scrollElement = LvtkScrollContainerElement::Create();
+    auto scrollElement = Lv2cScrollContainerElement::Create();
     scrollElement->HorizontalScrollEnabled(true);
     scrollElement->VerticalScrollOffset(true);
     scrollElement->Style()
-        .HorizontalAlignment(LvtkAlignment::Stretch)
-        .VerticalAlignment(LvtkAlignment::Stretch);
+        .HorizontalAlignment(Lv2cAlignment::Stretch)
+        .VerticalAlignment(Lv2cAlignment::Stretch);
 
     {
-        LvtkFlexGridElement::ptr main = LvtkFlexGridElement::Create();
+        Lv2cFlexGridElement::ptr main = Lv2cFlexGridElement::Create();
 
         main->Style()
             .Background(theme->paper)
             .Padding({24, 16, 24, 16})
             .ColumnGap(16)
-            .FlexDirection(LvtkFlexDirection::Row)
-            .FlexWrap(LvtkFlexWrap::NoWrap);
+            .FlexDirection(Lv2cFlexDirection::Row)
+            .FlexWrap(Lv2cFlexWrap::NoWrap);
         {
             std::vector<std::string> colors{"#F44336", "#405090","#E91E63", "#9C27B0", "#009688"};
 

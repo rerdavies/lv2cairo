@@ -21,8 +21,8 @@
 #include <string>
 #include <sstream>
 #include <locale>
-#include "lvtk/JsonVariant.hpp"
-#include "lvtk/JsonIo.hpp"
+#include "lv2c/JsonVariant.hpp"
+#include "lv2c/JsonIo.hpp"
 #include <iostream>
 
 using namespace lvtk;

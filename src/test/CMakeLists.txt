@@ -8,10 +8,10 @@ find_package(X11)
 
 
 
-add_executable(lvtk_demo  
-    $<TARGET_OBJECTS:lvtk> $<TARGET_OBJECTS:lvtk_ui>
+add_executable(lv2c_demo  
+    $<TARGET_OBJECTS:lv2c> $<TARGET_OBJECTS:lv2c_ui>
 
-    LvtkTestMain.cpp
+    Lv2cTestMain.cpp
     TestPage.hpp
     TunerTestPage.cpp TunerTestPage.hpp
     TableTestPage.cpp TableTestPage.hpp
@@ -37,7 +37,7 @@ add_executable(lvtk_demo
 )
 
 add_custom_command(
-        TARGET lvtk_demo POST_BUILD
+        TARGET lv2c_demo POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${PROJECT_SOURCE_DIR}/resources
                 ${CMAKE_CURRENT_BINARY_DIR}/resources)
@@ -45,16 +45,16 @@ add_custom_command(
 
 
 
-target_include_directories(lvtk_demo PRIVATE
-    ${Lvtk_INCLUDE_DIRS}
+target_include_directories(lv2c_demo PRIVATE
+    ${Lv2c_INCLUDE_DIRS}
 )
 
-target_link_libraries(lvtk_demo 
-    lvtk lvtk_ui pthread
+target_link_libraries(lv2c_demo 
+    lv2c lv2c_ui pthread
 )
 
 add_executable(CatchTest 
-    $<TARGET_OBJECTS:lvtk> $<TARGET_OBJECTS:lvtk_ui>
+    $<TARGET_OBJECTS:lv2c> $<TARGET_OBJECTS:lv2c_ui>
 
     UriTest.cpp
     MaterialColorTest.cpp
@@ -69,12 +69,12 @@ add_executable(CatchTest
 )
 
 target_include_directories(CatchTest PRIVATE
-    ${Lvtk_INCLUDE_DIRS}
-    ${PROJECT_SOURCE_DIR}/src/lvtk_ui
-    lvtk_ui lvtk 
+    ${Lv2c_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/src/lv2c_ui
+    lv2c_ui lv2c 
 )
 
-target_link_libraries(CatchTest lvtk lvtk_ui pthread)
+target_link_libraries(CatchTest lv2c lv2c_ui pthread)
 
 
 add_test (NAME CatchTest COMMAND CatchTest)

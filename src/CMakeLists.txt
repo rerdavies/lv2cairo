@@ -51,12 +51,12 @@ endif()
 
 
 
-message(STATUS "lvtk: CMAKE_DEB_HOST_ARCH: ${CMAKE_DEB_HOST_ARCH}")
-message(STATUS "lvtk: CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
-message(STATUS "lvtk: CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
+message(STATUS "lv2c: CMAKE_DEB_HOST_ARCH: ${CMAKE_DEB_HOST_ARCH}")
+message(STATUS "lv2c: CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
+message(STATUS "lv2c: CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
 
-add_subdirectory(generate_lvtk_plugin_info)
-add_subdirectory(lvtk)
-add_subdirectory(lvtk_ui)
+add_subdirectory(generate_lv2c_plugin_info)
+add_subdirectory(lv2c)
+add_subdirectory(lv2c_ui)
 add_subdirectory(test)
 add_subdirectory(test_plugin)

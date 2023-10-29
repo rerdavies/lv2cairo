@@ -18,69 +18,69 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "EditBoxTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkButtonElement.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk/LvtkEditBoxElement.hpp"
-#include "lvtk/LvtkNumericEditBoxElement.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cButtonElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c/Lv2cEditBoxElement.hpp"
+#include "lv2c/Lv2cNumericEditBoxElement.hpp"
 using namespace lvtk;
 
-LvtkElement::ptr EditBoxTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr EditBoxTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    LvtkVerticalStackElement::ptr main = LvtkVerticalStackElement::Create();
-    main->Style().Background(theme->paper).Padding({24, 16, 24, 16}).VerticalAlignment(LvtkAlignment::Stretch).HorizontalAlignment(LvtkAlignment::Stretch);
+    Lv2cVerticalStackElement::ptr main = Lv2cVerticalStackElement::Create();
+    main->Style().Background(theme->paper).Padding({24, 16, 24, 16}).VerticalAlignment(Lv2cAlignment::Stretch).HorizontalAlignment(Lv2cAlignment::Stretch);
 
     {
-        auto flexGrid = LvtkFlexGridElement::Create();
+        auto flexGrid = Lv2cFlexGridElement::Create();
         main->AddChild(flexGrid);
         flexGrid->Style()
-            .FlexWrap(LvtkFlexWrap::Wrap)
-            .FlexDirection(LvtkFlexDirection::Column)
-            .HorizontalAlignment(LvtkAlignment::Stretch)
-            .VerticalAlignment(LvtkAlignment::Stretch);
+            .FlexWrap(Lv2cFlexWrap::Wrap)
+            .FlexDirection(Lv2cFlexDirection::Column)
+            .HorizontalAlignment(Lv2cAlignment::Stretch)
+            .VerticalAlignment(Lv2cAlignment::Stretch);
         {
             {
-                auto stack = LvtkVerticalStackElement::Create();
+                auto stack = Lv2cVerticalStackElement::Create();
                 stack->Style().Margin({4}).Width(180);
                 flexGrid->AddChild(stack);
-                auto title = LvtkTypographyElement::Create();
-                title->Text("Numeric float").Variant(LvtkTypographyVariant::Caption);
+                auto title = Lv2cTypographyElement::Create();
+                title->Text("Numeric float").Variant(Lv2cTypographyVariant::Caption);
                 title->Style().Margin({4});
                 stack->AddChild(title);
 
-                auto element = LvtkNumericEditBoxElement::Create();
-                element->Style().TextAlign(LvtkTextAlign::Center);
+                auto element = Lv2cNumericEditBoxElement::Create();
+                element->Style().TextAlign(Lv2cTextAlign::Center);
                 stack->AddChild(element);
-                element->Style().HorizontalAlignment(LvtkAlignment::Stretch);
+                element->Style().HorizontalAlignment(Lv2cAlignment::Stretch);
 
 
-                auto valueDisplay = LvtkTypographyElement::Create();
-                valueDisplay->Variant(LvtkTypographyVariant::Caption);
-                valueDisplay->Style().HorizontalAlignment(LvtkAlignment::End);
+                auto valueDisplay = Lv2cTypographyElement::Create();
+                valueDisplay->Variant(Lv2cTypographyVariant::Caption);
+                valueDisplay->Style().HorizontalAlignment(Lv2cAlignment::End);
                 stack->AddChild(valueDisplay);
 
                 element->DisplayValueProperty.Bind(valueDisplay->TextProperty);
             }
             {
-                auto stack = LvtkVerticalStackElement::Create();
+                auto stack = Lv2cVerticalStackElement::Create();
                 stack->Style().Margin({4}).Width(180);
                 flexGrid->AddChild(stack);
-                auto title = LvtkTypographyElement::Create();
-                title->Text("Numeric uint8").Variant(LvtkTypographyVariant::Caption);
+                auto title = Lv2cTypographyElement::Create();
+                title->Text("Numeric uint8").Variant(Lv2cTypographyVariant::Caption);
                 title->Style().Margin({4});
                 stack->AddChild(title);
 
-                auto element = LvtkNumericEditBoxElement::Create();
-                element->ValueType(LvtkValueType::Uint8);
+                auto element = Lv2cNumericEditBoxElement::Create();
+                element->ValueType(Lv2cValueType::Uint8);
                 stack->AddChild(element);
-                element->Style().HorizontalAlignment(LvtkAlignment::Stretch);
+                element->Style().HorizontalAlignment(Lv2cAlignment::Stretch);
 
 
-                auto valueDisplay = LvtkTypographyElement::Create();
-                valueDisplay->Variant(LvtkTypographyVariant::Caption);
-                valueDisplay->Style().HorizontalAlignment(LvtkAlignment::End);
+                auto valueDisplay = Lv2cTypographyElement::Create();
+                valueDisplay->Variant(Lv2cTypographyVariant::Caption);
+                valueDisplay->Style().HorizontalAlignment(Lv2cAlignment::End);
                 stack->AddChild(valueDisplay);
 
                 element->DisplayValueProperty.Bind(valueDisplay->TextProperty);
@@ -88,7 +88,7 @@ LvtkElement::ptr EditBoxTestPage::CreatePageView(LvtkTheme::ptr theme)
 
 
             {
-                auto element = LvtkEditBoxElement::Create();
+                auto element = Lv2cEditBoxElement::Create();
                 flexGrid->AddChild(element);
                 element->Variant(EditBoxVariant::Underline);
                 element->Text("abc").Selection({0, 2});
@@ -96,7 +96,7 @@ LvtkElement::ptr EditBoxTestPage::CreatePageView(LvtkTheme::ptr theme)
                     .Margin({4});
             }
             {
-                auto element = LvtkEditBoxElement::Create();
+                auto element = Lv2cEditBoxElement::Create();
                 flexGrid->AddChild(element);
                 element->Variant(EditBoxVariant::Underline);
                 element->Text("Error")
@@ -106,7 +106,7 @@ LvtkElement::ptr EditBoxTestPage::CreatePageView(LvtkTheme::ptr theme)
                 element->Style().Margin({4});
             }
             {
-                auto element = LvtkEditBoxElement::Create();
+                auto element = Lv2cEditBoxElement::Create();
                 flexGrid->AddChild(element);
                 element->Variant(EditBoxVariant::Underline);
                 element->Text("Centered")
@@ -114,11 +114,11 @@ LvtkElement::ptr EditBoxTestPage::CreatePageView(LvtkTheme::ptr theme)
 
                 element->Style()
                     .Margin({4})
-                    .TextAlign(LvtkTextAlign::Center)
+                    .TextAlign(Lv2cTextAlign::Center)
                     ;
             }
             {
-                auto element = LvtkEditBoxElement::Create();
+                auto element = Lv2cEditBoxElement::Create();
                 flexGrid->AddChild(element);
                 element->Variant(EditBoxVariant::Underline);
                 element->Text("End-aligned")
@@ -126,11 +126,11 @@ LvtkElement::ptr EditBoxTestPage::CreatePageView(LvtkTheme::ptr theme)
 
                 element->Style()
                     .Margin({4})
-                    .TextAlign(LvtkTextAlign::End)
+                    .TextAlign(Lv2cTextAlign::End)
                     ;
             }
             {
-                auto element = LvtkEditBoxElement::Create();
+                auto element = Lv2cEditBoxElement::Create();
                 flexGrid->AddChild(element);
                 element->Variant(EditBoxVariant::Underline);
                 element->Text("")
@@ -138,8 +138,8 @@ LvtkElement::ptr EditBoxTestPage::CreatePageView(LvtkTheme::ptr theme)
 
                 element->Style()
                     .Margin({4})
-                    .TextAlign(LvtkTextAlign::Start)
-                    .FontSize(LvtkMeasurement::Point(24))
+                    .TextAlign(Lv2cTextAlign::Start)
+                    .FontSize(Lv2cMeasurement::Point(24))
                     .Padding({2,12,2,12})
                     .Width(240)
                     ;

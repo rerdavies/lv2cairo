@@ -48,7 +48,7 @@ myprefix:vuOutGroup
 <@PLUGIN_URI@>
         a lv2:Plugin ,
                 lv2:ChorusPlugin ;
-                doap:name "Lvtk Demo Plugin" 
+                doap:name "Lv2c Demo Plugin" 
                 ;
         doap:license <https://opensource.org/license/mit/> ;
         doap:maintainer <http://two-play.com/rerdavies#me> ;
@@ -62,7 +62,7 @@ myprefix:vuOutGroup
 lvtk test plugin
 """ ;
 
-        mod:brand "Lvtk";
+        mod:brand "Lv2c";
         mod:label "Test Plugin";
         lv2:optionalFeature lv2:hardRTCapable;
 

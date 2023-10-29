@@ -18,37 +18,37 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "SvgTestPage.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkButtonElement.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
-#include "lvtk/LvtkSvgElement.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cButtonElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
+#include "lv2c/Lv2cSvgElement.hpp"
 
 using namespace lvtk;
 
-LvtkElement::ptr SvgTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr SvgTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    LvtkVerticalStackElement::ptr main = LvtkVerticalStackElement::Create();
+    Lv2cVerticalStackElement::ptr main = Lv2cVerticalStackElement::Create();
     main->Style().Background(theme->paper).Padding({24, 16, 24, 16})
-    .VerticalAlignment(LvtkAlignment::Stretch)
-    .HorizontalAlignment(LvtkAlignment::Stretch)
+    .VerticalAlignment(Lv2cAlignment::Stretch)
+    .HorizontalAlignment(Lv2cAlignment::Stretch)
     ;
 
     {
-        auto flexGrid = LvtkFlexGridElement::Create();
+        auto flexGrid = Lv2cFlexGridElement::Create();
         main->AddChild(flexGrid);
         flexGrid->Style()
-            .FlexWrap(LvtkFlexWrap::Wrap)
-            .FlexDirection(LvtkFlexDirection::Row)
-            .HorizontalAlignment(LvtkAlignment::Stretch)
-            .VerticalAlignment(LvtkAlignment::Stretch);
+            .FlexWrap(Lv2cFlexWrap::Wrap)
+            .FlexDirection(Lv2cFlexDirection::Row)
+            .HorizontalAlignment(Lv2cAlignment::Stretch)
+            .VerticalAlignment(Lv2cAlignment::Stretch);
         {
             for (double size: std::vector<double>{18,24,36,48,96})
             {
-                auto svg = LvtkSvgElement::Create();
-                svg->Style().Width(size).Height(size).Margin({8}).HorizontalAlignment(LvtkAlignment::Start).VerticalAlignment(LvtkAlignment::Start);
+                auto svg = Lv2cSvgElement::Create();
+                svg->Style().Width(size).Height(size).Margin({8}).HorizontalAlignment(Lv2cAlignment::Start).VerticalAlignment(Lv2cAlignment::Start);
                 svg->Source("fx_dial.svg");
-                svg->Style().TintColor(LvtkColor("#E0E0E080"));
+                svg->Style().TintColor(Lv2cColor("#E0E0E080"));
                 flexGrid->AddChild(svg);
             }
         }

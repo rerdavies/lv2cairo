@@ -34,12 +34,12 @@ namespace lvtk {
         }
 
 
-        virtual LvtkTheme::ptr GetTheme()  override
+        virtual Lv2cTheme::ptr GetTheme()  override
         {
-            return LvtkTheme::Create(true);
+            return Lv2cTheme::Create(true);
         }
 
-        virtual LvtkElement::ptr CreatePageView(LvtkTheme::ptr theme) override;
+        virtual Lv2cElement::ptr CreatePageView(Lv2cTheme::ptr theme) override;
 
 
 

@@ -4,7 +4,7 @@
 cmake_minimum_required (VERSION 3.9)
 
 
-project(Lv2Lvtk VERSION 0.0.1 DESCRIPTION "Lvtk-based LV2 UI library")
+project(Lv2c VERSION 0.0.1 DESCRIPTION "Cairo-based LV2 UI library")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -18,7 +18,7 @@ set(CMAKE_CXX_STANDARD 20 CACHE STRING "Default C++ standard")
 # Include sub-projects.
 add_subdirectory ("src")
 
-export(TARGETS lvtk lvtk_ui NAMESPACE Lvtk FILE FindLvtk.cmake)
+export(TARGETS lv2c lv2c_ui NAMESPACE Lv2c FILE FindLv2c.cmake)
 
 # set(CPACK_GENERATOR "DEB")
 # set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Robin E. R. Davies <rerdavies at gmail.com>") # required

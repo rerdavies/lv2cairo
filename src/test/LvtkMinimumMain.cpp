@@ -22,7 +22,7 @@
 #include <memory.h>
 #include <vector>
 #include <filesystem>
-#include "lvtk/LvtkLog.hpp"
+#include "lv2c/Lv2cLog.hpp"
 #include "ss.hpp"
 
 #include <stdio.h>

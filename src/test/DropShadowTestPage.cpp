@@ -18,92 +18,92 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "DropShadowTestPage.hpp"
-#include "lvtk/LvtkVerticalStackElement.hpp"
-#include "lvtk/LvtkFlexGridElement.hpp"
-#include "lvtk/LvtkTypographyElement.hpp"
-#include "lvtk/LvtkSvgElement.hpp"
-#include "lvtk/LvtkDropShadowElement.hpp"
-#include "lvtk/LvtkDialElement.hpp"
+#include "lv2c/Lv2cVerticalStackElement.hpp"
+#include "lv2c/Lv2cFlexGridElement.hpp"
+#include "lv2c/Lv2cTypographyElement.hpp"
+#include "lv2c/Lv2cSvgElement.hpp"
+#include "lv2c/Lv2cDropShadowElement.hpp"
+#include "lv2c/Lv2cDialElement.hpp"
 
 using namespace lvtk;
 
-LvtkElement::ptr DropShadowTestPage::CreatePageView(LvtkTheme::ptr theme)
+Lv2cElement::ptr DropShadowTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {
 
-    LvtkVerticalStackElement::ptr main = LvtkVerticalStackElement::Create();
-    main->Style().Background(theme->paper).Padding({24, 16, 24, 16}).VerticalAlignment(LvtkAlignment::Stretch).HorizontalAlignment(LvtkAlignment::Stretch);
+    Lv2cVerticalStackElement::ptr main = Lv2cVerticalStackElement::Create();
+    main->Style().Background(theme->paper).Padding({24, 16, 24, 16}).VerticalAlignment(Lv2cAlignment::Stretch).HorizontalAlignment(Lv2cAlignment::Stretch);
 
     {
-        auto flexGrid = LvtkFlexGridElement::Create();
+        auto flexGrid = Lv2cFlexGridElement::Create();
         main->AddChild(flexGrid);
         flexGrid->Style()
-            .FlexWrap(LvtkFlexWrap::Wrap)
-            .FlexDirection(LvtkFlexDirection::Row)
-            .FlexAlignItems(LvtkAlignment::Center)
+            .FlexWrap(Lv2cFlexWrap::Wrap)
+            .FlexDirection(Lv2cFlexDirection::Row)
+            .FlexAlignItems(Lv2cAlignment::Center)
             .RowGap(16)
             .ColumnGap(16)
-            .HorizontalAlignment(LvtkAlignment::Stretch)
-            .VerticalAlignment(LvtkAlignment::Stretch)
+            .HorizontalAlignment(Lv2cAlignment::Stretch)
+            .VerticalAlignment(Lv2cAlignment::Stretch)
 
             ;
         {
-            auto dropShadow = LvtkDropShadowElement::Create();
+            auto dropShadow = Lv2cDropShadowElement::Create();
             flexGrid->AddChild(dropShadow);
-            dropShadow->Variant(LvtkDropShadowVariant::InnerDropShadow)
+            dropShadow->Variant(Lv2cDropShadowVariant::InnerDropShadow)
                 .Radius(4)
                 .XOffset(0)
                 .YOffset(2)
                 .ShadowOpacity(0.75)
-                .ShadowColor(LvtkColor(0, 0, 0))
+                .ShadowColor(Lv2cColor(0, 0, 0))
                 ;
             dropShadow->Style()
                 .Opacity(0.75);
 
             {
-                auto dial = LvtkSvgElement::Create();
+                auto dial = Lv2cSvgElement::Create();
                 dial->Source("fx_dial.svg");
-                dial->Style().Width(48).Height(48).TintColor(LvtkColor(0.9,1,1));
+                dial->Style().Width(48).Height(48).TintColor(Lv2cColor(0.9,1,1));
                 dropShadow->AddChild(dial);
             }
         }
 
         {
-            auto element = LvtkContainerElement::Create();
+            auto element = Lv2cContainerElement::Create();
             element->Style()
-                .Background(LvtkColor(1, 1, 1))
+                .Background(Lv2cColor(1, 1, 1))
                 .Padding({8});
 
             flexGrid->AddChild(element);
 
-            auto dropShadow = LvtkDropShadowElement::Create();
+            auto dropShadow = Lv2cDropShadowElement::Create();
             element->AddChild(dropShadow);
             dropShadow->Radius(6.0).ShadowOpacity(0.5).XOffset(0).YOffset(4);
             {
 
-                auto typography = LvtkTypographyElement::Create();
+                auto typography = Lv2cTypographyElement::Create();
                 dropShadow->AddChild(typography);
                 typography->Text("Purity ")
-                    .Variant(LvtkTypographyVariant::Title);
+                    .Variant(Lv2cTypographyVariant::Title);
                 typography->Style()
-                    .FontSize(LvtkMeasurement::Point(30))
-                    .Color(LvtkColor(1, 1, 1))
-                    .FontStyle(LvtkFontStyle::Normal)
-                    .FontWeight(LvtkFontWeight::Heavy)
+                    .FontSize(Lv2cMeasurement::Point(30))
+                    .Color(Lv2cColor(1, 1, 1))
+                    .FontStyle(Lv2cFontStyle::Normal)
+                    .FontWeight(Lv2cFontWeight::Heavy)
                     .Margin(4);
             }
         }
 
         {
-            auto container = LvtkContainerElement::Create();
+            auto container = Lv2cContainerElement::Create();
             container->Style()
-                .Background(LvtkColor(1,1,1))
+                .Background(Lv2cColor(1,1,1))
                 .Padding({30});
             {
-                auto dropShadow = LvtkDropShadowElement::Create();
+                auto dropShadow = Lv2cDropShadowElement::Create();
                 dropShadow->Radius(6).ShadowOpacity(0.5).XOffset(2).YOffset(4);
-                dropShadow->Style().Background(LvtkColor(1,1,1));
+                dropShadow->Style().Background(Lv2cColor(1,1,1));
                 {
-                    auto element = LvtkElement::Create();
+                    auto element = Lv2cElement::Create();
                     element->Style()
                         .Width({100})
                         .Height({100})
@@ -117,18 +117,18 @@ LvtkElement::ptr DropShadowTestPage::CreatePageView(LvtkTheme::ptr theme)
             flexGrid->AddChild(container);
         }
         {
-            auto container = LvtkContainerElement::Create();
+            auto container = Lv2cContainerElement::Create();
             container->Style()
-                .Background(LvtkColor(1,1,1))
+                .Background(Lv2cColor(1,1,1))
                 .Padding({30});
             {
-                auto dropShadow = LvtkDropShadowElement::Create();
+                auto dropShadow = Lv2cDropShadowElement::Create();
                 dropShadow->Radius(5).ShadowOpacity(0.6).XOffset(2).YOffset(3);
-                dropShadow->Style().Background(LvtkColor(1,1,1)).RoundCorners({8});
+                dropShadow->Style().Background(Lv2cColor(1,1,1)).RoundCorners({8});
                 {
-                    auto element = LvtkElement::Create();
+                    auto element = Lv2cElement::Create();
                     element->Style()
-                        .Background(LvtkColor(1,1,1))
+                        .Background(Lv2cColor(1,1,1))
                         .Width({100})
                         .Height({100})
                         .RoundCorners({8})
@@ -144,20 +144,20 @@ LvtkElement::ptr DropShadowTestPage::CreatePageView(LvtkTheme::ptr theme)
 
 
         {
-            auto dropShadow = LvtkDropShadowElement::Create();
+            auto dropShadow = Lv2cDropShadowElement::Create();
             dropShadow->Style().Margin(12);
             dropShadow->Radius(4).ShadowOpacity(0.75).XOffset(1).YOffset(2);
             flexGrid->AddChild(dropShadow);
             {
-                auto typography = LvtkTypographyElement::Create();
+                auto typography = Lv2cTypographyElement::Create();
                 dropShadow->AddChild(typography);
                 typography->Text("Truth")
-                    .Variant(LvtkTypographyVariant::Title);
+                    .Variant(Lv2cTypographyVariant::Title);
                 typography->Style()
-                    .FontSize(LvtkMeasurement::Point(30))
-                    .Color(LvtkColor(1, 1, 1))
-                    .FontStyle(LvtkFontStyle::Italic)
-                    .FontWeight(LvtkFontWeight::Heavy);
+                    .FontSize(Lv2cMeasurement::Point(30))
+                    .Color(Lv2cColor(1, 1, 1))
+                    .FontStyle(Lv2cFontStyle::Italic)
+                    .FontWeight(Lv2cFontWeight::Heavy);
             }
         }
     }
