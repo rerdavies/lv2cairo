@@ -19,7 +19,7 @@ const Home = () => {
                         display: floatLogo? undefined: "none"}} />
 
                 <Typography variant="h2" sx={{ marginBottom: 4 }}>
-                    <span style={{fontWeight: 900, color: "#505050"}}>LVtk</span>
+                    <span style={{fontWeight: 900, color: "#505050"}}>Lv2Cairo</span>
                 </Typography>
                 <SmallPrint>
                     { Lv2cVersion() }
