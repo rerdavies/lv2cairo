@@ -46,7 +46,9 @@ namespace lvtk::ui {
         Lv2TunerElement();
         virtual ~Lv2TunerElement();
 
-        BINDING_PROPERTY(ReferenceFrequency,double,440.0)        
+        BINDING_PROPERTY(ReferenceFrequency,double,440.0)      
+        BINDING_PROPERTY(ValueIsMidiNote,bool ,true)        
+
     protected:
         virtual bool WillDraw() const override { return true; }
         virtual void OnMount() override;

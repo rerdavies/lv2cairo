@@ -632,7 +632,9 @@ namespace lvtk::ui
         else
         {
 
-            if (portInfo.designation() == PIPEDAL_UI__tunerFrequency)
+            if (portInfo.units() == Lv2Units::midiNote  // use this
+                || portInfo.designation() == PIPEDAL_UI__tunerFrequency  // deprecated (not this)
+                )
             {
                 return Lv2PortViewType::Tuner;
             }

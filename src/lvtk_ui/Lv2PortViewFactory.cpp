@@ -158,6 +158,7 @@ LvtkElement::ptr Lv2PortViewFactory::CreateTuner(Lv2PortViewController *viewCont
         .HorizontalAlignment(LvtkAlignment::Center)
         .VerticalAlignment(LvtkAlignment::Center);
 
+    element->ValueIsMidiNote(viewController->PortInfo().units() == Lv2Units::midiNote);
     viewController->PortValueProperty.Bind(element->ValueProperty);
 
     return element;

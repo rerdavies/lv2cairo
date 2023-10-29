@@ -208,13 +208,19 @@ void Lv2TunerElement::OnDraw(LvtkDrawingContext &dc)
         dc.fill();
 
 
-        double frequency = Value();
         double midiNote;
-        if (frequency == 0)
+        if (this->ValueIsMidiNote())
         {
-            midiNote = -1;
-        } {
-            midiNote = std::log2(frequency/ReferenceFrequency())*12 + 69;
+            midiNote = Value();
+        } else {
+
+            double frequency = Value();
+            if (frequency <= 0)
+            {
+                midiNote = -1;
+            } {
+                midiNote = std::log2(frequency/ReferenceFrequency())*12 + 69;
+            }
         }
 
         DrawText(dc,midiNote);
