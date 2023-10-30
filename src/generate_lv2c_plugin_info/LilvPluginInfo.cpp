@@ -35,7 +35,7 @@
 #include <string.h>
 
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 using namespace lv2;
 
 static constexpr const char *RDFS__comment = "http://www.w3.org/2000/01/rdf-schema#"

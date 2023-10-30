@@ -35,7 +35,7 @@
 #include "PiPedalUI.hpp"
 #endif
 
-namespace lvtk::ui {
+namespace lv2c::ui {
 
 #ifndef LV2_PROPERTY_GETSET
 #define LV2_PROPERTY_GETSET(name)             \

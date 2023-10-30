@@ -38,12 +38,12 @@
 
 struct LV2_Atom_Forge_;
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cWindow;
     class Lv2cSettingsFile;
 }
-namespace lvtk::ui
+namespace lv2c::ui
 {
     class Lv2PortViewFactory;
     class Lv2FileDialog;

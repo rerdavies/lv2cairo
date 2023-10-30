@@ -24,7 +24,7 @@
 #include "ss.hpp"
 #include "lv2c/Lv2cSvg.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 void Lv2cSvgElement::Load()
 {

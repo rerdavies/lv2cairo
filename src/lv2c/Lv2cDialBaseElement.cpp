@@ -20,7 +20,7 @@
 #include "lv2c/Lv2cDialBaseElement.hpp"
 #include "lv2c/Lv2cWindow.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cDialBaseElement::Lv2cDialBaseElement()
 {

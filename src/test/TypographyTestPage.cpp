@@ -21,7 +21,7 @@
 #include "lv2c/Lv2cTypographyElement.hpp"
 #include "lv2c/Lv2cVerticalStackElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cElement::ptr TypographyTestPage::CreatePageView(Lv2cTheme::ptr theme) 
 {

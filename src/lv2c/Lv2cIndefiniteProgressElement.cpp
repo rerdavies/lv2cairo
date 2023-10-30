@@ -2,7 +2,7 @@
 #include "lv2c/Lv2cWindow.hpp"
 #include "lv2c/Lv2cDrawingContext.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cIndefiniteProgressElement::Lv2cIndefiniteProgressElement()
 {

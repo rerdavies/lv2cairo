@@ -21,7 +21,7 @@
 #include "Lv2cValueElement.hpp"
 #include "Lv2cBindingProperty.hpp"
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cVuElement : public Lv2cValueElement
     {

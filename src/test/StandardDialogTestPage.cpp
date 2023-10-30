@@ -24,8 +24,8 @@
 #include "lv2c/Lv2cVerticalStackElement.hpp"
 #include "lv2c_ui/Lv2FileDialog.hpp"
 
-using namespace lvtk;
-using namespace lvtk::ui;
+using namespace lv2c;
+using namespace lv2c::ui;
 
 
 class CustomMessageDialog: public Lv2cMessageDialog {

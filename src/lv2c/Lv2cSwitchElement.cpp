@@ -3,9 +3,9 @@
 #include "lv2c/Lv2cWindow.hpp"
 #include <numbers>
 
-using namespace lvtk;
+using namespace lv2c;
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cToggleTrackElement : public Lv2cElement
     {

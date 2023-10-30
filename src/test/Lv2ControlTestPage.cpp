@@ -27,8 +27,8 @@
 #include "lv2c/Lv2cGroupElement.hpp"
 #include "lv2c/Lv2cScrollContainerElement.hpp"
 
-using namespace lvtk;
-using namespace lvtk::ui;
+using namespace lv2c;
+using namespace lv2c::ui;
 
 Lv2cElement::ptr Lv2ControlTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {

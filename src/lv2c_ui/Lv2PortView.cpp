@@ -28,9 +28,9 @@
 #define XK_MISCELLANY
 #include "X11/keysymdef.h"
 
-using namespace lvtk;
+using namespace lv2c;
 
-namespace lvtk::ui
+namespace lv2c::ui
 {
     class Lv2PortElement : public Lv2cStereoValueElement
     {

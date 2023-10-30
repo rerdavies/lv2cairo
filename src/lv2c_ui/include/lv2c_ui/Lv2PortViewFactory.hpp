@@ -23,11 +23,11 @@
 #include "lv2c/Lv2cDropdownElement.hpp"
 #include <vector>
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cTheme;
 }
 
-namespace lvtk::ui
+namespace lv2c::ui
 {
     class Lv2PortViewController;
 

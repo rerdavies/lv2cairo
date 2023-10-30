@@ -25,7 +25,7 @@
 #include "lv2c/JsonIo.hpp"
 #include <iostream>
 
-using namespace lvtk;
+using namespace lv2c;
 
 void SerializationTest(const json_variant &variant)
 {

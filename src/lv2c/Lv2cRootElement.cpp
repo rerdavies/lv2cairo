@@ -23,7 +23,7 @@
 #define XK_MISCELLANY
 #include <X11/keysymdef.h>
 
-using namespace lvtk;
+using namespace lv2c;
 
 void Lv2cRootElement::AddChildEx(
     ChildType childType,

@@ -35,7 +35,7 @@
 #include <X11/keysymdef.h>
 
 using namespace std;
-using namespace lvtk;
+using namespace lv2c;
 
 // native window for x11/cairo
 #include "lv2c/Lv2cLog.hpp"
@@ -46,7 +46,7 @@ using namespace lvtk;
 
 std::vector<std::filesystem::path> Lv2cWindow::resourceDirectories;
 
-namespace lvtk
+namespace lv2c
 {
     class FocusNavigationSelector
     {

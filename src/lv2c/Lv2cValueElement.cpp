@@ -19,7 +19,7 @@
 
 #include "lv2c/Lv2cValueElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cValueElement::Lv2cValueElement()
 {

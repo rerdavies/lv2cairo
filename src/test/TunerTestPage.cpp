@@ -26,8 +26,8 @@
 
 #include "lv2c/Lv2cVerticalStackElement.hpp"
 
-using namespace lvtk;
-using namespace lvtk::ui;
+using namespace lv2c;
+using namespace lv2c::ui;
 
 
 

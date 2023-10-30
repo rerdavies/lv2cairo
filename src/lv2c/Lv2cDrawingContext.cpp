@@ -23,7 +23,7 @@
 #include <numbers>
 #include "ss.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cPattern Lv2cPattern::radial_gradient(double cx, double cy, double radius, const std::vector<Lv2cColorStop> &colorStops)
 {
@@ -192,7 +192,7 @@ Lv2cSurface Lv2cSurface::create_from_png(const std::string &filename)
     case cairo_status_t::x:  \
         return #x;
 
-const std::string lvtk::Lv2cStatusMessage(cairo_status_t status)
+const std::string lv2c::Lv2cStatusMessage(cairo_status_t status)
 {
     switch (status)
     {

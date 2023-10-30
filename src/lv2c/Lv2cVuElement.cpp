@@ -19,7 +19,7 @@
 
 #include "lv2c/Lv2cVuElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 void Lv2cVuElement::OnMount()
 {

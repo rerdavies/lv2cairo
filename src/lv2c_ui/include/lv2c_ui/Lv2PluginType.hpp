@@ -43,7 +43,7 @@
 #include "json.hpp"
 #endif
 
-namespace lvtk::ui
+namespace lv2c::ui
 {
 
     enum class PluginType

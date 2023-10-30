@@ -22,7 +22,7 @@
 #include "lv2c_ui/Lv2Units.hpp"
 
 using namespace std;
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 template <typename T>
 std::string
@@ -239,12 +239,12 @@ void ClassFileWriter::Write(const std::shared_ptr<Lv2PluginInfo> pluginInfo)
         Indent();
     }
     {
-        s << Tab() << "class " << className << ": public lvtk::ui::Lv2PluginInfo"
+        s << Tab() << "class " << className << ": public lv2c::ui::Lv2PluginInfo"
           << "{" << endl;
         s << Tab() << "public:" << endl;
         Indent();
         {
-            s << Tab() << "using super=lvtk::ui::Lv2PluginInfo;" << endl;
+            s << Tab() << "using super=lv2c::ui::Lv2PluginInfo;" << endl;
             s << Tab() << "using ptr=std::shared_ptr<" << className << ">;" << endl;
             s << Tab() << "static ptr Create() { return std::make_shared<" << className << ">(); }" << endl;
             s << endl;
@@ -252,7 +252,7 @@ void ClassFileWriter::Write(const std::shared_ptr<Lv2PluginInfo> pluginInfo)
             s << Tab() << className << "() {" << endl;
             Indent();
             {
-                s << Tab() << "using namespace lvtk::ui;" << endl;
+                s << Tab() << "using namespace lv2c::ui;" << endl;
                 s << endl;
 
                 WRITE_PROPERTY(pluginInfo, uri)

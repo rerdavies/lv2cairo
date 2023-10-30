@@ -20,7 +20,7 @@
 #pragma once
 
 #include "Lv2cFlexGridElement.hpp"
-namespace lvtk
+namespace lv2c
 {
     class Lv2cHorizontalStackElement : public Lv2cFlexGridElement
     {

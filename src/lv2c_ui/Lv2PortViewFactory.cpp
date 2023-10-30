@@ -25,8 +25,8 @@
 #define XK_MISCELLANY
 #include "X11/keysymdef.h"
 
-using namespace lvtk;
-using namespace lvtk::ui;
+using namespace lv2c;
+using namespace lv2c::ui;
 
 double Lv2PortViewFactory::EditControlHeight() const
 {
@@ -317,7 +317,7 @@ Lv2PortViewFactory::ValueControlStyle Lv2PortViewFactory::GetValueControlStyle(L
     }
 }
 
-namespace lvtk::implementation
+namespace lv2c::implementation
 {
     class EditContainerElement : public Lv2cContainerElement
     {
@@ -388,7 +388,7 @@ namespace lvtk::implementation
     }
 }
 
-using namespace lvtk::implementation;
+using namespace lv2c::implementation;
 Lv2cElement::ptr Lv2PortViewFactory::CreateEditArea(Lv2PortViewController *viewController)
 {
     auto controlStyle = GetValueControlStyle(viewController);

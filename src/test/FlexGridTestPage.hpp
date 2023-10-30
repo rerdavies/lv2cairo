@@ -21,7 +21,7 @@
 
 #include "TestPage.hpp"
 
-namespace lvtk {
+namespace lv2c {
 class FlexGridTestPage : public TestPage
 {
 public:

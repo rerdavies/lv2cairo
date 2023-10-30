@@ -22,7 +22,7 @@
 #include "Lv2cContainerElement.hpp"
 #include "Lv2cBindingProperty.hpp"
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cScrollBarElement;
 
@@ -40,7 +40,7 @@ namespace lvtk
     /// to ensure that the child's active content doesn't get displayed under a horizontal scrollbar.
     ///
     /// Children of Lv2cScrollContainers have constrained horizontal layout if the horizontal scrollbar is disabled
-    /// A child with 100% width will align with the right border of the lvtk element, and unconstrained horizontal 
+    /// A child with 100% width will align with the right border of the lv2cairo element, and unconstrained horizontal 
     /// layout if the horizontal scrollbar is enabled. Similarly, children have constrained or unconstrained vertical
     /// layout if the vertical scrollbar is disabled or enabled, respectively.
 

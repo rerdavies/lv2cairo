@@ -24,11 +24,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <sstream>
 #include <fstream>
 
-using namespace lvtk;
+using namespace lv2c;
 
 static std::string monoFontFamily = "Lucida Console,Consolas,Liberation Mono,Monaco,Courier,monospace";
 
-namespace lvtk::implementation
+namespace lv2c::implementation
 {
     class MarkdownTypographyElement : public Lv2cTypographyElement
     {
@@ -71,7 +71,7 @@ namespace lvtk::implementation
     };
 }
 
-using namespace lvtk::implementation;
+using namespace lv2c::implementation;
 
 Lv2cMarkdownElement::Lv2cMarkdownElement()
 {

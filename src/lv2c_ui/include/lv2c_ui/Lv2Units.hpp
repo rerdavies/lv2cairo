@@ -41,7 +41,7 @@
 #include <string>
 // #include "json.hpp"
 
-namespace lvtk::ui
+namespace lv2c::ui
 {
 
     enum class Lv2Units

@@ -19,7 +19,7 @@
 
 #include "lv2c/Lv2cSlideInOutAnimationElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cSlideInOutAnimationElement::Lv2cSlideInOutAnimationElement()
 {

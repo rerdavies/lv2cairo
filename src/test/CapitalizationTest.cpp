@@ -25,7 +25,7 @@
 #include <iostream>
 
 
-using namespace lvtk;
+using namespace lv2c;
 
 
 TEST_CASE("Unicode capitalization test", "[capitalization]")

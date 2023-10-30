@@ -21,7 +21,7 @@
 
 #include "Lv2cSwitchElement.hpp"
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cOnOffSwitchElement: public Lv2cSwitchElement 
     {
     public:

@@ -27,7 +27,7 @@
 
 #include "JsonVariant.hpp"
 
-namespace lvtk
+namespace lv2c
 {
 
     class json_exception : public std::runtime_error

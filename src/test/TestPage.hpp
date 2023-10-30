@@ -23,9 +23,9 @@
 #include "lv2c/Lv2cTheme.hpp"
 #include <string>
 
-using namespace lvtk;
+using namespace lv2c;
 
-namespace lvtk
+namespace lv2c
 {
     class TestPage
     {

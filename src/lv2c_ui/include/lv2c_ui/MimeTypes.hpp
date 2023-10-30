@@ -24,7 +24,7 @@
 #include <set>
 #include <filesystem>
 
-namespace lvtk::ui {
+namespace lv2c::ui {
     class MimeTypes {
     public:
         static const std::string& MimeTypeFromPath(const std::filesystem::path &path);

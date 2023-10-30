@@ -21,7 +21,7 @@
 #include "lv2c/Lv2cValueElement.hpp"
 #include <chrono>
 
-namespace lvtk
+namespace lv2c
 {
     enum class Lv2cLampVariant {
         // The lamp can take intermediate values.

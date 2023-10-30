@@ -35,7 +35,7 @@
 #include <iostream>
 #include <unordered_set>
 #include <set>
-namespace lvtk
+namespace lv2c
 {
     class json_reader;
     class json_writer;

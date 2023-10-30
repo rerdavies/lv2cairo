@@ -22,7 +22,7 @@
 #include <cmath>
 #include <iostream>
 
-using namespace lvtk;
+using namespace lv2c;
 
 
 static bool ApproxEqual(double v1, double v2)
@@ -106,7 +106,7 @@ static void TestLv2cColorBlending()
     }
 }
 
-using namespace lvtk::implementation;
+using namespace lv2c::implementation;
 
 static void TestLv2cLinearColor()
 {

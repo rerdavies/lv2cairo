@@ -23,7 +23,7 @@
 #include <cstdint>
 #include <string>
 
-namespace lvtk {
+namespace lv2c {
     // return the names of various commonly used keysyms 
     // for debug use.
     std::string GetKeysymName(uint32_t keySym);

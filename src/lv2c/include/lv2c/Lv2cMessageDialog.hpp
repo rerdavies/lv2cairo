@@ -22,7 +22,7 @@
 #include "Lv2cDialog.hpp"
 #include <string>
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cButtonElement;
 

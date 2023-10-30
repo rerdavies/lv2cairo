@@ -36,7 +36,7 @@
 
 */
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 constexpr size_t MAX_REGISTRATION = 100;
 static bool gMaxRegistrationsExceeded = false;

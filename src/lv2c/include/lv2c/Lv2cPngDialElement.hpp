@@ -25,7 +25,7 @@
 #include "Lv2cBindingProperty.hpp"
 #include "Lv2cPngStripElement.hpp"
 
-namespace lvtk
+namespace lv2c
 {
 
     /// @brief A dial control element.

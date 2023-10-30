@@ -30,7 +30,7 @@
 #include <memory>
 #include <sstream>
 
-using namespace lvtk;
+using namespace lv2c;
 
 json_variant::~json_variant()
 {

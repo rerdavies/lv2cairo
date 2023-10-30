@@ -20,7 +20,7 @@
 #include "lv2c/Lv2cDamageList.hpp"
 #include <cmath>
 
-using namespace lvtk;
+using namespace lv2c;
 
 
 int64_t Lv2cDamageList::Width() const

@@ -1,8 +1,8 @@
-sudo cp -T assets/oo-icon.svg /usr/share/icons/hicolor/symbolic/apps/com.twoplay.lv2cairo-plugin-symbolic.svg
-sudo cp -T assets/oo-icon.svg /usr/share/icons/hicolor/scalable/apps/com.twoplay.lv2cairo-plugin.svg
+sudo cp -T assets/oo-icon.svg /usr/share/icons/hicolor/symbolic/apps/lv2c.github.io-plugin-symbolic.svg
+sudo cp -T assets/oo-icon.svg /usr/share/icons/hicolor/scalable/apps/lv2c.github.io-plugin.svg
 #sudo cp -T assets/oo-icon.png /usr/share/icons//breeze-dark/apps/48/cairotestmain.png
 sudo touch /usr/share/icons/hicolor
 sudo touch /usr/share/icons/breeze-dark
-xdg-desktop-menu uninstall assets/com.twoplay.lv2cairo-plugin.desktop
-xdg-desktop-menu install assets/com.twoplay.lv2cairo-plugin.desktop
+xdg-desktop-menu uninstall assets/lv2c.github.io-plugin.desktop
+xdg-desktop-menu install assets/lv2c.github.io-plugin.desktop
 xdg-desktop-menu forceupdate

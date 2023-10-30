@@ -26,7 +26,7 @@
 #include "lv2c/Lv2cNumericEditBoxElement.hpp"
 #include "lv2c/Lv2cTypographyElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 constexpr size_t TABLE_ROWS = 5;
 

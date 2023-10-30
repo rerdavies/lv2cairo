@@ -27,7 +27,7 @@
 #include "lv2c/Lv2cCieColors.hpp"
 #include "ss.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cElement::ptr MakePalette(Lv2cTheme::ptr theme,const std::string &color)
 {

@@ -19,7 +19,7 @@
 
 #include "lv2c/Lv2cContainerElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 void Lv2cContainerElement::AddChild(std::shared_ptr<Lv2cElement> child)
 {

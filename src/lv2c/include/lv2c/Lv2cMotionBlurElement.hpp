@@ -23,7 +23,7 @@
 
 #include "Lv2cBindingProperty.hpp"
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cSurface;
 
     class Lv2cMotionBlurElement : public Lv2cContainerElement {

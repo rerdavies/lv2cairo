@@ -20,8 +20,8 @@
 #include "SamplePluginInfo.hpp"
 #include "lv2c_ui/Lv2UI.hpp"
 
-using namespace lvtk::ui;
-using namespace lvtk;
+using namespace lv2c::ui;
+using namespace lv2c;
 
 class SamplePlugin: public Lv2UI {
 public:

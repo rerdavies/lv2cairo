@@ -18,8 +18,8 @@ function DocGettingStarted() {
         <Subheading>Getting the source</Subheading>
         <P>The source code for Lv2Cairo is available at <br/>
         <Code>
-            <a href={"https://github.com/rerdavies/lvtk"}>
-            https://github.com/rerdavies/lvtk
+            <a href={"https://github.com/rerdavies/lv2c"}>
+            https://github.com/rerdavies/lv2c
             </a>
             </Code>
         </P>

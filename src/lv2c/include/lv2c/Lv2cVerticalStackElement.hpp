@@ -21,7 +21,7 @@
 
 #include "Lv2cContainerElement.hpp"
 
-namespace lvtk {
+namespace lv2c {
 
     class Lv2cVerticalStackElement : public Lv2cContainerElement
     {

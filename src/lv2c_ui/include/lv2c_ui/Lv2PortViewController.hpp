@@ -25,7 +25,7 @@
 #include <memory>
 #include "Lv2Units.hpp"
 
-namespace lvtk::ui {
+namespace lv2c::ui {
     class Lv2PortInfo;
 
     enum Lv2PortViewType {

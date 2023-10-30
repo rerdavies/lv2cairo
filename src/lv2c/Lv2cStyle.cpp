@@ -21,7 +21,7 @@
 #include "lv2c/Lv2cElement.hpp"
 #include "lv2c/Lv2cTheme.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 template <typename T>
 T Lv2cStyle::FromSelfOrClassesOrParent(InheritOptionalPtr<T> pMember, T defaultValue) const

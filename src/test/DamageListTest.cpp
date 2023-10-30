@@ -24,7 +24,7 @@
 #include <iostream>
 #include <cstdlib>
 using namespace std;
-using namespace lvtk;
+using namespace lv2c;
 
 
 void Check2RectComposition(const Lv2cRectangle &c, const Lv2cRectangle &c2, size_t expectedRects)

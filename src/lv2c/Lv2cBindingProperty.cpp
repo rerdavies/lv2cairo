@@ -21,12 +21,12 @@
 #include "lv2c/Lv2cObject.hpp"
 #include <atomic>
 
-using namespace lvtk;
+using namespace lv2c;
 
 std::atomic<uint64_t> gNextHandle;
 
 // explicit specializations of bindings..
-namespace lvtk
+namespace lv2c
 {
     template class Observable<double>;
     template class Lv2cBindingProperty<double>;
@@ -63,16 +63,16 @@ MapRangeBindingTransform::MapRangeBindingTransform(double sourceMinVal, double s
 {
 }
 
-uint64_t lvtk::implementation::nextHandle()
+uint64_t lv2c::implementation::nextHandle()
 {
     return ++gNextHandle;
 }
 
-uint64_t lvtk::implementation::handleCount = 0;
-uint64_t lvtk::implementation::bindingRecordCount = 0;
-uint64_t lvtk::implementation::observerLinkCount = 0;
+uint64_t lv2c::implementation::handleCount = 0;
+uint64_t lv2c::implementation::bindingRecordCount = 0;
+uint64_t lv2c::implementation::observerLinkCount = 0;
 
-namespace lvtk::implementation
+namespace lv2c::implementation
 {
     ObserverLink::ObserverLink()
     {
@@ -131,4 +131,4 @@ namespace lvtk::implementation
         }
     }
 
-} // namespace lvtk::implementation
+} // namespace lv2c::implementation

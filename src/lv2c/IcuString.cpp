@@ -33,7 +33,7 @@
 #include <sstream>
 
 using namespace icu;
-using namespace lvtk;
+using namespace lv2c;
 
 IcuString::~IcuString()
 {

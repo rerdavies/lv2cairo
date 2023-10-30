@@ -25,7 +25,7 @@
 #include "lv2c/Lv2cBindingProperty.hpp"
 #include "lv2c/Lv2cNumericEditBoxElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 static std::vector<Lv2cElement::ptr> MakeFlexChildren()
 {

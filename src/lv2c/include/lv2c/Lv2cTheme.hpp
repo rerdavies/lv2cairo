@@ -25,7 +25,7 @@
 #include "Lv2cStyle.hpp"
 #include "Lv2cUserData.hpp"
 
-namespace lvtk {
+namespace lv2c {
 
     class Lv2cThemeColors {
     public:

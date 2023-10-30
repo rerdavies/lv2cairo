@@ -21,7 +21,7 @@
 
 #include "Lv2cContainerElement.hpp"
 #include "Lv2cBindingProperty.hpp"
-namespace lvtk {
+namespace lv2c {
 
 
     /// @brief The common base class of value controls.

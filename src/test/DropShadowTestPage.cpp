@@ -25,7 +25,7 @@
 #include "lv2c/Lv2cDropShadowElement.hpp"
 #include "lv2c/Lv2cDialElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cElement::ptr DropShadowTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {

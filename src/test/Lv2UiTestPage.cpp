@@ -22,9 +22,9 @@
 #include "lv2c_ui/Lv2UI.hpp"
 #include "lv2c/Lv2cScrollContainerElement.hpp"
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
-namespace lvtk
+namespace lv2c
 {
 
     class SamplePluginUI : public Lv2UI

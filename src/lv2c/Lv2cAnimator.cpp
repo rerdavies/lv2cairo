@@ -20,7 +20,7 @@
 #include "lv2c/Lv2cAnimator.hpp"
 #include "lv2c/Lv2cWindow.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cAnimator::~Lv2cAnimator()
 {

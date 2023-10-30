@@ -20,7 +20,7 @@
 #include "lv2c/Lv2cTableElement.hpp"
 #include "lv2c/Lv2cLog.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cTableElement &Lv2cTableElement::AddRow(const std::vector<Lv2cElement::ptr> &children)
 {

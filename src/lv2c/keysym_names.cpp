@@ -29,14 +29,14 @@
 
 using namespace std;
 
-using namespace lvtk;
+using namespace lv2c;
 
 static std::map<uint32_t, std::string> kkMap;
 
 #define KK(keycode) \
     kkMap[keycode] = #keycode;
 
-std::string lvtk::GetKeysymName(uint32_t keySym)
+std::string lv2c::GetKeysymName(uint32_t keySym)
 {
     if (kkMap.size() == 0)
     {

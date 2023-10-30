@@ -36,7 +36,7 @@
 #include "lv2c_ui/MimeTypes.hpp"
 
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 using namespace lv2;
 using namespace std;
 

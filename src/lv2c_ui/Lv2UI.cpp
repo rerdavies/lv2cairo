@@ -56,8 +56,8 @@
 struct LV2_Atom_Forge_ : public LV2_Atom_Forge
 {
 };
-using namespace lvtk::ui;
-using namespace lvtk;
+using namespace lv2c::ui;
+using namespace lv2c;
 using namespace pipedal;
 
 void Lv2UI::SetCreateWindowDefaults()
@@ -90,11 +90,11 @@ void Lv2UI::SetCreateWindowDefaults()
 
     if (params.x11Windowclass.length() == 0)
     {
-        params.x11Windowclass = "com.twoplay.lvtk-plugin"; // Maybe used for settings by Window Managers.
+        params.x11Windowclass = "lv2c.github.io-plugin"; // Maybe used for settings by Window Managers.
     }
     if (params.gtkApplicationId.length() == 0)
     {
-        params.gtkApplicationId = "com.twoplay.lvtk-plugin"; // Connects KDE Plasma and Gnome Destkop to a .desktop file that has the actual icon reference.
+        params.gtkApplicationId = "lv2c.github.io-plugin"; // Connects KDE Plasma and Gnome Destkop to a .desktop file that has the actual icon reference.
     }
     if (params.title.length() == 0)
     {
@@ -132,7 +132,7 @@ static std::string MakeSettingsKey(const std::string &pluginUri)
 }
 Lv2UI::Lv2UI(std::shared_ptr<Lv2PluginInfo> pluginInfo, const Lv2cCreateWindowParameters &createWindowParameters_)
     : pluginInfo(pluginInfo), createWindowParameters(createWindowParameters_),
-      icuInstance(lvtk::IcuString::Instance()) // lifetime managment for Icu libraries.
+      icuInstance(lv2c::IcuString::Instance()) // lifetime managment for Icu libraries.
 {
 
     this->createWindowParameters.settingsKey = MakeSettingsKey(pluginInfo->uri());

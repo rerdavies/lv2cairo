@@ -23,7 +23,7 @@
 #include "lv2c/Lv2cVerticalStackElement.hpp"
 #include "lv2c/Lv2cSvgElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cElement::ptr SvgTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {

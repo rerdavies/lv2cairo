@@ -21,7 +21,7 @@
 
 #include "TestPage.hpp"
 
-namespace lvtk {
+namespace lv2c {
     class VerticalStackTestPage: public TestPage {
     public:
         using ptr = std::shared_ptr<VerticalStackTestPage>;

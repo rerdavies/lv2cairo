@@ -20,7 +20,7 @@
 #include "lv2c/Lv2cDialog.hpp"
 #include "Lv2cX11Window.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cDialog::~Lv2cDialog()
 {

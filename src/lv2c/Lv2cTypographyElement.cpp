@@ -28,14 +28,14 @@
 #include <sstream>
 #include <cmath>
 
-using namespace lvtk;
+using namespace lv2c;
 
 PangoEllipsizeMode ToPangoEllipsizeMode(Lv2cEllipsizeMode cairoMode)
 {
     return (PangoEllipsizeMode)(int)cairoMode;
 }
 
-using namespace lvtk;
+using namespace lv2c;
 
 bool Lv2cTypographyElement::WillDraw() const
 {

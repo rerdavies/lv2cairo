@@ -24,7 +24,7 @@
 #include "lv2/log/log.h"
 
 
-namespace lvtk::ui {
+namespace lv2c::ui {
     /// @brief Lv2 native callbacks. For private use only.
     class Lv2NativeCallbacks
     {

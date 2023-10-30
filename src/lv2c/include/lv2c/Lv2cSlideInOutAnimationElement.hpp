@@ -23,7 +23,7 @@
 #include "Lv2cAnimator.hpp"
 
 
-namespace lvtk {
+namespace lv2c {
     enum class Lv2cSlideAnimationType {
         None,
         SlideInStart,

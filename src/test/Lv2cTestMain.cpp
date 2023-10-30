@@ -58,7 +58,7 @@
 #include "lv2c/Lv2cDropShadowElement.hpp"
 
 using namespace std;
-using namespace lvtk;
+using namespace lv2c;
 
 
 
@@ -152,7 +152,7 @@ void TestWindow::CreateWindow()
     parameters.maxSize = Lv2cSize(4096,4096);
     parameters.title = "Lv2c Demo";
     parameters.settingsKey = "Lv2cTestMain";
-    parameters.x11Windowclass = "com.twoplay.lvtk.plugin";
+    parameters.x11Windowclass = "lv2c.github.io.lv2cairo.plugin";
     parameters.positioning = Lv2cWindowPositioning::CenterOnDesktop;
     parameters.settingsObject = settings.Root();
     parameters.backgroundColor = theme->paper;
@@ -190,7 +190,7 @@ void TestWindow::Render()
     pages.push_back(PaletteTestPage::Create());
     pages.push_back(VerticalStackTestPage::Create());
     pages.push_back(TunerTestPage::Create());
-    lvtk::SetLogLevel(Lv2cLogLevel::Debug);
+    lv2c::SetLogLevel(Lv2cLogLevel::Debug);
 
 
     auto mainElement = Lv2cVerticalStackElement::Create();

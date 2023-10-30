@@ -20,7 +20,7 @@
 #include "lv2c/Lv2cFlexGridElement.hpp"
 #include "lv2c/Lv2cLog.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cSize Lv2cFlexGridElement::MeasureClient(Lv2cSize constraint, Lv2cSize available, Lv2cDrawingContext &context)
 {

@@ -22,7 +22,7 @@
 #include "Lv2cElement.hpp"
 #include "Lv2cBindingProperty.hpp"
 
-namespace lvtk
+namespace lv2c
 {
     enum class Lv2cImageAlignment {
         // the entire image is displayed, while preserving aspect ratio.

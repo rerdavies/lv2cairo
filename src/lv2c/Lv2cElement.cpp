@@ -28,7 +28,7 @@
 #include "cleanup.hpp"
 #include "ss.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cElement::Lv2cElement()
 {

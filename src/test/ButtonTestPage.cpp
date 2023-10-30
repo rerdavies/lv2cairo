@@ -26,7 +26,7 @@
 #include "lv2c/Lv2cSvgElement.hpp"
 #include "lv2c/Lv2cDialog.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 class MyDialog : public Lv2cDialog
 {

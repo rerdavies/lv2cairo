@@ -3,14 +3,14 @@
 #include "lv2c_ui/Lv2PluginInfo.hpp"
 #include <memory>
 
-class SamplePluginInfo: public lvtk::ui::Lv2PluginInfo{
+class SamplePluginInfo: public lv2c::ui::Lv2PluginInfo{
 public:
-    using super=lvtk::ui::Lv2PluginInfo;
+    using super=lv2c::ui::Lv2PluginInfo;
     using ptr=std::shared_ptr<SamplePluginInfo>;
     static ptr Create() { return std::make_shared<SamplePluginInfo>(); }
 
     SamplePluginInfo() {
-        using namespace lvtk::ui;
+        using namespace lv2c::ui;
 
         name("Lv2c Demo Plugin");
         brand("Lv2c");
@@ -21,7 +21,7 @@ public:
         optional_features({"http://lv2plug.in/ns/lv2core#hardRTCapable"});
         author_name("Robin Davies");
         author_homepage("https://github.com/sponsors/rerdavies");
-        comment("lvtk test plugin");
+        comment("Lv2Cairo test plugin");
         extensions({});
         ports({
             Lv2PortInfo_Init {
@@ -90,7 +90,7 @@ public:
                 .scale_points_ = {Lv2ScalePoint{-60,"-INF"}},
                 .is_output_ = true,
                 .is_control_port_ = true,
-                .port_group_ = "https://rerdavies.github.io/lvtk/test_plugin#vuOutGroup",
+                .port_group_ = "https://rerdavies.github.io/lv2c/test_plugin#vuOutGroup",
                 .designation_ = "http://lv2plug.in/ns/ext/port-groups#left",
                 .units_ = Lv2Units::db,
             },
@@ -105,7 +105,7 @@ public:
                 .scale_points_ = {Lv2ScalePoint{-60,"-INF"}},
                 .is_output_ = true,
                 .is_control_port_ = true,
-                .port_group_ = "https://rerdavies.github.io/lvtk/test_plugin#vuOutGroup",
+                .port_group_ = "https://rerdavies.github.io/lv2c/test_plugin#vuOutGroup",
                 .designation_ = "http://lv2plug.in/ns/ext/port-groups#right",
                 .units_ = Lv2Units::db,
             },
@@ -117,7 +117,7 @@ public:
                 .classes_ = Lv2PluginClasses{{"http://lv2plug.in/ns/lv2core#ControlPort","http://lv2plug.in/ns/lv2core#InputPort"}},
                 .is_input_ = true,
                 .is_control_port_ = true,
-                .port_group_ = "https://rerdavies.github.io/lvtk/test_plugin#eqGroup",
+                .port_group_ = "https://rerdavies.github.io/lv2c/test_plugin#eqGroup",
             },
             Lv2PortInfo_Init {
                 .index_ = 8,
@@ -127,7 +127,7 @@ public:
                 .classes_ = Lv2PluginClasses{{"http://lv2plug.in/ns/lv2core#InputPort","http://lv2plug.in/ns/lv2core#ControlPort"}},
                 .is_input_ = true,
                 .is_control_port_ = true,
-                .port_group_ = "https://rerdavies.github.io/lvtk/test_plugin#eqGroup",
+                .port_group_ = "https://rerdavies.github.io/lv2c/test_plugin#eqGroup",
             },
             Lv2PortInfo_Init {
                 .index_ = 9,
@@ -137,7 +137,7 @@ public:
                 .classes_ = Lv2PluginClasses{{"http://lv2plug.in/ns/lv2core#InputPort","http://lv2plug.in/ns/lv2core#ControlPort"}},
                 .is_input_ = true,
                 .is_control_port_ = true,
-                .port_group_ = "https://rerdavies.github.io/lvtk/test_plugin#eqGroup",
+                .port_group_ = "https://rerdavies.github.io/lv2c/test_plugin#eqGroup",
             },
             Lv2PortInfo_Init {
                 .index_ = 10,
@@ -149,7 +149,7 @@ public:
                 .is_input_ = true,
                 .is_control_port_ = true,
                 .enumeration_property_ = true,
-                .port_group_ = "https://rerdavies.github.io/lvtk/test_plugin#eqGroup",
+                .port_group_ = "https://rerdavies.github.io/lv2c/test_plugin#eqGroup",
             },
             Lv2PortInfo_Init {
                 .index_ = 11,
@@ -168,7 +168,7 @@ public:
                 .is_audio_port_ = true,
             },
         });
-        port_groups({Lv2PortGroup{"https://rerdavies.github.io/lvtk/test_plugin#vuOutGroup","vuOutGroup","Out"},Lv2PortGroup{"https://rerdavies.github.io/lvtk/test_plugin#eqGroup","eqGroup","Tone"}});
+        port_groups({Lv2PortGroup{"https://rerdavies.github.io/lv2c/test_plugin#vuOutGroup","vuOutGroup","Out"},Lv2PortGroup{"https://rerdavies.github.io/lv2c/test_plugin#eqGroup","eqGroup","Tone"}});
         has_factory_presets(false);
         piPedalUI(PiPedalUI{
             {

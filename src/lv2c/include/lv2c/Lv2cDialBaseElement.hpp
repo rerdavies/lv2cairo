@@ -24,7 +24,7 @@
 #include "Lv2cSvgElement.hpp"
 #include "Lv2cBindingProperty.hpp"
 
-namespace lvtk
+namespace lv2c
 {
 
     class Lv2cDialBaseElement: public Lv2cValueElement 

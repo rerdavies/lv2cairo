@@ -19,7 +19,7 @@
 
 #pragma once
 
-namespace lvtk
+namespace lv2c
 {
 
     /// @brief A base-class for storing custom user data.

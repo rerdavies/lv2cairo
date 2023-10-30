@@ -26,7 +26,7 @@
 #include  "lv2/lv2plug.in/ns/extensions/units/units.h"
 
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 Lv2Units UriToUnits(const std::string &uri);
 
@@ -69,7 +69,7 @@ std::map<Lv2Units,std::string> unitsToStringMap =
 };
 
 static const std::string emptyString;
-const std::string& lvtk::ui::UnitsToString(Lv2Units units)
+const std::string& lv2c::ui::UnitsToString(Lv2Units units)
 {
     if (unitsToStringMap.find(units) != unitsToStringMap.end())
     {
@@ -148,7 +148,7 @@ std::map<std::string,Lv2Units> uriToUnitsMap = {
 #undef CASE
 
 
-Lv2Units lvtk::ui::StringToUnits(const std::string &text)
+Lv2Units lv2c::ui::StringToUnits(const std::string &text)
 {
     if (unitMap.find(text) != unitMap.end()) {
         return unitMap[text];
@@ -156,7 +156,7 @@ Lv2Units lvtk::ui::StringToUnits(const std::string &text)
     return Lv2Units::none;
 }
 
-Lv2Units lvtk::ui::UriToUnits(const std::string &text)
+Lv2Units lv2c::ui::UriToUnits(const std::string &text)
 {
     if (text.length() == 0) return Lv2Units::none;
     if (uriToUnitsMap.contains(text))
@@ -185,7 +185,7 @@ public:
 } g_units_converter;
 
 
-json_enum_converter<Lv2Units> *lvtk::ui::get_units_enum_converter()
+json_enum_converter<Lv2Units> *lv2c::ui::get_units_enum_converter()
 {
     return &g_units_converter;
 }

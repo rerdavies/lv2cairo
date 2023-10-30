@@ -34,7 +34,7 @@
 #include <X11/extensions/Xrandr.h>
 
 using namespace std;
-using namespace lvtk;
+using namespace lv2c;
 
 Window x11Window = 0;
 Display *x11Display = nullptr;

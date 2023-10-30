@@ -23,7 +23,7 @@
 
 
 
-namespace lvtk
+namespace lv2c
 {
 
     /// @brief Display text from a list of items.

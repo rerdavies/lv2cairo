@@ -23,7 +23,7 @@
 #include "cairo/cairo.h"
 #include <vector>
 
-namespace lvtk
+namespace lv2c
 {
 
     class Lv2cColorStop

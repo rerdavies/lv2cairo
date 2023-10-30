@@ -22,7 +22,7 @@
 #include "ss.hpp"
 #include "lv2c_ui/MimeTypes.hpp"
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 UiFileProperty::UiFileProperty(
     const std::string &name, 
@@ -45,9 +45,9 @@ UiFileProperty::UiFileProperty(
 // }
 
 PiPedalUI::PiPedalUI(
-    std::vector<lvtk::ui::UiFileProperty> &&fileProperties,
-    std::vector<lvtk::ui::UiFrequencyPlot> &&frequencyPlots,
-    std::vector<lvtk::ui::UiPortNotification> &&portNotifications)
+    std::vector<lv2c::ui::UiFileProperty> &&fileProperties,
+    std::vector<lv2c::ui::UiFrequencyPlot> &&frequencyPlots,
+    std::vector<lv2c::ui::UiPortNotification> &&portNotifications)
 {
 
     this->fileProperties_ = std::move(fileProperties);

@@ -36,7 +36,7 @@
 // forward declaration.
 typedef struct _PangoContext PangoContext;
 
-namespace lvtk
+namespace lv2c
 {
 
     using animation_clock_t = std::chrono::steady_clock;

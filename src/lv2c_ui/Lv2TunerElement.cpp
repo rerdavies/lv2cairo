@@ -26,8 +26,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "pango/pangocairo.h"
 #include "lv2c/Lv2cPangoContext.hpp"
 
-using namespace lvtk;
-using namespace lvtk::ui;
+using namespace lv2c;
+using namespace lv2c::ui;
 
 Lv2TunerElement::Lv2TunerElement()
 {

@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include "ss.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cSvg::~Lv2cSvg() noexcept
 {

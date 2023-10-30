@@ -25,7 +25,7 @@
 #include <concepts>
 
 using namespace std;
-using namespace lvtk;
+using namespace lv2c;
 
 
 static_assert(std::same_as<Lv2cArgumentTraits<double>::arg_t, double>);
@@ -89,10 +89,10 @@ void ElementBindingTest()
 
 void CheckForLeaks()
 {
-    REQUIRE(lvtk::implementation::bindingRecordCount == 0);
-    REQUIRE(lvtk::implementation::bindingRecordCount == 0);
-    REQUIRE(lvtk::implementation::observerLinkCount == 0);
-    REQUIRE(lvtk::implementation::handleCount == 0);
+    REQUIRE(lv2c::implementation::bindingRecordCount == 0);
+    REQUIRE(lv2c::implementation::bindingRecordCount == 0);
+    REQUIRE(lv2c::implementation::observerLinkCount == 0);
+    REQUIRE(lv2c::implementation::handleCount == 0);
 }
 
 void BindingTest()

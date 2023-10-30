@@ -2,7 +2,7 @@
 #include "lv2c/Lv2cTypographyElement.hpp"
 #include "lv2c/Lv2cFlexGridElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cGroupElement::Lv2cGroupElement()
 {

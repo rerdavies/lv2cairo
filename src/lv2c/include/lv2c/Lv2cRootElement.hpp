@@ -22,7 +22,7 @@
 #include "Lv2cContainerElement.hpp"
 #include <functional>
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cRootElement : public Lv2cContainerElement 
     {

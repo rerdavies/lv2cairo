@@ -28,7 +28,7 @@
 #include <concepts>
 using namespace std;
 
-using namespace lvtk;
+using namespace lv2c;
 
 namespace test
 {

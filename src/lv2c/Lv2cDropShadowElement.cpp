@@ -24,7 +24,7 @@
 #include <numbers>
 #include "lv2c/Lv2cWindow.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 static double ShadowFn(int x_, int y_, int radius)
 {

@@ -1,7 +1,7 @@
 #include "lv2c/Lv2cDbVuElement.hpp"
 #include "lv2c/Lv2cWindow.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 using namespace std::chrono;
 constexpr milliseconds HOLD_TIME = 2000ms;

@@ -23,7 +23,7 @@
 #include "Lv2cButtonBaseElement.hpp"
 
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cTypographyElement;
     class Lv2cSvgElement;
 

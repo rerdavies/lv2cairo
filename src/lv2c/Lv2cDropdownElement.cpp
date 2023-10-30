@@ -36,9 +36,9 @@
 
 #include <chrono>
 
-using namespace lvtk;
+using namespace lv2c;
 
-namespace lvtk::implementation
+namespace lv2c::implementation
 {
     class DropdownItemLayoutElement : public Lv2cContainerElement
     {
@@ -157,7 +157,7 @@ namespace lvtk::implementation
     }
 }
 
-using namespace lvtk::implementation;
+using namespace lv2c::implementation;
 
 Lv2cSize DropdownItemLayoutElement::MeasureClient(Lv2cSize clientConstraint, Lv2cSize clientAvailable, Lv2cDrawingContext &context)
 {
@@ -406,14 +406,14 @@ bool Lv2cDropdownItem::operator==(const Lv2cDropdownItem &other) const
     return itemId == other.itemId && separator == other.separator && svgIcon == other.svgIcon && text == other.text;
 }
 
-lvtk::Lv2cDropdownItem::Lv2cDropdownItem() : itemId(INVALID_SELECTION_ID), separator(false) {}
+lv2c::Lv2cDropdownItem::Lv2cDropdownItem() : itemId(INVALID_SELECTION_ID), separator(false) {}
 
-lvtk::Lv2cDropdownItem::Lv2cDropdownItem(selection_id_t itemId, const std::string &text)
+lv2c::Lv2cDropdownItem::Lv2cDropdownItem(selection_id_t itemId, const std::string &text)
     : itemId(itemId), text(text), separator(false)
 {
 }
 
-lvtk::Lv2cDropdownItem::Lv2cDropdownItem(selection_id_t itemId, const std::string &text, const std::string &svgIcon)
+lv2c::Lv2cDropdownItem::Lv2cDropdownItem(selection_id_t itemId, const std::string &text, const std::string &svgIcon)
     : itemId(itemId), text(text), svgIcon(svgIcon), separator(false)
 {
 }

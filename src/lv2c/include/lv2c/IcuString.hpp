@@ -25,7 +25,7 @@
 typedef struct UConverter UConverter;
 typedef struct UCollator UCollator;
 
-namespace lvtk
+namespace lv2c
 {
 
 

@@ -24,7 +24,7 @@
 #include <cmath>
 #include <iomanip>
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cNumericEditBoxElement::Lv2cNumericEditBoxElement()
 {

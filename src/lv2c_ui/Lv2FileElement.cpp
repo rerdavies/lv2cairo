@@ -28,8 +28,8 @@
 #include "X11/keysymdef.h"
 
 
-using namespace lvtk;
-using namespace lvtk::ui;
+using namespace lv2c;
+using namespace lv2c::ui;
 
 Lv2FileElement::Lv2FileElement()
 {

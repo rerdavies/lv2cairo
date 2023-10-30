@@ -22,7 +22,7 @@
 #include "TestPage.hpp"
  
  
-namespace lvtk {
+namespace lv2c {
 class Lv2ControlTestPage : public TestPage
 {
 public:

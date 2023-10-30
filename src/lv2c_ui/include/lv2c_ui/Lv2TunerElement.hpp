@@ -30,11 +30,11 @@ typedef struct _PangoFontMap PangoFontMap;
 typedef struct _PangoFontDescription PangoFontDescription;
 
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cDrawingContext;
 }
 
-namespace lvtk::ui {
+namespace lv2c::ui {
 
     class Lv2TunerElement : public Lv2cValueElement {
     public:

@@ -24,7 +24,7 @@
 
 #include "lv2c/Lv2cDrawingContext.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cButtonBaseElement::Lv2cButtonBaseElement()
 {

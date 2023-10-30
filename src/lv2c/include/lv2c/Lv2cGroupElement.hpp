@@ -22,13 +22,13 @@
 #include "lv2c/Lv2cContainerElement.hpp"
 #include "lv2c/Lv2cBindingProperty.hpp"
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cTypographyElement;
     class Lv2cFlexGridElement;
 }
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cGroupElement: public Lv2cContainerElement 
     {
     public:

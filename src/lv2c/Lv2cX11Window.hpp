@@ -41,7 +41,7 @@ typedef union _XEvent XEvent;
 
 // typedef struct fd_set;
 
-namespace lvtk
+namespace lv2c
 {
 
     class Lv2cX11Window

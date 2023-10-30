@@ -25,7 +25,7 @@
 #include <lv2/port-groups/port-groups.h>
 using namespace std;
 
-namespace lvtk::ui
+namespace lv2c::ui
 {
 
     std::string Lv2PortViewController::GetDisplayString(double value) const

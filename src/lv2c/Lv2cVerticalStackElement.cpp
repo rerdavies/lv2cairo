@@ -20,7 +20,7 @@
 #include "lv2c/Lv2cVerticalStackElement.hpp"
 #include "lv2c/Lv2cLog.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 // StyleContext Lv2cVerticalStackElement::GetHorizontalMeasureContext(double width, Lv2cElement *element)
 // {

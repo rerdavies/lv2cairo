@@ -30,7 +30,7 @@
 struct _cairo;
 typedef struct _cairo cairo_t;
 
-namespace lvtk
+namespace lv2c
 {
 
     class Lv2cDrawingContext;
@@ -175,7 +175,7 @@ namespace lvtk
         /// In common use, one would compare relative contrast values, for example: to decide whether to use light- or dark-colored text 
         /// on a given background background color based on which has the larger color difference.
         ///
-        /// See lvtk/Lv2cCieColors.hpp for a more general selection of color-space and color-management functions.
+        /// See lv2c/Lv2cCieColors.hpp for a more general selection of color-space and color-management functions.
         static double ColorDifference(const Lv2cColor &c1, const Lv2cColor &c2);
         
 

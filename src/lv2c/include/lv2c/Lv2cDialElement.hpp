@@ -25,7 +25,7 @@
 #include "Lv2cDropShadowElement.hpp"
 #include "Lv2cBindingProperty.hpp"
 
-namespace lvtk
+namespace lv2c
 {
 
     /// @brief A dial control element.

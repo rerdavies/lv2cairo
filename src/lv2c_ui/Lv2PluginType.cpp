@@ -41,7 +41,7 @@
 
 
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 
 class PluginTypeMapEntry {
@@ -108,7 +108,7 @@ static std::pair<std::string,PluginType> urisToNames[] {
 
 };
 
-PluginType lvtk::ui::uri_to_plugin_type(const std::string&uri)
+PluginType lv2c::ui::uri_to_plugin_type(const std::string&uri)
 {
     for (auto& i: urisToNames)
     {
@@ -121,7 +121,7 @@ PluginType lvtk::ui::uri_to_plugin_type(const std::string&uri)
 }
 
 
-const std::string& lvtk::ui::plugin_type_to_uri(PluginType type)
+const std::string& lv2c::ui::plugin_type_to_uri(PluginType type)
 {
     for (auto& i: urisToNames)
     {
@@ -182,7 +182,7 @@ static std::pair<std::string,PluginType> strings_to_type_map[] {
     STRING_TO_TYPE_MAP_ENTRY(PiPedalAmpsNode),
 };
 
-PluginType lvtk::ui::string_to_plugin_type(const std::string&uri)
+PluginType lv2c::ui::string_to_plugin_type(const std::string&uri)
 {
     for (auto& i: strings_to_type_map)
     {
@@ -195,7 +195,7 @@ PluginType lvtk::ui::string_to_plugin_type(const std::string&uri)
 }
 
 
-const std::string &lvtk::ui::plugin_type_to_string(PluginType type)
+const std::string &lv2c::ui::plugin_type_to_string(PluginType type)
 {
     for (auto& i: strings_to_type_map)
     {
@@ -227,7 +227,7 @@ public:
 } g_plugin_type_converter;
 
 
-json_enum_converter<PluginType> *lvtk::ui::get_plugin_type_enum_converter()
+json_enum_converter<PluginType> *lv2c::ui::get_plugin_type_enum_converter()
 {
     return &g_plugin_type_converter;
 }

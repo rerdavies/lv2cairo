@@ -24,7 +24,7 @@
 #include "lv2c/Lv2cTypographyElement.hpp"
 #include "lv2c/Lv2cScrollContainerElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cElement::ptr Label(Lv2cElement::ptr element, const std::string &label)
 {

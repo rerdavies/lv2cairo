@@ -30,7 +30,7 @@
 
 #include "Lv2cElement.hpp"
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cElement;
 

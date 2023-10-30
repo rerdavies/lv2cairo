@@ -25,7 +25,7 @@
 #include "lv2c/Lv2cSvgElement.hpp"
 #include "lv2c/Lv2cTypographyElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cMessageDialog::Lv2cMessageDialog()
 {

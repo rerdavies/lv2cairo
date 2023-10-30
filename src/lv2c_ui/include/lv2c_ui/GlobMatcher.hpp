@@ -37,7 +37,7 @@ See analysis at the end of this file.
 #endif
 class GlobExpression;
 
-namespace lvtk::ui
+namespace lv2c::ui
 {
     /// @brief Matches strings against patterns with '*' or '?' wildcards.
     /// Call SetPattern to prepare the pattern for matching. Call Matches() to 

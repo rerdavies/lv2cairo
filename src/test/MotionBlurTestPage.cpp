@@ -25,7 +25,7 @@
 #include "lv2c/Lv2cSlideInOutAnimationElement.hpp"
 #include "lv2c/Lv2cDropdownElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 static Lv2cElement::ptr Frame(Lv2cElement::ptr element)
 {

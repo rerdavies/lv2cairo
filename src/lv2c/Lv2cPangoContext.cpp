@@ -23,12 +23,12 @@
 #include <vector>
 #include <sstream>
 
-using namespace lvtk;
+using namespace lv2c;
 
-Lv2cPangoContext lvtk::gPangoContext;
+Lv2cPangoContext lv2c::gPangoContext;
 
 
-const std::set<std::string> &lvtk::FontFamilies()
+const std::set<std::string> &lv2c::FontFamilies()
 {
     return gPangoContext.FontFamilies();
 }

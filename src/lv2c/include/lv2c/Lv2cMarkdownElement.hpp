@@ -25,7 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <filesystem>
 #include <iostream>
 
-namespace lvtk {
+namespace lv2c {
     /// @brief Display text formated with Markdown (.md) code.
     /// Currently supports a very limited subset of markdown codes.
 

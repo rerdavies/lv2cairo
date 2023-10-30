@@ -22,7 +22,7 @@
 #include "TestPage.hpp"
 #include "lv2c/Lv2cBindingProperty.hpp"
 
-namespace lvtk {
+namespace lv2c {
 class MotionBlurTestPage : public TestPage
 {
 public:

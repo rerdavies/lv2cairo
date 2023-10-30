@@ -19,7 +19,7 @@
 
 #include "lv2c/Lv2cDropdownItemElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 #include "lv2c/Lv2cTypographyElement.hpp"
 #include "lv2c/Lv2cSvgElement.hpp"

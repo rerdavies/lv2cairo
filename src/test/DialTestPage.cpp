@@ -26,7 +26,7 @@
 
 #include "lv2c/Lv2cVerticalStackElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 static Lv2cElement::ptr TitleBox(const std::string &title, Lv2cElement::ptr control)
 {

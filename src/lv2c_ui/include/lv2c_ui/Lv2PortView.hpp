@@ -27,10 +27,10 @@
 #include  "lv2c/Lv2cContainerElement.hpp"
 #include "Lv2PortViewFactory.hpp"
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cDropdownItem;
 }
-namespace lvtk::ui {
+namespace lv2c::ui {
     class Lv2PortViewController;
 
    

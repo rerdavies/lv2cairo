@@ -31,7 +31,7 @@
 
 
 
-namespace lvtk {
+namespace lv2c {
 
     class Lv2cSettingsFile: public std::enable_shared_from_this<Lv2cSettingsFile>  {
     public:

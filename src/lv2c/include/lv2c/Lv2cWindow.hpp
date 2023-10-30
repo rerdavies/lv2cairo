@@ -40,7 +40,7 @@
 // forward declaration.
 typedef struct _PangoContext PangoContext;
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cX11Window;
     class Lv2cTheme;
@@ -107,15 +107,15 @@ namespace lvtk
         /// @brief The X11 window class of the window.
         /// Used by X11 to locate resource files (of which we have none). Leave it at the default value unless you have a 
         /// compelling need to change it.
-        std::string x11Windowclass = "com.twoplay.lvtk-plugin";
+        std::string x11Windowclass = "lv2c.github.io-plugin";
 
         /// @brief The GTK Application ID
         /// Used to locate icons and/or desktop files on KDE Plasma and Gnome Destkop. Use the default 
         /// value to get the default Lv2 Plugin icon (recommmended).  Since we aren't an application, the 
         /// primary purpose of this property is to allow KDE Plasma and Gnome Desktop to location the 
-        /// dummy com.twoplay.lvtk-plugin.desktop file, which contains a reference to the LV2 Plugin
+        /// dummy lv2c.github.io-plugin.desktop file, which contains a reference to the LV2 Plugin
         /// icon.
-        std::string gtkApplicationId = "com.twoplay.lvtk-plugin";
+        std::string gtkApplicationId = "lv2c.github.io-plugin";
 
 
         /// @brief The X11 name of the  window. Used by Windowm Managers for labelling task buttons &c.

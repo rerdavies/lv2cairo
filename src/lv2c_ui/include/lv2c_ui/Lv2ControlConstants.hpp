@@ -19,7 +19,7 @@
 
 #pragma once
 
-namespace lvtk::ui {
+namespace lv2c::ui {
     constexpr double Lv2ControlWidth = 80;
     constexpr double Lv2ControlHeight= 110;
 

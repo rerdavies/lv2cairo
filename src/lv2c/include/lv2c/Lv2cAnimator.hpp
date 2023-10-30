@@ -23,7 +23,7 @@
 
 #include <chrono>
 #include <functional>
-namespace lvtk
+namespace lv2c
 {
 
     enum class Lv2cEasingFunction {

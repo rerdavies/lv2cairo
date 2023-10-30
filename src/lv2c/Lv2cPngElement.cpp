@@ -24,7 +24,7 @@
 #include "ss.hpp"
 // #include "lv2c/lv2tk_png.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 void Lv2cPngElement::Load()
 {

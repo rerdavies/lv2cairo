@@ -23,7 +23,7 @@
 #include <cmath>
 #include <cassert>
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cMotionBlurElement::Lv2cMotionBlurElement()
 {

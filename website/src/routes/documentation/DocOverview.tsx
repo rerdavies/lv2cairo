@@ -19,11 +19,11 @@ function DocOverview() {
             <P>
                 A basic implemention of an LV UI plugin (exclusive of time spent implementing 
                 the audio plugin) is exceptionally easy: about 40 lines of 
-                code, and about 15 minutes of work. You don't need to know a whole lot about the lvtk 
+                code, and about 15 minutes of work. You don't need to know a whole lot about the lv2c 
                 libary to create a basic plugin. You may want to refer to 
                 the <Link to="BuildingAnLv2Plugin">Building an LV2 Plugin</Link> section 
                 of the documentation to get a sense of what the basic procedure is, and decide from 
-                there how much you really want to know about the full lvtk library.
+                there how much you really want to know about the full lv2c library.
             </P>
 
             {/**************************************** */}

@@ -19,7 +19,7 @@
 
 #include "lv2c/Lv2cTheme.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cTheme::Lv2cTheme(const Lv2cThemeColors &themeColors)
     : Lv2cThemeColors(themeColors)

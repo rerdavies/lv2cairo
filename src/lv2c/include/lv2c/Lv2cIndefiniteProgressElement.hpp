@@ -23,7 +23,7 @@
 #include "Lv2cBindingProperty.hpp"
 #include "Lv2cAnimator.hpp"
 
-namespace lvtk {
+namespace lv2c {
 
     class Lv2cIndefiniteProgressElement : public Lv2cElement {
     public:

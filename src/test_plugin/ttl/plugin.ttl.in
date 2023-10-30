@@ -59,7 +59,7 @@ myprefix:vuOutGroup
 
 
         rdfs:comment """
-lvtk test plugin
+Lv2Cairo test plugin
 """ ;
 
         mod:brand "Lv2c";

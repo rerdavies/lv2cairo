@@ -22,7 +22,7 @@
 #include "Lv2cWindow.hpp"
 #include "Lv2cBindingProperty.hpp"
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cDialog: public Lv2cWindow
     {

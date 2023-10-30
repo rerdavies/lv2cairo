@@ -31,14 +31,14 @@
 #include "ss.hpp"
 
 
-using namespace lvtk;
+using namespace lv2c;
 
 
 std::filesystem::path Lv2cSettingsFile::GetSettingsPath(const std::string &identifier)
 {
 #ifdef __linux__ 
     std::filesystem::path home = std::getenv("HOME");
-std::filesystem::path path = home / ".config" / "io.github.rerdavies.lvtk" / identifier;
+std::filesystem::path path = home / ".config" / "io.github.rerdavies.lv2cairo" / identifier;
     std::filesystem::create_directories(path);
     path = path / "settings.json";
     return path;
@@ -141,7 +141,7 @@ Lv2cSettingsFile::~Lv2cSettingsFile()
 
 
 
-json_variant lvtk::Lv2cPointToJson(Lv2cPoint value)
+json_variant lv2c::Lv2cPointToJson(Lv2cPoint value)
 {
     json_variant result = json_variant::array();
     result.resize(2);
@@ -149,7 +149,7 @@ json_variant lvtk::Lv2cPointToJson(Lv2cPoint value)
     result[1] = value.y;
     return result;
 }
-Lv2cPoint lvtk::Lv2cPointFromJson(const json_variant&value, Lv2cPoint defaultValue)
+Lv2cPoint lv2c::Lv2cPointFromJson(const json_variant&value, Lv2cPoint defaultValue)
 {
     if (value.is_null())
     {
@@ -161,7 +161,7 @@ Lv2cPoint lvtk::Lv2cPointFromJson(const json_variant&value, Lv2cPoint defaultVal
     return result;
 }
 
-json_variant lvtk::Lv2cSizeToJson(Lv2cSize value)
+json_variant lv2c::Lv2cSizeToJson(Lv2cSize value)
 {
     json_variant result = json_variant::array();
     result.resize(2);
@@ -169,7 +169,7 @@ json_variant lvtk::Lv2cSizeToJson(Lv2cSize value)
     result[1] = value.Height();
     return result;
 }
-Lv2cSize lvtk::Lv2cSizeFromJson(const json_variant&value, Lv2cSize defaultValue)
+Lv2cSize lv2c::Lv2cSizeFromJson(const json_variant&value, Lv2cSize defaultValue)
 {
     if (value.is_null())
     {

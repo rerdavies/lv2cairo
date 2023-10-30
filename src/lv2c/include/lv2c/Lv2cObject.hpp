@@ -19,7 +19,7 @@
 
 #pragma once
 
-namespace lvtk 
+namespace lv2c 
 {
     class Lv2cObject {
     public:

@@ -25,7 +25,7 @@
 #include <sstream>
 #include <cmath>
 
-using namespace lvtk;
+using namespace lv2c;
 
 
 static constexpr uint16_t UTF16_SURROGATE_1_BASE = 0xD800U;

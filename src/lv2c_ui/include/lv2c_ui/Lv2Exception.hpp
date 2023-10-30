@@ -21,7 +21,7 @@
 
 #include <stdexcept>
 
-namespace lvtk::ui {
+namespace lv2c::ui {
     class Lv2Exception: public std::runtime_error {
     public:
         Lv2Exception(const std::string&message)

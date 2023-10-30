@@ -27,12 +27,12 @@
 
 #include "pango/pango.h"
 
-using namespace lvtk;
+using namespace lv2c;
 using namespace std;
 
 // Make sure Pango and lv2 enum declarations match.
 
-// make sure that enum class lvtk::FontStretch values match typdef enum { } PANGO_STRETCH values.
+// make sure that enum class lv2c::FontStretch values match typdef enum { } PANGO_STRETCH values.
 #define FONT_STRETCH_VALUE_CHECK(PANGO_NAME, LV2CAIRO_NAME) \
     static_assert(int(Lv2cFontStretch::LV2CAIRO_NAME) == PangoStretch::PANGO_STRETCH_##PANGO_NAME);
 
@@ -626,7 +626,7 @@ bool Lv2cHoverColors::operator==(const Lv2cHoverColors &other) const
     return true;
 }
 
-namespace lvtk::implementation
+namespace lv2c::implementation
 {
     float srgb2i[256];
 
@@ -653,7 +653,7 @@ namespace lvtk::implementation
     static SrgbToITable rgbConversion;
 }
 
-using namespace lvtk::implementation;
+using namespace lv2c::implementation;
 
 /*static*/
 void Lv2cLinearColor::ToImageSurface(const std::vector<Lv2cLinearColor> &source, uint8_t *dest)
@@ -891,10 +891,10 @@ Lv2cColor::Lv2cColor(const Lv2cHsvColor &color)
 }
 
 
-// convenience function to avoid bringing lvtk/Lv2cCieColors.hpp into sope for the entire project.
+// convenience function to avoid bringing lv2c/Lv2cCieColors.hpp into sope for the entire project.
 double Lv2cColor::ColorDifference(const Lv2cColor &c1, const Lv2cColor &c2)
 {
-    return lvtk::CieColorDifference(c1,c2);
+    return lv2c::CieColorDifference(c1,c2);
 }
 
 static Lv2cCieLab Lerp(double v, const Lv2cCieLab &c1, const Lv2cCieLab&c2)

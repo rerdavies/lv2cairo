@@ -22,7 +22,7 @@
 #include <sstream>
 
 using namespace std;
-namespace lvtk
+namespace lv2c
 {
 
 

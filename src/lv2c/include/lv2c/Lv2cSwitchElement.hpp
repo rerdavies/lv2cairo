@@ -23,7 +23,7 @@
 #include "Lv2cBindingProperty.hpp"
 #include <chrono>
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cToggleThumbElement;
     class Lv2cToggleTrackElement;
     class Lv2cDropShadowElement;

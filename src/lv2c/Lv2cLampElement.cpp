@@ -3,7 +3,7 @@
 #include "lv2c/Lv2cDropShadowElement.hpp"
 #include "lv2c/Lv2cWindow.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cLampElement::Lv2cLampElement()
 {

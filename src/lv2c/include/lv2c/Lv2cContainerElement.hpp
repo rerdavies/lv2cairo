@@ -21,7 +21,7 @@
 
 #pragma once
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cContainerElement: public Lv2cElement {
     public:
         virtual const char* Tag() const override { return "Container";}

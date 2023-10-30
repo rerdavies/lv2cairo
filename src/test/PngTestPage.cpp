@@ -24,7 +24,7 @@
 #include "lv2c/Lv2cPngElement.hpp"
 #include "lv2c/Lv2cTypographyElement.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 Lv2cElement::ptr PngTestPage::CreatePageView(Lv2cTheme::ptr theme)
 {

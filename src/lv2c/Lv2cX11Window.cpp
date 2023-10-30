@@ -31,7 +31,7 @@
 
 #include "ss.hpp"
 
-using namespace lvtk;
+using namespace lv2c;
 
 #define DEBUG_ENABLE_EVENT_TRACING false
 
@@ -45,7 +45,7 @@ void Lv2cX11Window::logDebug(Window x11Window, const std::string &message)
 {
     std::stringstream s;
     s << "(" << x11Window << "): " << message;
-    lvtk::LogDebug(s.str());
+    lv2c::LogDebug(s.str());
 }
 #if (DEBUG_ENABLE_EVENT_TRACING)
 #define LOG_TRACE(window,message) logDebug(window,message)

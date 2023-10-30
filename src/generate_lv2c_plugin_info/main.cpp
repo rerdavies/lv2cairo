@@ -31,7 +31,7 @@
 using namespace std;
 using namespace lv2;
 using namespace twoplay;
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 class cleanup
 {

@@ -23,7 +23,7 @@
 #include <vector>
 
 
-namespace lvtk {
+namespace lv2c {
     struct Lv2cColumnDefinition {
         Lv2cAlignment rowAlignment = Lv2cAlignment::Start;
         Lv2cAlignment columnAlignment = Lv2cAlignment::Start;

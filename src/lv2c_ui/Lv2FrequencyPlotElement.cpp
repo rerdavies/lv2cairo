@@ -23,8 +23,8 @@
 #include <lv2/atom/atom.h>
 #include <cmath>
 
-using namespace lvtk::ui;
-using namespace lvtk;
+using namespace lv2c::ui;
+using namespace lv2c;
 
 static constexpr float MIN_DB = -200;
 static constexpr float MIN_DB_AMPLITUDE = 1e-10f;

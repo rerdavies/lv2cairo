@@ -27,7 +27,7 @@
 #include "Lv2cTypes.hpp"
 #include "Lv2cDrawingContext.hpp"
 
-namespace lvtk
+namespace lv2c
 {
 
     class Lv2cTheme;

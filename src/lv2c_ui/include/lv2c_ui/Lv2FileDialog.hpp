@@ -31,7 +31,7 @@
 
 
 // forard declarations.
-namespace lvtk
+namespace lv2c
 {
     class Lv2cWindow;
     class Lv2cButtonElement;
@@ -39,7 +39,7 @@ namespace lvtk
     class Lv2cTypographyElement;
     class Lv2cEditBoxElement;
 }
-namespace lvtk::ui
+namespace lv2c::ui
 {
 
     struct Lv2FileFilter {
@@ -50,17 +50,17 @@ namespace lvtk::ui
         bool operator==(const Lv2FileFilter&other) const;
     };
 
-    class Lv2FileDialog : public lvtk::Lv2cDialog
+    class Lv2FileDialog : public lv2c::Lv2cDialog
     {
     public:
         using self = Lv2FileDialog;
-        using super = lvtk::Lv2cDialog;
+        using super = lv2c::Lv2cDialog;
         using ptr = std::shared_ptr<self>;
         static ptr Create(const std::string &title, const std::string &settingsKey) { return std::make_shared<self>(title, settingsKey); }
 
         Lv2FileDialog(const std::string &title, const std::string &settingsKey);
 
-        virtual void Show(lvtk::Lv2cWindow *parent) override;
+        virtual void Show(lv2c::Lv2cWindow *parent) override;
 
         Lv2cEvent<std::string> OK;
 

@@ -27,7 +27,7 @@
 
 
 
-namespace lvtk::ui
+namespace lv2c::ui
 {
 
     class LilvUiFileType : public UiFileType

@@ -25,10 +25,10 @@
 #include "lv2c/Lv2cCieColors.hpp"
 #include <cassert>
 
-using namespace lvtk;
+using namespace lv2c;
 
-Lv2cCieXyz lvtk::D65Illuminant{95.0489f, 100.0f, 108.8840f};
-Lv2cCieXyz lvtk::D50Illuminant{96.4212f, 100.0f, 82.5188f};
+Lv2cCieXyz lv2c::D65Illuminant{95.0489f, 100.0f, 108.8840f};
+Lv2cCieXyz lv2c::D50Illuminant{96.4212f, 100.0f, 82.5188f};
 
 Lv2cCieXyz::Lv2cCieXyz(float x, float y, float z)
     : x(x), y(y), z(z)
@@ -259,12 +259,12 @@ Lv2cCieLab::Lv2cCieLab(const Lv2cColor&color, const Lv2cCieXyz&illuminant)
 }
 
 
-double lvtk::CieColorDifference(const Lv2cColor& color_1, const Lv2cColor& color_2)
+double lv2c::CieColorDifference(const Lv2cColor& color_1, const Lv2cColor& color_2)
 {
     return CieColorDifference(Lv2cCieLab(color_1),Lv2cCieLab(color_2));
 }
 
-double lvtk::CieColorDifference(const Lv2cCieLab& color_1, const Lv2cCieLab& color_2)
+double lv2c::CieColorDifference(const Lv2cCieLab& color_1, const Lv2cCieLab& color_2)
 {
     // Copyright (c) 2018 Yuki Koyama
     //

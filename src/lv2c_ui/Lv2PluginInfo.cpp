@@ -20,7 +20,7 @@
 #include "lv2c_ui/Lv2PluginInfo.hpp"
 #include <string.h>
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 
 

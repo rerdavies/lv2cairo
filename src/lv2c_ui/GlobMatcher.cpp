@@ -30,7 +30,7 @@ SECURITY WARNING: Please review the security note at the top of GlobMatcher.hpp
 #include <sstream>
 
 using namespace std;
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 
 static bool isEndOfSegment(char c)

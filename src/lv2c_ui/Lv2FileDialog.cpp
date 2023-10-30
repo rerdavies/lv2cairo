@@ -47,8 +47,8 @@
 #include <sys/stat.h>
 #endif
 
-using namespace lvtk::ui;
-using namespace lvtk;
+using namespace lv2c::ui;
+using namespace lv2c;
 
 #if defined(__linux__)
 static bool isExecutable(const std::filesystem::path &path)
@@ -83,7 +83,7 @@ bool IsHiddenFile(const std::filesystem::path &path)
 
 #endif
 
-namespace lvtk::ui
+namespace lv2c::ui
 {
     // directories forbidden because they are dangerous, infested with symlinks, and/or just plain uninteresting for practical searches.
 
@@ -980,7 +980,7 @@ Lv2cElement::ptr Lv2FileDialog::RenderFilePanel()
     return body;
 }
 
-namespace lvtk::ui
+namespace lv2c::ui
 {
 }
 

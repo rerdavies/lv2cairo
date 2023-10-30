@@ -22,7 +22,7 @@
 #include "lv2c_ui/PiPedalUI.hpp"
 #include "lv2c_ui/Lv2UI.hpp"
 
-namespace lvtk::ui {
+namespace lv2c::ui {
 
     /// Element that display a frequency-response graph.
     ///

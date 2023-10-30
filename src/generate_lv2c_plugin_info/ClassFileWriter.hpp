@@ -23,15 +23,15 @@
 #include <memory>
 #include "lv2c_ui/Lv2PluginInfo.hpp"
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 class ClassFileWriter {
 public:
 
     ClassFileWriter(std::ostream&s, const std::string &className, std::string&nameSpace): s(s),className(className),nameSpace(nameSpace) { }
-    using Lv2PluginInfo = lvtk::ui::Lv2PluginInfo;
-    using Lv2PortInfo = lvtk::ui::Lv2PortInfo;
-    using PiPedalUI = lvtk::ui::PiPedalUI;
+    using Lv2PluginInfo = lv2c::ui::Lv2PluginInfo;
+    using Lv2PortInfo = lv2c::ui::Lv2PortInfo;
+    using PiPedalUI = lv2c::ui::PiPedalUI;
 
     void Write(const std::shared_ptr<Lv2PluginInfo> pluginInfo);
 private:

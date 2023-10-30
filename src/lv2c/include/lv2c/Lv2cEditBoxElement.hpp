@@ -28,7 +28,7 @@
 typedef struct _PangoLayout PangoLayout;
 typedef struct _PangoFontDescriptor PangoFontDescriptor;
 
-namespace lvtk
+namespace lv2c
 {
 
     class Lv2cPangoContext;

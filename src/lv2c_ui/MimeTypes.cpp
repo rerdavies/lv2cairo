@@ -20,7 +20,7 @@
 
 #include "lv2c_ui/MimeTypes.hpp"
 
-using namespace lvtk::ui;
+using namespace lv2c::ui;
 
 
 #pragma GCC diagnostic push

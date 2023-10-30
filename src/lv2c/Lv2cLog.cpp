@@ -22,14 +22,14 @@
 
 using namespace std;
 
-namespace lvtk
+namespace lv2c
 {
 
     static Lv2cLogLevel logLevel = Lv2cLogLevel::Debug;
 
     void SetLogLevel(Lv2cLogLevel logLevel_)
     {
-        lvtk::logLevel = logLevel_;
+        lv2c::logLevel = logLevel_;
     }
 
     void LogError(const std::string &message)

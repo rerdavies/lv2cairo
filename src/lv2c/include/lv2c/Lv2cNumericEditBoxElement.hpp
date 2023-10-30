@@ -23,7 +23,7 @@
 #include "Lv2cBindingProperty.hpp"
 #include <optional>
 
-namespace lvtk {
+namespace lv2c {
 
     enum Lv2cValueType {
         Int8,

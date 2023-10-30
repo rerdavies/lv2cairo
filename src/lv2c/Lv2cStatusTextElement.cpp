@@ -29,7 +29,7 @@
 #include <chrono>
 
 
-using namespace lvtk;
+using namespace lv2c;
 
 
 Lv2cSize Lv2cStatusTextElement::MeasureClient(Lv2cSize clientConstraint, Lv2cSize clientAvailable,Lv2cDrawingContext&context)

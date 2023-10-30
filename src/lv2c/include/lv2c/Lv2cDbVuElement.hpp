@@ -20,7 +20,7 @@
 #pragma once
 #include <chrono>
 #include "Lv2cVuElement.hpp"
-namespace lvtk {
+namespace lv2c {
     class Lv2cDbVuElement: public Lv2cVuElement {
     public:
         using self = Lv2cDbVuElement;

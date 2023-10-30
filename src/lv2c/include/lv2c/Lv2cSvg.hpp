@@ -24,7 +24,7 @@
 
 typedef struct _RsvgHandle RsvgHandle;
 
-namespace lvtk
+namespace lv2c
 {
     class Lv2cSvg
     {

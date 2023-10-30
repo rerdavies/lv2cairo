@@ -28,7 +28,7 @@
 typedef struct _PangoLayout PangoLayout;
 
 
-namespace lvtk
+namespace lv2c
 {
     namespace implementation {
             class AnimatedDropdownElement;

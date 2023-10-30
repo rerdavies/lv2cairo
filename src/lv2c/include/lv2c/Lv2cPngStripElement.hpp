@@ -23,7 +23,7 @@
 #include <string>
 
 
-namespace lvtk
+namespace lv2c
 {
     /// @brief Renders a PNG strip file as an animation.
     /// Takes an png file consisting of a NxM tiles horizontally arranged. 

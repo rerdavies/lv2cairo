@@ -35,9 +35,9 @@
 #include "X11/keysymdef.h"
 #include <codecvt>
 
-using namespace lvtk;
+using namespace lv2c;
 
-using namespace lvtk;
+using namespace lv2c;
 
 using SelectionRange = Lv2cEditBoxElement::SelectionRange;
 

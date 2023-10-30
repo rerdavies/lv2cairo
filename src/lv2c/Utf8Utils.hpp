@@ -24,7 +24,7 @@
 #include <string>
 #include <string_view>
 
-namespace lvtk {
+namespace lv2c {
     size_t Utf8Index(size_t size, const std::string &text);
     size_t Utf8Decrement(size_t size, const std::string &text);
     size_t Utf8Increment(size_t size, const std::string &text);

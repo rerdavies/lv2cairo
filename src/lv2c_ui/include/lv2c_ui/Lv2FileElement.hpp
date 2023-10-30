@@ -22,13 +22,13 @@
 #include "lv2c/Lv2cButtonBaseElement.hpp"
 #include "lv2c/Lv2cBindingProperty.hpp"
 
-namespace lvtk {
+namespace lv2c {
     class Lv2cTypographyElement;
     class Lv2cSvgElement;
 }
 
-namespace lvtk::ui {
-    using namespace lvtk;
+namespace lv2c::ui {
+    using namespace lv2c;
 
     class Lv2FileElement: public Lv2cButtonBaseElement {
     public: 

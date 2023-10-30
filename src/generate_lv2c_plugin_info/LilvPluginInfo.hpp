@@ -23,18 +23,18 @@
 #include <lilv/lilv.h>
 
 
-namespace lvtk::ui {
+namespace lv2c::ui {
 
     // Provides construction of Lv2PluginInfo from lilv.
 
-    class LilvPortInfo: public lvtk::ui::Lv2PortInfo {
+    class LilvPortInfo: public lv2c::ui::Lv2PortInfo {
     public:
         LilvPortInfo(LilvWorld*pWorld,const LilvPlugin *pPlugin, const LilvPort *pPort);
 
     private:
         Lv2BufferType GetBufferType(const std::string&buffer_type);
     };
-    class LilvPluginInfo: public lvtk::ui::Lv2PluginInfo {
+    class LilvPluginInfo: public lv2c::ui::Lv2PluginInfo {
     public:
         LilvPluginInfo(LilvWorld *pWorld, const LilvPlugin *pPlugin);
     private:

@@ -22,7 +22,7 @@
 #include "Lv2cContainerElement.hpp"
 #include "Lv2cBindingProperty.hpp"
 
-namespace lvtk
+namespace lv2c
 {
 
     class Lv2cDropShadowElement : public Lv2cContainerElement

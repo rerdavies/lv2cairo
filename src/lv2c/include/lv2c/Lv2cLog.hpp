@@ -20,7 +20,7 @@
 #pragma once
 #include <string>
 
-namespace lvtk
+namespace lv2c
 {
     enum class Lv2cLogLevel
     {

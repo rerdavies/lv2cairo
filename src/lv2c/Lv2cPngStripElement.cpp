@@ -2,7 +2,7 @@
 #include "lv2c/Lv2cWindow.hpp"
 #include <numbers>
 
-using namespace lvtk;
+using namespace lv2c;
 
 void Lv2cPngStripElement::OnSourceChanged(const std::string &source)
 {

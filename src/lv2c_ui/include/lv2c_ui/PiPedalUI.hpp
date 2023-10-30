@@ -47,7 +47,7 @@
 
 
 
-namespace lvtk::ui {
+namespace lv2c::ui {
 
 
 

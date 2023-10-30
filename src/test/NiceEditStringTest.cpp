@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 #include "lv2c/Lv2cNumericEditBoxElement.hpp"
-using namespace lvtk;
+using namespace lv2c;
 
 TEST_CASE( "NiceEditString test", "[nice_edit_string]" )   {
     REQUIRE( Lv2cNumericEditBoxElement::NiceEditText(123456,Lv2cValueType::Uint16) == "123456");
