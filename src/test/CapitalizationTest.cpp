@@ -32,22 +32,33 @@ TEST_CASE("Unicode capitalization test", "[capitalization]")
 {
     IcuString icu;
 
+
     {
-        std::u16string testString(u"şġßabcABC😀");
-        std::u16string result = icu.toUpper(testString);
-        std::u16string expected = u"ŞĠẞABCABC😀";
+        std::u32string testString(U"şġabcABC😀");
+        std::u32string result = icu.toUpper(testString);
+        std::u32string expected = U"ŞĠABCABC😀";
+        REQUIRE(result == expected);
+    }
+
+    {
+        std::string testString("abc");
+        std::string result = icu.toUpper(testString);
+        std::string expected = "ABC";
+        REQUIRE(result == expected);
+    }
+
+    {
+        std::string testString("ωşġßabcABC😀");
+        std::u32string wTestString = icu.toUtf32(testString);
+
+        std::string result = icu.toUpper(testString);
+        std::string expected = "ΩŞĠßABCABC😀";
         REQUIRE(result == expected);
     }
     {
         std::string testString("şġßabcABC😀");
         std::string result = icu.toUpper(testString);
-        std::string expected = "ŞĠẞABCABC😀";
-        REQUIRE(result == expected);
-    }
-    {
-        std::string testString("şġßabcABC😀");
-        std::string result = icu.toUpper(testString);
-        std::string expected = "ŞĠẞABCABC😀";
+        std::string expected = "ŞĠßABCABC😀";
         REQUIRE(result == expected);
     }
 

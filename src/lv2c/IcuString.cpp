@@ -20,33 +20,18 @@
 #include <inttypes.h>
 
 #include "lv2c/IcuString.hpp"
-#include "unicode/uclean.h"
-#include "unicode/utypes.h"
-#include "unicode/uchar.h"
-#include "unicode/locid.h"
-#include "unicode/ustring.h"
-#include "unicode/ucnv.h"
-#include "unicode/unistr.h"
-#include <unicode/ucol.h>
 #include <iostream>
 
+#include <iostream>
+#include <string>
+#include <locale>
+#include <codecvt>
 #include <sstream>
 
-using namespace icu;
 using namespace lv2c;
 
 IcuString::~IcuString()
 {
-    if (cnv)
-    {
-        ucnv_close(cnv);
-        cnv = nullptr;
-    }
-    if (coll)
-    {
-        ucol_close(coll);
-        coll = nullptr;
-    }
 }
 
 #ifdef __linux__
@@ -54,131 +39,104 @@ IcuString::~IcuString()
 #endif
 
 
+
+
+
 IcuString::IcuString()
 {
-
-    UErrorCode errorCode = U_ZERO_ERROR;
-    u_init(&errorCode);
-
-
-    if (U_FAILURE(errorCode))
+    this->m_locale = std::locale("");
+    std::string name = m_locale.name();
+    if (name == "")
     {
-        fprintf(stderr, "Can't initialize ICU Unicode package. %s\n", u_errorName(errorCode));
-        exit(EXIT_FAILURE);
-    }
-
-    cnv = ucnv_open("UTF-8", &errorCode);
-
-    if (U_FAILURE(errorCode))
-    {
-        fprintf(stderr, "Can't create ICU Unicode default converter: %s\n", u_errorName(errorCode));
-        exit(EXIT_FAILURE);
-    }
-
-    ucnv_setFromUCallBack(cnv, UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C, nullptr, nullptr, &errorCode);
-    if (U_FAILURE(errorCode))
-    {
-        fprintf(stderr, "Can't create ICU Unicode escape callback. %s\n", u_errorName(errorCode));
-        ucnv_close(cnv);
-        exit(EXIT_FAILURE);
-    }
-
-    coll = ucol_open("en-US", &errorCode);
-    if (U_FAILURE(errorCode))
-    {
-        fprintf(stderr, "Can't create ICU Unicode Collator. %s\n", u_errorName(errorCode));
-        ucnv_close(cnv);
-        exit(EXIT_FAILURE);
+        m_locale = std::locale("en_US.UTF8");
     }
 }
 
-std::u16string IcuString::toUpper(const std::u16string &text)
+
+std::u32string IcuString::toUpper(const std::u32string &text)
 {
+    #ifdef __linux__
+    auto& f = std::use_facet<std::ctype<wchar_t>>(m_locale);
 
-    std::basic_stringstream<char16_t> s;
-
-    bool isError = false;
-    const char16_t *input = text.data();
-    char16_t c;
-
-    for (size_t i = 0; i < text.length() && !isError; /* U16_NEXT post-increments */)
+    std::basic_stringstream<char32_t> s;
+    for (auto c: text)
     {
-        size_t previous = i;
-        U16_NEXT(input, i, INT32_MAX, c); /* without length because NUL-terminated */
-        if (c == u'ß')                    // lowercase ss.
-        {
-            s << u'ẞ'; // uppercase ss.
-        }
-        else if (i == previous + 2) // emoji?
-        {
-            s << text[previous];
-            s << text[previous + 1];
-        }
-        else
-        {
-            if (c == 0)
-            {
-                break; /* stop at terminating NUL, no need to terminate buffer */
-            }
-            c = u_toupper(c);
-            s << c;
-        }
+        s << (char32_t)(f.toupper((wchar_t)c));
     }
+    #else 
+        static_assert("windows wchar_t is 16 bit instead of 32-bit. Adjust accordingly.");
+    #endif
+
     return s.str();
+}
+
+// utility wrapper to adapt locale-bound facets for u32string/wbuffer convert
+template<class Facet>
+struct icu_deletable_facet : Facet
+{
+    template<class... Args>
+    icu_deletable_facet(Args&&... args) : Facet(std::forward<Args>(args)...) {}
+    ~icu_deletable_facet() {}
+};
+
+
+std::u32string IcuString::toUtf32(const std::string &text)
+{
+    // use deprecated converter for now until C++ N fixes it.
+    return std::wstring_convert<
+            icu_deletable_facet<std::codecvt<char32_t,char,std::mbstate_t>>, char32_t>{}.from_bytes(text) ;  
+}
+
+ 
+
+std::string IcuString::toUtf8(const std::u32string &text)
+{
+    // use deprecated converter for now until C++ N fixes it.
+
+    return std::wstring_convert<
+        icu_deletable_facet<std::codecvt<char32_t,char,std::mbstate_t>>,
+         char32_t>{}
+         .to_bytes(text) ;  
+
 }
 
 std::u16string IcuString::toUtf16(const std::string &text)
 {
-    UErrorCode errorCode = U_ZERO_ERROR;
-    int32_t size = ucnv_toUChars(cnv, nullptr, 0, text.c_str(), text.length(), &errorCode);
-    if (U_FAILURE(errorCode) && errorCode != UErrorCode::U_BUFFER_OVERFLOW_ERROR)
-    {
-        return u"#icu-error";
-    }
-    errorCode = U_ZERO_ERROR;
-
-    std::u16string result;
-    result.resize(size);
-    ucnv_toUChars(cnv, result.data(), result.length() + 1, text.c_str(), text.length(), &errorCode);
-
-    if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING)
-    {
-        return u"#icu-error";
-    }
-    return result;
+    // use deprecated converter for now until C++ N fixes it.
+    return std::wstring_convert<
+            std::codecvt_utf8_utf16<char16_t>, char16_t>{}
+            .from_bytes(text) ;  
 }
 std::string IcuString::toUtf8(const std::u16string &text)
 {
-    UErrorCode errorCode = U_ZERO_ERROR;
-    int32_t size = ucnv_fromUChars(cnv, NULL, 0, text.c_str(), text.length(), &errorCode);
-    if (U_FAILURE(errorCode) && errorCode != UErrorCode::U_BUFFER_OVERFLOW_ERROR)
-    {
-        return "#icu-error";
-    }
-    errorCode = U_ZERO_ERROR;
-    std::string result;
-    result.resize(size);
-    ucnv_fromUChars(cnv, result.data(), size + 1, text.c_str(), text.length(), &errorCode);
-    if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING)
-    {
-        return "#error";
-    }
-    return result;
-}
+    // use deprecated converter for now until C++ N fixes it.
 
+    return std::wstring_convert<
+        std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(text);
+
+}
 std::string IcuString::toUpper(const std::string &text)
 {
-    return toUtf8(toUpper(toUtf16(text)));
+    auto wText = toUtf32(text);
+    return toUtf8(toUpper(wText));
 }
 
 int IcuString::collationCompare(const std::string &v1, const std::string &v2)
 {
-    return collationCompare(toUtf16(v1), toUtf16(v2));
+    auto& f = std::use_facet<std::collate<char>>(m_locale);
+
+    return f.compare(
+        v1.c_str(), v1.c_str()+v1.length(),
+            v2.c_str(), v2.c_str()+v2.length());
 }
 
 int IcuString::collationCompare(const std::u16string &v1, const std::u16string &v2)
 {
-    return ucol_strcoll(coll, v1.c_str(), v1.length(), v2.c_str(), v2.length());
+    auto& f = std::use_facet<std::collate<char16_t>>(m_locale);
+    return f.compare(
+        v1.c_str(), v1.c_str()+v1.length(),
+        v2.c_str(), v2.c_str()+v2.length());
+
 }
 
 /*static*/

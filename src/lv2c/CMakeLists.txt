@@ -14,9 +14,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 find_package(Cairo REQUIRED)
 find_package(X11 REQUIRED)
 find_package(Pango REQUIRED)
-find_package(ICU COMPONENTS uc i18n)
-
+#find_package(ICU COMPONENTS uc i18n)
 message(STATUS "ICU_LIBRARIES=${ICU_LIBRARIES}")
+
+# incorrect library versions.
+#set(ICU_LIBRARIES libicuuc.a libicui18n.a libicudata.a)
+set(ICU_LIBRARIES )
 
 find_library(RSVG2_LIB 
         NAMES rsvg-2 librsvg-2.so.2 REQUIRED )
@@ -187,6 +190,17 @@ target_include_directories(
 )
 
 
+message(STATUS "LIBS: " ${LV2CAIRO_INCLUDE_DIRECTORY}
+${CAIRO_INCLUDE_DIRS}
+${PC_PANGOCAIRO_INCLUDE_DIRS}
+${GOBJECT_INCLUDE_DIR}
+${X11_INCLUDE_DIRS}
+${GLIB_INCLUDE_DIRS}
+${RSVG2_INCLUDE_DIR}
+${GDK_PIXBUF_INCLUDE_DIR}
+)
+
+
 
 target_link_libraries(lv2c PUBLIC 
     ${CAIRO_LIBRARIES} ${X11_LIBRARIES}
@@ -194,6 +208,6 @@ target_link_libraries(lv2c PUBLIC
     ${GOBJECT_LIBRARIES}
     ${RSVG2_LIB}
     ${GDK_PIXBUF_LIB}
-    ${ICU_LIBRARIES}
+    #${ICU_LIBRARIES}
     Xrandr
 )

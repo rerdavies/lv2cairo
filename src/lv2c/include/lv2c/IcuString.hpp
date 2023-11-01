@@ -21,15 +21,14 @@
 
 #include <string>
 #include <memory>
-
-typedef struct UConverter UConverter;
-typedef struct UCollator UCollator;
+#include <locale>
 
 namespace lv2c
 {
 
 
     /// @brief A wrapper for the UCI unicode library to provate basic UTF services.
+    /// Subsequentlyt replaced due to evil linkage and versioning problems on Debian bookworm. Don't use UCI anymore.
     class IcuString
     {
     public:
@@ -67,10 +66,12 @@ namespace lv2c
 
 
         std::string toUpper(const std::string&text);
-
-        std::u16string toUpper(const std::u16string&text);
+        std::u32string toUpper(const std::u32string&text);
         std::u16string toUtf16(const std::string&text);
         std::string toUtf8(const std::u16string&text);
+
+        std::u32string toUtf32(const std::string&text);
+        std::string toUtf8(const std::u32string&text);
 
         /// @brief Compare using current locale's sorting rules.
         /// @param v1 string
@@ -78,12 +79,14 @@ namespace lv2c
         /// @return -1 if v1 < v2, 0 if v1 == v2, +1 if v1 > v2.
         int collationCompare(const std::string &v1, const std::string &v2);
         int collationCompare(const std::u16string &v1, const std::u16string &v2);
-    private:
-        UConverter *cnv = nullptr;
-        UCollator *coll = nullptr;
 
-        static IcuString *gIcuStringInstance;
+    private:
+        static IcuString * gIcuStringInstance;
         static int64_t gIcuStringRefCount;
+
+
+        std::locale&locale() { return m_locale;}
+        std::locale m_locale;
     };
 
 
