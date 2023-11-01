@@ -31,6 +31,7 @@
 #include "lv2/patch/patch.h"
 
 #include <iostream>
+#include <algorithm>
 
 #include <string.h>
 

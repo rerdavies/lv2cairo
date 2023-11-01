@@ -19,6 +19,8 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#pragma GCC diagnostic ignored "-Wrestrict" // GCC 12 bug.
+
 #include "lv2c/Lv2cMarkdownElement.hpp"
 #include "lv2c/Lv2cFlexGridElement.hpp"
 #include <sstream>
