@@ -264,7 +264,7 @@ void Lv2cElement::Draw(Lv2cDrawingContext &dc, const Lv2cRectangle &clipBounds)
 
         Lv2cRectangle screenBounds = dc.device_to_user(deviceBounds);
 
-        cairo_public cairo_surface_t *renderSurface = cairo_image_surface_create(
+        cairo_surface_t *renderSurface = cairo_image_surface_create(
             cairo_format_t::CAIRO_FORMAT_ARGB32,
             (int)std::round(deviceBounds.Width()),
             (int)std::round(deviceBounds.Height()));

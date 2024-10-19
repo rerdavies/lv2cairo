@@ -493,7 +493,7 @@ void Lv2cDropShadowElement::DrawDropShadow(Lv2cDrawingContext &dc, const Lv2cRec
 
     double windowScale = Window()->WindowScale();
 
-    cairo_public cairo_surface_t *renderSurface = cairo_image_surface_create(
+    cairo_surface_t *renderSurface = cairo_image_surface_create(
         cairo_format_t::CAIRO_FORMAT_A8,
         (int)std::round(deviceBufferBounds.Width()),
         (int)std::round(deviceBufferBounds.Height()));
