@@ -16,7 +16,7 @@ function DocIndex() {
     return (
         <Box >
             <Box className={"page_column"}>
-                <img src="img/Lv2C-Logo-whitebg.svg" style={{position: "absolute", left: -138,top: -14, width: 125, display: floatLogo? undefined: "none"}} />
+                <img src="img/LvcLogo.svg" style={{position: "absolute", left: -138,top: -14, width: 125, display: floatLogo? undefined: "none"}} />
                 <Typography variant="h3" style={{fontWeight: 1200}}>Lv2Cairo</Typography>
                 <Typography variant="h6" paragraph>The Documentation</Typography>
                 {

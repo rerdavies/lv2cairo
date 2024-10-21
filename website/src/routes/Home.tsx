@@ -93,12 +93,16 @@ const Home = () => {
                 
                 <Box sx={{ paddingLeft: 4, marginBottom: 1.5 }}>
                     <Link to="/documentation/index"><Typography >The Documentation</Typography></Link>
+                    <Box sx={{ paddingLeft: 2, marginTop: 1 }}>
+                        <Link to="/documentation/overview"><Typography >More Details</Typography></Link>
+                        <Link to="/documentation/getting_started"> <Typography>Getting Started</Typography></Link>
+                        <Link to="/documentation/building_an_lv2_audio_plugin"> <Typography>Building an LV2 Audio Plugin</Typography></Link>
+                        <Link to="/documentation/building_an_lv2_ui_plugin"> <Typography>Building an LV2 UI Plugin</Typography></Link>
+                        <Link to="/documentation/apis"> <Typography>API Documentation</Typography></Link>
+                        <Link to="/documentation/coding_conventions"> <Typography>Lv2Cairo Coding Conventions</Typography></Link>
+                    </Box>
                     <br/>
-                    <Link to="/documentation/overview"><Typography >More Details</Typography></Link>
-                    <Link to="/documentation/getting_started"> <Typography>Getting Started</Typography></Link>
-                    <Link to="/documentation/build_an_lv2_audio_plugin"> <Typography>Building an LV2 Audio Plugin</Typography></Link>
-                    <Link to="/documentation/build_an_lv2_ui_plugin"> <Typography>Building an LV2 UI Plugin</Typography></Link>
-                    <br/>
+                    
                     <a href="http://github.com/rerdavies/lv2cairo"> <Typography>The GitHub Repository</Typography></a>
                 </Box>
                 <div style={{height: 24}} />
