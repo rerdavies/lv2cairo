@@ -18,7 +18,12 @@ To build and run the website locally for development and test purposes, follow t
 
 2. Upgrade NPM to lastest version.
 
-3. To run the Vite development server:
+3. Install components and dependencies.
+
+    cd website
+    npm install
+
+4. To run the Vite development server:
 
    cd website
    ./start.sh
