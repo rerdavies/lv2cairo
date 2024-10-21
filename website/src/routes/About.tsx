@@ -1,10 +1,9 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import ArchitectureDiagram from '../ArchitectureDiagram';
 import { Link} from "react-router-dom";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { FigureCaption,SmallPrint, P, Ul,Subheading } from './documentation/StandardFormats';
-import { Lv2cCopyrightText, Lv2cVersion, Lv2cVersionNotice } from '../VersionInfo';
+import { P } from './documentation/StandardFormats';
+import { Lv2cCopyrightText } from '../VersionInfo';
 import { Lv2Cairo } from './documentation/StandardFormats';
 
 
