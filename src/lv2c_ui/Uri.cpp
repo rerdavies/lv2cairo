@@ -20,6 +20,7 @@
 #include "Uri.hpp"
 #include <stdexcept>
 #include "UriHelper.hpp"
+#include <cstdint>
 
 using namespace pipedal;
 

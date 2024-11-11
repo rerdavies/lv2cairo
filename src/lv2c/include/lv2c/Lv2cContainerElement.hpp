@@ -21,6 +21,9 @@
 
 #pragma once
 
+
+#pragma GCC diagnostic ignored "-Woverloaded-virtual" // GCC 13 warning.
+
 namespace lv2c {
     class Lv2cContainerElement: public Lv2cElement {
     public:

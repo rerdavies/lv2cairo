@@ -1,4 +1,4 @@
-#include <catch2/catch.hpp>
+#include "CatchTest.hpp"
 #include "lv2c/Lv2cTypes.hpp"
 #include <cmath>
 #include <iostream>
