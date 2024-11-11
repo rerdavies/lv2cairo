@@ -70,7 +70,7 @@ size_t Lv2cTableElement::RowCount() const
     return ChildCount() / ColumnCount();
 }
 
-Lv2cElement::ptr &Lv2cTableElement::Child(size_t row, size_t column)
+Lv2cElement::ptr &Lv2cTableElement::ChildCell(size_t row, size_t column)
 {
     return Children()[row * ColumnCount() + column];
 }
@@ -118,7 +118,7 @@ Lv2cSize Lv2cTableElement::MeasureClient(
                 Lv2cSize childConstraint(columnDefinition.columnWidth- cellExtra.Width(), 0);
                 for (size_t r = 0; r < rowCount; ++r)
                 {
-                    auto &child = Child(r, c);
+                    auto &child = ChildCell(r, c);
                     child->Measure(childConstraint, childAvailable, context);
                     Lv2cSize size = child->MeasuredSize();
                     size = size + cellExtra;
@@ -138,7 +138,7 @@ Lv2cSize Lv2cTableElement::MeasureClient(
 
                 for (size_t r = 0; r < rowCount; ++r)
                 {
-                    auto &child = Child(r, c);
+                    auto &child = ChildCell(r, c);
                     child->Measure(childConstraint, childAvailable, context);
                     auto size = child->MeasuredSize();
                     size = size + cellExtra;
@@ -193,7 +193,7 @@ Lv2cSize Lv2cTableElement::MeasureClient(
                 Lv2cSize childAvailable(childWidth,clientAvailable.Height());
                 for (size_t r = 0; r < rowCount; ++r)
                 {
-                    auto &child = Child(r, c);
+                    auto &child = ChildCell(r, c);
 
                     child->Measure(childConstraint, childAvailable, context);
                     auto measureSize = child->MeasuredSize();
@@ -244,7 +244,7 @@ Lv2cSize Lv2cTableElement::Arrange(Lv2cSize available, Lv2cDrawingContext &conte
         double x = 0;
         for (size_t c = 0; c < columnCount; ++c)
         {
-            auto &child = Child(r, c);
+            auto &child = ChildCell(r, c);
             Lv2cSize measuredSize = child->MeasuredSize();
             auto &columnDefinition = columnDefinitions[c];
 

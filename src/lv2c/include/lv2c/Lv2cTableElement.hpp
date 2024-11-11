@@ -37,14 +37,9 @@ namespace lv2c {
 
         static ptr Create() { return std::make_shared<self>(); }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Woverloaded-virtual" //GCC 12
-#pragma GCC diagnostic ignored "-Woverloaded-virtual=" // GCC 13
 
-        Lv2cElement::ptr&Child(size_t row, size_t column);
+        Lv2cElement::ptr&ChildCell(size_t row, size_t column);
 
-
-#pragma GCC diagnostic pop
     public:
         size_t ColumnCount() const;
         Lv2cTableElement &ColumnCount(size_t columns);
