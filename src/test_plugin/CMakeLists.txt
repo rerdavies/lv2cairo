@@ -34,7 +34,7 @@ add_custom_command(
     OUTPUT  SamplePluginInfo.hpp          # Treated as relative to CMAKE_CURRENT_BINARY_DIR
     COMMAND generate_lv2c_plugin_info 
             ${PLUGIN_URI}
-              --ttl ${CMAKE_CURRENT_BINARY_DIR}
+              --ttl ${CMAKE_CURRENT_BINARY_DIR}/
               --out ${CMAKE_CURRENT_BINARY_DIR}/SamplePluginInfo.hpp 
               --class SamplePluginInfo
     DEPENDS 
