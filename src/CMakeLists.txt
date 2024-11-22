@@ -24,7 +24,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     endif()
 
 
-    set (CXX_EXTRA_FLAGS "-Wno-psabi -Werror -Wall -pedantic -Wno-reorder -Wno-restrict -Wno-overloaded-virtual")
+    set (CXX_EXTRA_FLAGS "-Wno-psabi -Wall -pedantic -Wno-reorder -Wno-restrict -Wno-overloaded-virtual")
 
     set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG ${CXX_ARCH_FLAGS} ${CXX_EXTRA_FLAGS}")
     set(CMAKE_CXX_FLAGS_DEBUG "-g -D_GLIBCXX_DEBUG ${CXX_ARCH_FLAGS} ${CXX_EXTRA_FLAGS}")
