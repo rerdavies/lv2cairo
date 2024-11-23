@@ -92,20 +92,24 @@ target_include_directories(lv2tk_test_ui PRIVATE
 target_link_libraries(lv2tk_test_ui lv2c lv2c_ui)
 
 
-set(INSTALL_DIR /usr/lib/lv2/${LV2_INSTALL_PATH})
+option(INSTALL_LV2CAIRO_TEST_PLUGIN "Install LV2Cairo test Plugin" ON)
 
-install(TARGETS lv2tk_test lv2tk_test_ui
-    LIBRARY DESTINATION ${INSTALL_DIR}
-    )
+if (INSTALL_LV2CAIRO_TEST_PLUGIN)
+
+    set(INSTALL_DIR /usr/lib/lv2/${LV2_INSTALL_PATH})
+
+    install(TARGETS lv2tk_test lv2tk_test_ui
+        LIBRARY DESTINATION ${INSTALL_DIR}
+        )
 
 
-# Copy all assets to resources file
-INSTALL(FILES
-   ${CMAKE_CURRENT_BINARY_DIR}/manifest.ttl 
-   ${CMAKE_CURRENT_BINARY_DIR}/${LV2_SO_NAME}.ttl
-    DESTINATION ${INSTALL_DIR})
+    # Copy all assets to resources file
+    INSTALL(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/manifest.ttl 
+    ${CMAKE_CURRENT_BINARY_DIR}/${LV2_SO_NAME}.ttl
+        DESTINATION ${INSTALL_DIR})
 
-# copy all resourece files to install resource directory.
+    # copy all resourece files to install resource directory.
 
-INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/resources DESTINATION ${INSTALL_DIR} )
-
+    INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/resources DESTINATION ${INSTALL_DIR} )
+endif()
