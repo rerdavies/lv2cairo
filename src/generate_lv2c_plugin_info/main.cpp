@@ -49,7 +49,7 @@ private:
     std::function<void(void)> fn;
 };
 
-void Process(const std::string &pluginUri, const std::string &extraBundle, const std::string &className, std::string nameSpace,std::ostream &os)
+void Process(const std::string &pluginUri, const std::string &extraBundle, const std::string &className, std::string nameSpace,std::ostream &os, bool generateProperties)
 {
 
     LilvWorld *world = lilv_world_new();
@@ -97,10 +97,12 @@ int main(int argc, char **argv)
     std::string ttlFile;
     std::string className = "MyPluginInfo";
     std::string nameSpace;
+    bool generateProperties = false;
     std::string outputFile;
     CommandLineParser parser;
     parser.AddOption("--ttl", &ttlFile);
     parser.AddOption("--out", &outputFile);
+    parser.AddOption("--generate-properties", &generateProperties);
     parser.AddOption("--class", &className);
     parser.AddOption("--namespace", &nameSpace);
 
@@ -133,7 +135,7 @@ int main(int argc, char **argv)
             pOut = &f;
         }
 
-        Process(uri, ttlFile, className, nameSpace, *pOut);
+        Process(uri, ttlFile, className, nameSpace, *pOut, generateProperties);
     }
     catch (const std::exception &e)
     {
