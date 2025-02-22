@@ -52,3 +52,5 @@
 #define PIPEDAL_UI__width PIPEDAL_UI_PREFIX "width"
 
 #define PIPEDAL_UI__tunerFrequency PIPEDAL_UI_PREFIX "tunerFrequency"
+
+#define PIPEDAL_UI__ledColor PIPEDAL_UI_PREFIX "ledColor"

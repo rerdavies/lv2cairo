@@ -23,33 +23,42 @@
 #include <memory>
 #include "lv2c_ui/Lv2PluginInfo.hpp"
 
-using namespace lv2c::ui;
 
 class ClassFileWriter {
 public:
 
-    ClassFileWriter(std::ostream&s, const std::string &className, std::string&nameSpace): s(s),className(className),nameSpace(nameSpace) { }
-    using Lv2PluginInfo = lv2c::ui::Lv2PluginInfo;
-    using Lv2PortInfo = lv2c::ui::Lv2PortInfo;
-    using PiPedalUI = lv2c::ui::PiPedalUI;
 
-    void Write(const std::shared_ptr<Lv2PluginInfo> pluginInfo);
+    ClassFileWriter(
+        std::ostream&s, 
+        const std::string &uiBaseClassName, 
+        const std::string &pluginBaseClassName,
+        std::string&nameSpace
+    ): 
+        s(s),
+        uiBaseClassName(uiBaseClassName),
+        nameSpace(nameSpace),
+        pluginBaseClassName(pluginBaseClassName) { }
+
+
+    void Write(const std::shared_ptr<lv2c::ui::Lv2PluginInfo> pluginInfo);
 private:
-    void Write(const PiPedalUI&piPedalUI);
+    void Write(const lv2c::ui::PiPedalUI&piPedalUI);
 
-    void WriteC(const UiFileProperty&fileProperty);
-    void WriteC(const UiFrequencyPlot&fileProperty);
-    void WriteC(const UiPortNotification&fileProperty);
+    void WriteC(const lv2c::ui::UiFileProperty&fileProperty);
+    void WriteC(const lv2c::ui::UiFrequencyPlot&fileProperty);
+    void WriteC(const lv2c::ui::UiPortNotification&fileProperty);
+    void WritePluginBase(const std::string &nameSpace,const std::string&pluginBaseClassName,const std::shared_ptr<lv2c::ui::Lv2PluginInfo> pluginInfo);
 
     template<typename T>
     void WriteCArray(const std::vector<T> & array, bool addComma);
 
-    void Write(const Lv2PortInfo& port);
+    void Write(const lv2c::ui::Lv2PortInfo& port);
     void Indent();
     void Unindent();
     std::string Tab();
     std::ostream&s;
-    std::string className;
+    std::string uiBaseClassName;
+    std::string pluginBaseClassName;
     std::string nameSpace;
     uint64_t indent =  0;
 };

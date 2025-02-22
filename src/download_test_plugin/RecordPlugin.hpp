@@ -19,77 +19,65 @@
 
 #pragma once
 
-#include "Lv2Plugin.hpp"
 
-using namespace lv2;
+#define DEFINE_LV2_PLUGIN_BASE
 
-class SamplePlugin : public Lv2Plugin
+#include "RecordPluginInfo.hpp"
+#include <chrono>
+#include <filesystem>
+#include "lv2ext/pipedal.lv2/ext/fileBrowser.h"
+
+
+using namespace lv2c::lv2_plugin;
+using namespace record_plugin;
+
+
+class RecordPlugin : public record_plugin::RecordPluginBase
 {
 public:
-	using super = Lv2Plugin;
+	using super = record_plugin::RecordPluginBase;
 
 	static Lv2Plugin *Create(double rate,
 							 const char *bundle_path,
 							 const LV2_Feature *const *features)
 	{
-		return new SamplePlugin(rate, bundle_path, features);
+		return new RecordPlugin(rate, bundle_path, features);
 	}
-	SamplePlugin(double rate,
+	RecordPlugin(double rate,
 				 const char *bundle_path,
 				 const LV2_Feature *const *features);
 
 protected:
-	virtual void ConnectPort(uint32_t port, void *data) override;
 	virtual void Activate() override;
 	virtual void Run(uint32_t n_samples) override;
 	virtual void Deactivate() override;
 
-private:
-	const float *level = nullptr;
-	float *vuIn = nullptr;
-	float *vuOutL = nullptr;
-	float *vuOutR = nullptr;
-	const float *lfoRate = nullptr;
-	const float *lfoDepth = nullptr;
-	float *lfoOut = nullptr;
-	const float *toneStack = nullptr;
+	virtual bool OnPatchPathSet(LV2_URID propertyUrid,const char*value) override;
+	virtual const char* OnGetPatchPropertyValue(LV2_URID propertyUrid) override;
 
-	const float *bass = nullptr;
-	const float *mid = nullptr;
-	const float *treble = nullptr;
-	const float *inLeft = nullptr;
-	float *outL = nullptr;
-	float *outR = nullptr;
-
-	float amplitude = 1.0;
-	float lfoPhase = 0;
-	static constexpr double UNINITIALIZED = 1E-180;
-	float lastLevel = UNINITIALIZED;
-	float lastToneStack = UNINITIALIZED;
-	float lastTreble = UNINITIALIZED;
-	float lastMid = UNINITIALIZED;
-	float lastBass = UNINITIALIZED;
 
 private:
-	enum class PortId
-	{
-		Level = 0,
-		VuIn,
-		LfoRate,
-		LfoDepth,
-		LfoOut,
-		VuOutL,
-		VuOutR,
+	void MakeNewRecordingFilename();
+	void StopRecording();
+	void SetFilePath(const char*filename);
+	void UpdateOutputControls(uint64_t sampleInFrame);
 
-		Bass,
-		Mid,
-		Treble,
-		ToneStack,
-
-		AudioInLeft,
-		AudioOutLeft,
-		AudioOutRight,
+	bool activated = false;
+	enum class PluginState {
+		Idle,
+		Recording,
+		Playing
 	};
 
-	void UpdateEq();
+	const LV2_FileBrowser_Files* fileBrowserFilesFeature = nullptr;
+	PluginState state = PluginState::Idle;
+
+	using clock_t = std::chrono::steady_clock;
+
+	clock_t::time_point startTime;
+	float time_seconds = 0.0f;
+
+	std::string filePath;
+	std::string recordingFilePath; 
+	std::string recordingDirectory;
 };

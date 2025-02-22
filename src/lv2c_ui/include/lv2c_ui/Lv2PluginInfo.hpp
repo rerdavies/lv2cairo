@@ -220,6 +220,8 @@ namespace lv2c::ui {
 
         bool is_valid_ = true;
 
+        std::string pipedal_ledColor_;
+
     };
     class Lv2PortInfo: private Lv2PortInfo_Init
     {
@@ -235,6 +237,7 @@ namespace lv2c::ui {
 
 
     public:
+        const std::string pipedal_ledColor() const { return pipedal_ledColor_; }
         bool IsSwitch() const
         {
             return min_value_ == 0 && max_value_ == 1 && (integer_property_ || toggled_property_ || enumeration_property_);
@@ -347,6 +350,7 @@ namespace lv2c::ui {
 
         std::string bundle_path_;
         std::string uri_;
+        std::string ui_;
         std::string name_;
         std::string plugin_class_;
         std::string brand_;
@@ -373,6 +377,7 @@ namespace lv2c::ui {
     public:
         LV2_PROPERTY_GETSET(bundle_path)
         LV2_PROPERTY_GETSET(uri)
+        LV2_PROPERTY_GETSET(ui)
         LV2_PROPERTY_GETSET(name)
         LV2_PROPERTY_GETSET(brand)
         LV2_PROPERTY_GETSET(label)

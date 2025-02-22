@@ -195,8 +195,39 @@ LilvPortInfo::LilvPortInfo(LilvWorld *pWorld, const LilvPlugin *plugin, const Li
     AutoLilvNode core__toggled = lilv_new_uri(pWorld, LV2_CORE__toggled);
     this->toggled_property_ = lilv_port_has_property(plugin, pPort, core__toggled);
 
+    AutoLilvNode pipedal_ui__ledColor = lilv_new_uri(pWorld, PIPEDAL_UI__ledColor);
+    AutoLilvNode port_led_color = lilv_port_get(plugin, pPort,pipedal_ui__ledColor);
+    if (port_led_color)
+    {
+        auto value =lilv_node_as_string(port_led_color);
+        if (value)
+        {
+            this->pipedal_ledColor_ = value;
+
+        }
+    }
+
+
+    
+
     AutoLilvNode portprops__not_on_gui_property_uri = lilv_new_uri(pWorld, LV2_PORT_PROPS__notOnGUI);
     this->not_on_gui_ = lilv_port_has_property(plugin, pPort, portprops__not_on_gui_property_uri);
+
+
+    AutoLilvNode portprops__trigger_uri = lilv_new_uri(pWorld, LV2_PORT_PROPS__trigger);
+    this->trigger_ = lilv_port_has_property(plugin, pPort, portprops__trigger_uri);
+
+    AutoLilvNode pipedalui_ledColor = lilv_new_uri(pWorld, PIPEDAL_UI__ledColor);
+    AutoLilvNode portLedColor = lilv_port_get(plugin, pPort, pipedalui_ledColor);
+    if (portLedColor)
+    {
+        auto result = lilv_node_as_string(portLedColor);
+        if (result)
+        {
+            this->pipedal_ledColor_ = result;
+        }
+    }
+
 
     AutoLilvNode core__connectionOptional = lilv_new_uri(pWorld, LV2_CORE__connectionOptional);
     this->connection_optional_ = lilv_port_has_property(plugin, pPort, core__connectionOptional);
@@ -288,6 +319,8 @@ LilvPortInfo::LilvPortInfo(LilvWorld *pWorld, const LilvPlugin *plugin, const Li
 }
 
 
+
+
 LilvPluginInfo::LilvPluginInfo(LilvWorld *pWorld, const LilvPlugin *pPlugin)
 {
     AutoLilvNode bundleUriNode = lilv_plugin_get_bundle_uri(pPlugin);
@@ -349,6 +382,7 @@ LilvPluginInfo::LilvPluginInfo(LilvWorld *pWorld, const LilvPlugin *pPlugin)
     AutoLilvNode rdfs__Comment = lilv_new_uri(pWorld, RDFS__comment);
     AutoLilvNode comment = lilv_world_get(pWorld, plugUri, rdfs__Comment, nullptr);
     this->comment_ = trimComment(comment.AsString());
+
 
     uint32_t ports = lilv_plugin_get_num_ports(pPlugin);
 

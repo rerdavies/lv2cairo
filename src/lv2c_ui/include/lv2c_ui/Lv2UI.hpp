@@ -36,6 +36,11 @@
 
 #include <lv2/atom/atom.h>
 
+#ifndef REGISTRATION_DECLARATION
+#define REGISTRATION_DECLARATION __attribute__((used))
+#endif
+
+
 struct LV2_Atom_Forge_;
 
 namespace lv2c

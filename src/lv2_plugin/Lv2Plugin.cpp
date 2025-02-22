@@ -18,7 +18,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-#include "Lv2Plugin.hpp"
+#include "lv2_plugin/Lv2Plugin.hpp"
+
 
 #include "lv2/atom/atom.h"
 #include "lv2/options/options.h"
@@ -33,7 +34,7 @@
 #include "lv2/atom/forge.h"
 #include <iostream>
 
-using namespace lv2;
+using namespace lv2c::lv2_plugin;
 
 Lv2LogLevel Lv2Plugin::logLevel = Lv2LogLevel::Note;
 
@@ -52,7 +53,7 @@ void Lv2Plugin::activate(LV2_Handle instance)
 void Lv2Plugin::run(LV2_Handle instance, uint32_t n_samples)
 {
     Lv2Plugin *plugin = (Lv2Plugin *)instance;
-    plugin->Run(n_samples);
+    plugin->RunOuter(n_samples);
 }
 
 void Lv2Plugin::deactivate(LV2_Handle instance)
@@ -458,7 +459,7 @@ void Lv2Plugin::PutPatchProperty(int64_t frameTime,LV2_URID propertyUrid, size_t
     lv2_atom_forge_key(&outputForge, urids.patch__value);
     lv2_atom_forge_vector(&outputForge, 
         sizeof(float),
-        urids.atom__float,
+        urids.atom__Float,
         (uint32_t)count,(void*)values);
     lv2_atom_forge_pop(&outputForge, &frame);
 
@@ -525,17 +526,17 @@ void Lv2Plugin::BeginAtomOutput(LV2_Atom_Sequence *controlOutput)
     const uint32_t notify_capacity = controlOutput->atom.size;
     lv2_atom_forge_set_buffer(
         &(this->outputForge), (uint8_t *)(controlOutput), notify_capacity);
-    lv2_atom_forge_sequence_head(&this->outputForge, &outputFrame, urids.units__Frame);
+    lv2_atom_forge_sequence_head(&this->outputForge, &outputFrame, urids.units__frame);
 }
 
 
 int32_t Lv2Plugin::GetIntOption(const LV2_Options_Option *option)
 {
-    if (option->type == urids.atom__float)
+    if (option->type == urids.atom__Float)
     {
         return (int32_t)*(const float*)(option->value);
     }
-    if (option->type == urids.atom__int)
+    if (option->type == urids.atom__Int)
     {
         return *(const int32_t*)(option->value);
     }

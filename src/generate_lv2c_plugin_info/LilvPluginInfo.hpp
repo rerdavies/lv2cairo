@@ -40,6 +40,5 @@ namespace lv2c::ui {
     private:
         bool HasFactoryPresets(LilvWorld*world,const LilvPlugin *plugin);
         PiPedalUI FindWritablePathProperties(LilvWorld*pWorld, const LilvPlugin *pPlugin);
-
     };
 }

@@ -17,33 +17,33 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "SamplePluginInfo.hpp"
+#include "RecordPluginInfo.hpp"
 #include "lv2c_ui/Lv2UI.hpp"
 
 using namespace lv2c::ui;
 using namespace lv2c;
-
-class SamplePlugin: public Lv2UI {
+using namespace record_plugin;
+class RecordPluginUi: public Lv2UI {
 public:
     using super=Lv2UI;
-    SamplePlugin();
+    RecordPluginUi();
 };
 
 
 
-SamplePlugin::SamplePlugin() : super(
-    SamplePluginInfo::Create(),
+RecordPluginUi::RecordPluginUi() : super(
+    RecordPluginUiInfo::Create(),
     Lv2cSize(490,360) // default window size.
     )
 {
     Lv2cTheme::ptr theme = Lv2cTheme::Create(true); // start with dark theme.
-    theme->paper = Lv2cColor("#080818"); // something dark.
+    theme->paper = Lv2cColor("#081808"); // something dark.
     this->Theme(theme);
 }
 
-// Refereence this variable to get the linker to deman-link the entire .obj.
-int uiLinkTarget;
-static Lv2UIRegistration<SamplePlugin> registration { PLUGIN_UI_URI};
+// Refereence this variable to get the linker to demand-link the entire .obj.
+
+static REGISTRATION_DECLARATION Lv2UIRegistration<RecordPluginUi> registration { RecordPluginUiInfo::UI_URI};
 
 
 

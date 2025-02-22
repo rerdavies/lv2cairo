@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Robin E. R. Davies
+// Copyright (c) Robin E. R. Davies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -49,7 +49,7 @@ private:
     std::function<void(void)> fn;
 };
 
-void Process(const std::string &pluginUri, const std::string &extraBundle, const std::string &className, std::string nameSpace,std::ostream &os, bool generateProperties)
+void Process(const std::string &pluginUri, const std::string &extraBundle, const std::string &uiBaseClassName, const std::string &pluginBaseClassName, std::string nameSpace,std::ostream &os)
 {
 
     LilvWorld *world = lilv_world_new();
@@ -80,7 +80,7 @@ void Process(const std::string &pluginUri, const std::string &extraBundle, const
     LilvPluginInfo x(world,plugin);
     std::shared_ptr<LilvPluginInfo> pluginInfo = std::make_shared<LilvPluginInfo>(world, plugin);
 
-    ClassFileWriter writer(os,className,nameSpace);
+    ClassFileWriter writer(os,uiBaseClassName,pluginBaseClassName,nameSpace);
 
     writer.Write(pluginInfo);
 
@@ -95,15 +95,16 @@ int main(int argc, char **argv)
     //             --out [filename]
 
     std::string ttlFile;
-    std::string className = "MyPluginInfo";
+    std::string uiBaseClassName = "";
+    std::string pluginBaseClassName = "";
     std::string nameSpace;
-    bool generateProperties = false;
     std::string outputFile;
     CommandLineParser parser;
     parser.AddOption("--ttl", &ttlFile);
     parser.AddOption("--out", &outputFile);
-    parser.AddOption("--generate-properties", &generateProperties);
-    parser.AddOption("--class", &className);
+    parser.AddOption("--plugin-base-class", &pluginBaseClassName);
+    parser.AddOption("--class", &uiBaseClassName);
+    parser.AddOption("--ui-base-class", &uiBaseClassName);
     parser.AddOption("--namespace", &nameSpace);
 
     try
@@ -135,7 +136,7 @@ int main(int argc, char **argv)
             pOut = &f;
         }
 
-        Process(uri, ttlFile, className, nameSpace, *pOut, generateProperties);
+        Process(uri, ttlFile, uiBaseClassName,pluginBaseClassName, nameSpace, *pOut);
     }
     catch (const std::exception &e)
     {

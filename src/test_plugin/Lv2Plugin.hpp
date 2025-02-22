@@ -36,6 +36,9 @@
 #include <concepts>
 
 
+#ifndef REGISTRATION_DECLARATION
+#define REGISTRATION_DECLARATION __attribute__((used))
+#endif
 namespace lv2
 {
 
