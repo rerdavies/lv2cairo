@@ -32,7 +32,7 @@ using namespace lv2c::lv2_plugin;
 using namespace record_plugin;
 
 
-class RecordPlugin : public record_plugin::RecordPluginBase
+class ToobRecordMono : public record_plugin::RecordPluginBase
 {
 public:
 	using super = record_plugin::RecordPluginBase;
@@ -41,9 +41,9 @@ public:
 							 const char *bundle_path,
 							 const LV2_Feature *const *features)
 	{
-		return new RecordPlugin(rate, bundle_path, features);
+		return new ToobRecordMono(rate, bundle_path, features);
 	}
-	RecordPlugin(double rate,
+	ToobRecordMono(double rate,
 				 const char *bundle_path,
 				 const LV2_Feature *const *features);
 

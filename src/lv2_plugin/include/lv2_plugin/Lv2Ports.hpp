@@ -27,12 +27,14 @@
 #include <cstdint>
 #include <cmath>
 
+
+
 namespace lv2c::lv2_plugin 
 {
 	#ifndef AF2DB_H_
 	#define AF2DB_H_
 
-	inline float Af2Db(float value) {
+	inline float AF2Db(float value) {
 		//  af = pow(10,db/20) = exp(log(10)*db/20)
 		// log(af) = log(10)*db/20
 		// db = log(af)*20/log(10)
@@ -42,7 +44,7 @@ namespace lv2c::lv2_plugin
 		return std::log(value)*K;
 	}
 
-	inline float Db2Af(float db, float minValue)
+	inline float Db2AF(float db, float minValue)
 	{
 		if (db == minValue) {
 			return 0;
@@ -346,22 +348,22 @@ namespace lv2c::lv2_plugin
 	public:
 		void SetData(void*pData)
 		{
-			this->pData = (LV2_Atom_Sequence*)pData;
+			this->pData = (void*)pData;
 		}
-		LV2_Atom_Sequence*Get() const { return pData; }
+		void*Get() const { return pData; }
 	private:
-		LV2_Atom_Sequence *pData = nullptr;
+	void *pData = nullptr;
 	};
 
 	class AtomOutputPort {
 	public:
 		void SetData(void*pData)
 		{
-			this->pData = ( LV2_Atom_Sequence*)pData;
+			this->pData = ( void*)pData;
 		}
-		LV2_Atom_Sequence*Get() const { return pData; }
+		void*Get() const { return pData; }
 	private:
-		LV2_Atom_Sequence *pData = nullptr;
+	void *pData = nullptr;
 	};
 
 
@@ -517,7 +519,7 @@ namespace lv2c::lv2_plugin
 				sampleCount -= updateRate;
 				if (pOut)
 				{
-					float value = Af2Db(maxValue);
+					float value = AF2Db(maxValue);
 					if (value < minDb)
 					{
 						value = minDb;
@@ -546,7 +548,7 @@ namespace lv2c::lv2_plugin
 				sampleCount -= updateRate;
 				if (pOut)
 				{
-					float value = Af2Db(maxValue);
+					float value = AF2Db(maxValue);
 					if (value < minDb)
 						value = minDb;
 					if (value > maxDb)
@@ -558,3 +560,4 @@ namespace lv2c::lv2_plugin
 		}
 	};	
 }
+

@@ -93,6 +93,8 @@ namespace lv2c
 			void LogNote(const char *fmt, ...);
 			void LogTrace(const char *fmt, ...);
 
+			void LogError(const std::string&msg) { LogError("%s",msg.c_str()); 	};
+
 		public:
 			virtual ~Lv2Plugin() {}
 

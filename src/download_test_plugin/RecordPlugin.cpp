@@ -27,13 +27,13 @@
 // using namespace lv2c::lv2_plugin;
 
 
-static REGISTRATION_DECLARATION  PluginRegistration<RecordPlugin> registration(RecordPlugin::URI);
+static REGISTRATION_DECLARATION  PluginRegistration<ToobRecordMono> registration(ToobRecordMono::URI);
 
 constexpr char PREFERRED_PATH_SEPARATOR = std::filesystem::path::preferred_separator;
 
 
 
-RecordPlugin::RecordPlugin(
+ToobRecordMono::ToobRecordMono(
     double rate,
     const char *bundle_path,
     const LV2_Feature *const *features)
@@ -109,7 +109,7 @@ void generate_datetime_filename(char* buffer, size_t buffer_size, const char* pr
     }
 }
 
-void RecordPlugin::MakeNewRecordingFilename()
+void ToobRecordMono::MakeNewRecordingFilename()
 {
     this->recordingFilePath = this->recordingDirectory;
 
@@ -122,14 +122,14 @@ void RecordPlugin::MakeNewRecordingFilename()
 
 }
 
-void RecordPlugin::Activate()
+void ToobRecordMono::Activate()
 {
     this->activated = true;
     super::Activate();
     this->state = PluginState::Idle;
 }
 
-void RecordPlugin::UpdateOutputControls(size_t samplesInFrame)
+void ToobRecordMono::UpdateOutputControls(size_t samplesInFrame)
 {
     if (state == PluginState::Recording)
     {
@@ -159,7 +159,7 @@ void RecordPlugin::UpdateOutputControls(size_t samplesInFrame)
     }
 }
 
-void RecordPlugin::StopRecording()
+void ToobRecordMono::StopRecording()
 {
     if (this->state == PluginState::Recording)
     {
@@ -168,7 +168,7 @@ void RecordPlugin::StopRecording()
         SetFilePath(this->recordingFilePath.c_str());
     }
 }
-void RecordPlugin::Run(uint32_t n_samples)
+void ToobRecordMono::Run(uint32_t n_samples)
 {
     auto src = in.Get();
     auto dst = out.Get();
@@ -229,14 +229,14 @@ void RecordPlugin::Run(uint32_t n_samples)
     }
 }
 
-void RecordPlugin::Deactivate()
+void ToobRecordMono::Deactivate()
 {
     this->activated = false;
     super::Deactivate();
 }
 
 
-bool RecordPlugin::OnPatchPathSet(LV2_URID propertyUrid,const char*value) 
+bool ToobRecordMono::OnPatchPathSet(LV2_URID propertyUrid,const char*value) 
 {
     if (propertyUrid == this->audioFile_urid)
     {
@@ -246,7 +246,7 @@ bool RecordPlugin::OnPatchPathSet(LV2_URID propertyUrid,const char*value)
     return false;
 
 }
-const char* RecordPlugin::OnGetPatchPropertyValue(LV2_URID propertyUrid)  {
+const char* ToobRecordMono::OnGetPatchPropertyValue(LV2_URID propertyUrid)  {
     if (propertyUrid == this->audioFile_urid)
     {
         return this->filePath.c_str();
@@ -254,7 +254,7 @@ const char* RecordPlugin::OnGetPatchPropertyValue(LV2_URID propertyUrid)  {
     return nullptr;
 }
 
-void RecordPlugin::SetFilePath(const char*filename)
+void ToobRecordMono::SetFilePath(const char*filename)
 {
     this->filePath = filename;
     if (activated)

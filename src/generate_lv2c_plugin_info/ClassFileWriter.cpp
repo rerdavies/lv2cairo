@@ -536,8 +536,8 @@ void ClassFileWriter::WritePluginBase(const std::string&nameSpace,const std::str
     {
         return;
     }
-    s << Tab() << "#include \"lv2_plugin/Lv2Plugin.hpp\"" << endl;
-    s << Tab() << "#include \"lv2_plugin/Lv2Ports.hpp\"" << endl;
+    s << Tab() << "#include <lv2_plugin/Lv2Plugin.hpp>" << endl;
+    s << Tab() << "#include <lv2_plugin/Lv2Ports.hpp>" << endl;
 
     s << Tab() << "using namespace lv2c::lv2_plugin;" << endl;
     s << endl;
@@ -734,7 +734,8 @@ void ClassFileWriter::WritePluginBase(const std::string&nameSpace,const std::str
             {
                 outputAtomPortName = "nullptr";
             }
-            s << Tab() << "SetAtomPortBuffers(" << inputAtomPortName << ", " << outputAtomPortName << ");" << endl;
+            s << Tab() << "SetAtomPortBuffers((LV2_Atom_Sequence*)(" << inputAtomPortName << 
+                 "), (LV2_Atom_Sequence*)(" << outputAtomPortName << "));" << endl;
         
             
             for (const auto&initStatement: initStatements)
