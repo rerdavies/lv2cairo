@@ -102,7 +102,7 @@ namespace lv2c::lv2_plugin
 		bool lastValue = false;
 	public:
 		void SetData(void *data) {
-			this->pData = (const float*)pData;
+			this->pData = (const float*)data;
 			this->lastValue = false;
 		}
 
@@ -114,7 +114,7 @@ namespace lv2c::lv2_plugin
 			return result;
 		}
 
-		bool Get() {
+		bool GetValue() {
 			bool newValue = (*pData != 0);
 			lastValue = newValue;
 			return newValue;

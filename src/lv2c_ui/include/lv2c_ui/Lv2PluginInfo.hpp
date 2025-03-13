@@ -208,6 +208,9 @@ namespace lv2c::ui {
         int range_steps_ = 0;
         bool trigger_ = false;
         bool integer_property_ = false;
+        bool mod_momentaryOffByDefault_ = false;
+        bool mod_momentaryOnByDefault_ = false;
+
         bool enumeration_property_ = false;
         bool toggled_property_ = false;
         bool not_on_gui_ = false;
@@ -296,6 +299,8 @@ namespace lv2c::ui {
         LV2_PROPERTY_GETSET_SCALAR(range_steps)
         LV2_PROPERTY_GETSET_SCALAR(trigger)
         LV2_PROPERTY_GETSET_SCALAR(integer_property)
+        LV2_PROPERTY_GETSET_SCALAR(mod_momentaryOffByDefault)
+        LV2_PROPERTY_GETSET_SCALAR(mod_momentaryOnByDefault)
         LV2_PROPERTY_GETSET_SCALAR(enumeration_property)
         LV2_PROPERTY_GETSET_SCALAR(toggled_property)
         LV2_PROPERTY_GETSET_SCALAR(not_on_gui)

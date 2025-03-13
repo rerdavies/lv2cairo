@@ -23,15 +23,15 @@
 using namespace lv2c::ui;
 using namespace lv2c;
 using namespace record_plugin;
-class RecordPluginUi: public Lv2UI {
+class RecordPluginMonoUi: public Lv2UI {
 public:
     using super=Lv2UI;
-    RecordPluginUi();
+    RecordPluginMonoUi();
 };
 
 
 
-RecordPluginUi::RecordPluginUi() : super(
+RecordPluginMonoUi::RecordPluginMonoUi() : super(
     RecordPluginUiInfo::Create(),
     Lv2cSize(490,360) // default window size.
     )
@@ -43,7 +43,7 @@ RecordPluginUi::RecordPluginUi() : super(
 
 // Refereence this variable to get the linker to demand-link the entire .obj.
 
-static REGISTRATION_DECLARATION Lv2UIRegistration<RecordPluginUi> registration { RecordPluginUiInfo::UI_URI};
+static REGISTRATION_DECLARATION Lv2UIRegistration<RecordPluginMonoUi> registration { RecordPluginUiInfo::UI_URI};
 
 
 

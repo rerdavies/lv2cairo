@@ -595,7 +595,7 @@ const std::string&PluginRegistrationBase::getPluginuri() const
 }
 
 
-LV2_Handle
+LV2_Handle 
 Lv2Plugin::instantiate(const LV2_Descriptor *descriptor,
                        double rate,
                        const char *bundle_path,
@@ -652,6 +652,7 @@ LV2_Descriptor **Lv2Plugin::GetLv2GetDescriptors()
     }
     return &(gDescriptors[0]);
 }
+
 
 // The LV2 Entry point!
 extern "C" {
