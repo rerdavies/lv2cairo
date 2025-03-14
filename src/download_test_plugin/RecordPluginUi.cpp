@@ -43,7 +43,7 @@ RecordPluginMonoUi::RecordPluginMonoUi() : super(
 
 // Refereence this variable to get the linker to demand-link the entire .obj.
 
-static REGISTRATION_DECLARATION Lv2UIRegistration<RecordPluginMonoUi> registration { RecordPluginUiInfo::UI_URI};
+REGISTRATION_DECLARATION Lv2UIRegistration<RecordPluginMonoUi> recordMonoRegistration { RecordPluginUiInfo::UI_URI};
 
 
 
