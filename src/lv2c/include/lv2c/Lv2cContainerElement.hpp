@@ -125,6 +125,7 @@ namespace lv2c {
     protected:
         virtual void OnLayoutComplete() override;
 
+        virtual std::optional<Lv2cCursor> GetMouseCursor(Lv2cMouseEventArgs &event) override;
 
         virtual bool FireScrollWheel(Lv2cScrollWheelEventArgs &event) override;
 

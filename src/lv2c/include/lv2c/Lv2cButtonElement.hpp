@@ -31,10 +31,14 @@ namespace lv2c {
         Dialog,
         DialogPrimary,
         DialogSecondary,
+
         BorderButton,
         BorderButtonDefault,
         BorderButtonPrimary,
         BorderButtonSecondary,
+
+        FilledButtonPrimary,
+        FilledButtonSecondary,
 
         ImageButton,
         ImageButtonPrimary,
@@ -62,7 +66,7 @@ namespace lv2c {
         virtual bool OnKeycodeDown(const Lv2cKeyboardEventArgs&event) override;
         virtual bool OnKeycodeUp(const Lv2cKeyboardEventArgs&event) override;
         virtual bool OnMouseDown(Lv2cMouseEventArgs &event) override;
-
+        
 
         virtual void OnMount() override;
 

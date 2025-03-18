@@ -474,6 +474,22 @@ size_t Lv2cContainerElement::ChildCount() const
     return Children().size();
 }
 
+std::optional<Lv2cCursor> Lv2cContainerElement::GetMouseCursor(Lv2cMouseEventArgs &event)  {
+    if (!IsMounted()) return std::nullopt;
+    if (!ScreenBounds().Contains(event.screenPoint)) return std::nullopt;
+    if (Style().Visibility() != Lv2cVisibility::Visible) return std::nullopt;
+
+    for (auto &child: Children()) {
+        if (child->ScreenBounds().Contains(event.screenPoint)) {
+            auto cursor = child->GetMouseCursor(event);
+            if (cursor.has_value()) {
+                return cursor;
+            }
+        }
+    }
+    return super::GetMouseCursor(event);
+}
+
 
 
 

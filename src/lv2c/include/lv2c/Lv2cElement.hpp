@@ -142,6 +142,8 @@ namespace lv2c
         virtual bool OnMouseOver(Lv2cMouseOverEventArgs &event);
         virtual bool OnMouseOut(Lv2cMouseOverEventArgs &event);
 
+        virtual std::optional<Lv2cCursor> GetMouseCursor(Lv2cMouseEventArgs &event);
+
         virtual bool OnScrollWheel(Lv2cScrollWheelEventArgs &event);
 
 

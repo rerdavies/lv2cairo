@@ -65,6 +65,7 @@ Lv2cWindow::Lv2cWindow()
     auto rootWindow = Lv2cRootElement::Create();
     rootWindow->Style().Theme(this->theme);
     this->rootElement = rootWindow;
+    this->rootElement->Style().Cursor(Lv2cCursor::Arrow);
 }
 
 Lv2cWindow::~Lv2cWindow()
@@ -347,6 +348,8 @@ bool Lv2cWindow::OnMouseUp(Lv2cMouseEventArgs &event)
     }
     return false;
 }
+
+
 bool Lv2cWindow::OnMouseMove(Lv2cMouseEventArgs &event)
 {
     this->mousePosition = event.point;
@@ -354,6 +357,7 @@ bool Lv2cWindow::OnMouseMove(Lv2cMouseEventArgs &event)
     {
         GetRootElement()->UpdateMouseOver(event.screenPoint);
     }
+
 
     // only send mouse move if captured.
     if (this->Capture() != nullptr)
@@ -396,7 +400,21 @@ void Lv2cWindow::MouseMove(WindowHandle h, int64_t x, int64_t y, ModifierState s
     Lv2cMouseEventArgs event{h, (uint64_t)-1, x / windowScale, y / windowScale, state};
     this->lastMouseEventArgs = event;
     OnMouseMove(event);
+    UpdateMouseCursor(h,x,y,state);
 }
+
+void Lv2cWindow::UpdateMouseCursor(WindowHandle h, int64_t x, int64_t y, ModifierState state)
+{
+    Lv2cMouseEventArgs event{h, (uint64_t)-1, x / windowScale, y / windowScale, state};
+    std::optional<Lv2cCursor> cursor = this->rootElement->GetMouseCursor(event);
+    if (cursor) {
+        nativeWindow->SetMouseCursor(*cursor);
+    } else {
+        nativeWindow->SetMouseCursor(Lv2cCursor::Arrow);
+    }
+}
+
+
 void Lv2cWindow::MouseLeave(WindowHandle h)
 {
     if (this->GetRootElement() != nullptr)
@@ -1426,6 +1444,20 @@ WindowHandle Lv2cWindow::Handle() const
         return nativeWindow->Handle();
     }
     return WindowHandle();
+}
+
+
+std::shared_ptr<Lv2cObject> Lv2cWindow::GetMemoObject(const std::string&name)
+{
+    if (this->memoObjects.contains(name))
+    {
+        return this->memoObjects[name].lock();
+    }
+    return nullptr;
+}
+void Lv2cWindow::SetMemoObject(const std::string &name, std::shared_ptr<Lv2cObject> obj)
+{
+    this->memoObjects[name] = std::weak_ptr<Lv2cObject>(obj);
 }
 
 

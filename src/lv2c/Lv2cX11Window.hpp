@@ -111,6 +111,8 @@ namespace lv2c
         void SetProperty(const std::string &property, const std::vector<int16_t> &data);
         void SetProperty(const std::string &property, const std::vector<int32_t> &data);
 
+
+        void SetMouseCursor(Lv2cCursor cursor);
         bool ProcessEvents();
 
         void ProcessEvent(XEvent &xEvent);
@@ -189,7 +191,8 @@ namespace lv2c
         void RegisterControllerMessages();
 
     private:
-
+        std::map<int,XID> x11CursorMap;
+        XID lastCursor = -1;
         Window GetTransientTarget(Window other);
 
         using clock_t = std::chrono::steady_clock;

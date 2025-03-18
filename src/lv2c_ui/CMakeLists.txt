@@ -18,6 +18,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 
 add_library(lv2c_ui OBJECT
+    include/lv2c_ui/Lv2TextOutputElement.hpp
+    include/lv2c_ui/Lv2MomentaryButtonElement.hpp
     include/lv2c_ui/Lv2ControlConstants.hpp
     include/lv2c_ui/Lv2PortViewFactory.hpp
     include/lv2c_ui/Lv2PluginType.hpp
@@ -35,13 +37,14 @@ add_library(lv2c_ui OBJECT
     include/lv2c_ui/Lv2FrequencyPlotElement.hpp
     include/lv2c_ui/Lv2TunerElement.hpp
     include/lv2c_ui/Lv2FileElement.hpp
+    Lv2TextOutputElement.cpp
     UriHelper.cpp UriHelper.hpp
     Uri.cpp Uri.hpp
     Lv2FileElement.cpp
     Lv2TunerElement.cpp
     Lv2FrequencyPlotElement.cpp
     Lv2FileDialog.cpp
-    GlobMatcher.cpp
+GlobMatcher.cpp
     MimeTypes.cpp
     Lv2PluginInfo.cpp
     Lv2PortViewFactory.cpp

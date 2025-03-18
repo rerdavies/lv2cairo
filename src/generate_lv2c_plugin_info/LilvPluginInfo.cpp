@@ -189,6 +189,16 @@ LilvPortInfo::LilvPortInfo(LilvWorld *pWorld, const LilvPlugin *plugin, const Li
     AutoLilvNode integer_property_uri = lilv_new_uri(pWorld, LV2_CORE__integer);
     this->integer_property_ = lilv_port_has_property(plugin, pPort, integer_property_uri);
 
+    #define MOD_PREFIX "http://moddevices.com/ns/mod#"
+
+    AutoLilvNode mod_momentaryOffByDefault_uri = lilv_new_uri(pWorld, MOD_PREFIX "preferMomentaryOffByDefault");
+    this->mod_momentaryOffByDefault_ = lilv_port_has_property(plugin, pPort, mod_momentaryOffByDefault_uri);
+
+    AutoLilvNode mod_momentaryOnByDefault_uri = lilv_new_uri(pWorld, MOD_PREFIX "preferMomentaryOnByDefault");
+    this->mod_momentaryOnByDefault_ = lilv_port_has_property(plugin, pPort, mod_momentaryOnByDefault_uri);
+
+
+
     AutoLilvNode enumeration_property_uri = lilv_new_uri(pWorld, LV2_CORE__enumeration);
     this->enumeration_property_ = lilv_port_has_property(plugin, pPort, enumeration_property_uri);
 

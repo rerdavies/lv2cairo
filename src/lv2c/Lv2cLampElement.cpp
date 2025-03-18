@@ -5,6 +5,55 @@
 
 using namespace lv2c;
 
+namespace lv2c {
+
+    class LampImage: public Lv2cObject   {
+
+    public:
+        Lv2cSurface png_surface;
+
+    };
+    class ImageCache {
+    public:
+        static std::shared_ptr<LampImage> GetLampImage(Lv2cWindow*window, Lv2cColor color)
+        {
+            std::stringstream ss;
+            ss << "lamp_ " << color.R() << '_' << color.G() << '_' << color.B() << '_' << color.A() << ".priv";
+            std::string key = ss.str();
+
+            std::shared_ptr<Lv2cObject> t = window->GetMemoObject(key);
+            if (t)
+            {
+                return std::static_pointer_cast<LampImage>(t);
+            }
+            auto image = std::make_shared<LampImage>();
+            auto originalSurface = window->GetPngImage("white_led.png");
+            Lv2cImageSurface newSurface = Lv2cImageSurface(cairo_format_t::CAIRO_FORMAT_ARGB32, originalSurface.size().Width(), originalSurface.size().Height()); 
+
+            Lv2cDrawingContext dc { newSurface};
+
+            dc.set_source(originalSurface);
+            dc.fill();
+            dc.paint();
+
+            dc.set_source(color);
+            dc.set_operator(cairo_operator_t::CAIRO_OPERATOR_MULTIPLY);
+            dc.fill();
+            dc.paint();
+
+            image->png_surface = newSurface;
+
+            window->SetMemoObject(key, image);
+            return image;
+        }
+
+        std::map<Lv2cColor, std::weak_ptr<LampImage>> cache;
+    };
+
+
+    ImageCache gImageCache;
+};
+
 Lv2cLampElement::Lv2cLampElement()
 {
     // VariantProperty.SetElement(this,&Lv2cLampElement::OnVariantChanged);
@@ -23,34 +72,18 @@ Lv2cLampElement::Lv2cLampElement()
     // AddChild(image);
     // this->image = image;
     // image->Style().Opacity(Value());
-    this->image = Lv2cElement::Create();
-    image->Style()
-        .RoundCorners({4})
-        .Height(18)
-        .Width(18)
-        .HorizontalAlignment(Lv2cAlignment::Center)
-        .VerticalAlignment(Lv2cAlignment::Center)
-        //.BorderWidth({1})
-        .BorderColor(Lv2cColor(0, 0, 0));
 
-    auto dropShadowSetting = Lv2cDropShadow{
-        .variant = Lv2cDropShadowVariant::InnerDropShadow,
-        .xOffset = 0.1,
-        .yOffset = 2.0,
-        .radius = 6.0,
-        .opacity = 0.95,
-    };
-    auto dropShadow = Lv2cDropShadowElement::Create();
-    dropShadow->Style()
-        .HorizontalAlignment(Lv2cAlignment::Center)
-        .VerticalAlignment(Lv2cAlignment::Center);
-
-    dropShadow->DropShadow(dropShadowSetting);
-    AddChild(dropShadow);
-
-    dropShadow->AddChild(image);
+    // this->Style()
+    //     .HorizontalAlignment(Lv2cAlignment::Center)
+    //     .VerticalAlignment(Lv2cAlignment::Center)
+    //     .RoundCorners({8})
+    //     .Height(16)
+    //     .Width(16)
+    //     .Margin(4)
+    //     ;
 
     OnValueChanged(Value());
+
 }
 
 void Lv2cLampElement::OnVariantChanged(Lv2cLampVariant value)
@@ -69,133 +102,113 @@ void Lv2cLampElement::OnValueChanged(double value)
     {
         adjustedValue = 1 - (1 - value) * (1 - value);
     }
-    StartAnimation(adjustedValue);
-}
-
-void Lv2cLampElement::AnimationTick(const animation_clock_time_point_t&now)
-{
-    using namespace std::chrono;
-    this->animationHandle = AnimationHandle::InvalidHandle;
-
-    constexpr clock_t::rep TICKS_PER_SECOND = duration_cast<clock_t::duration>(1000ms).count();
-    constexpr double TICKS_TO_SECONDS = 1.0 / TICKS_PER_SECOND;
-
-    auto dt = clock_t::now() - animationStartTime;
-
-    double seconds = dt.count() * TICKS_TO_SECONDS;
-
-    bool animating = true;
-    if (animationTarget < AnimationValue())
+    if (this->displayValue != adjustedValue)
     {
-        const double DECREMENT_RATE = 1 / 0.5;
-        double newValue = animationStartValue - seconds * DECREMENT_RATE;
-        // std::cout << "Tick: " << seconds << " start: " << animationStartValue << " new: " << newValue << std::endl;
-        if (newValue < 0)
-        {
-            AnimationValue(0);
-            animating = false;
-        }
-        else
-        {
-            AnimationValue(newValue);
-        }
-    }
-    else
-    {
-        AnimationValue(animationTarget);
-        animating = false;
-    }
-    if (animating)
-    {
-        Window()->RequestAnimationCallback(
-            [this](const animation_clock_time_point_t &now)
-            {
-                AnimationTick(now);
-            });
-    }
-}
-
-double Lv2cLampElement::AnimationValue() const { return animationValue; }
-void Lv2cLampElement::StartAnimation(double targetValue)
-{
-    if (targetValue == animationTarget && animationHandle)
-    {
-        return;
-    }
-    if (Window())
-    {
-        this->animationTarget = targetValue;
-        this->animationStartTime = clock_t::now();
-        this->animationStartValue = AnimationValue();
-        if (!animationHandle)
-        {
-            animationHandle = Window()->RequestAnimationCallback(
-                [this](const animation_clock_time_point_t &now)
-                { AnimationTick(now); });
-        }
-    }
-    else
-    {
-        AnimationValue(targetValue);
-    }
-}
-void Lv2cLampElement::StopAnimation()
-{
-    if (animationHandle)
-    {
-        Window()->CancelAnimationCallback(animationHandle);
-        animationHandle = AnimationHandle::InvalidHandle;
-        AnimationValue(animationTarget);
-    }
-}
-void Lv2cLampElement::AnimationValue(double value)
-{
-    if (!IsMounted())
-    {
-        return;
-    }
-    if (value != animationValue)
-    {
-        animationValue = value;
-        UpdateLampColor();
+        this->displayValue = adjustedValue;
+        Invalidate();
     }
 }
 
 void Lv2cLampElement::UpdateLampColor()
 {
-        Lv2cColor color = Lv2cColor::Blend(animationValue, Theme().lampOffColor, Theme().lampOnColor);
-        image->Style().Background(color);
-        Invalidate();
+    if (!this->IsMounted())
+    {
+        return;
+    }
+
+    Lv2cColor lampColor = Theme().lampOnColor;
+    if (this->lampColor) {
+        lampColor = *(this->lampColor);
+    }
+    offImage = gImageCache.GetLampImage(Window(),Theme().lampOffColor);
+    onImage = gImageCache.GetLampImage(Window(),lampColor);
+    Invalidate();
 
 }
 
 void Lv2cLampElement::OnUnmount()
 {
-    StopAnimation();
 }
 
 void Lv2cLampElement::OnMount()
 {
     Classes({Theme().lampStyle});
-    animationValue = Value();
+
     UpdateLampColor();
 }
 void Lv2cLampElement::OnDraw(Lv2cDrawingContext &dc)
 {
     super::OnDraw(dc);
-    // double value = Value();
-    // Lv2cRectangle clientRectangle {this->ClientSize()};
-    // auto corners = Style().RoundCorners().PixelValue();
-    // auto borderWidth = Style().BorderWidth().PixelValue();
 
-    // corners = corners.inset(borderWidth);
+    // LampImage*image = nullptr;
 
-    // dc.save();
-    // {
-    //     dc.round_corner_rectangle(clientRectangle,corners);
-    //     dc.clip();
-    //     dc.set_source(Style().Color());
-    //     dc.paint_with_alpha(value);
-    // }
-    // dc.restore();
+    Lv2cSurface surface;
+
+    if (displayValue > 0.5) 
+    {
+        surface = this->onImage->png_surface;
+    } else {
+        surface = this->offImage->png_surface;
+    }
+
+    Lv2cSize clientSize = ClientSize();
+
+    Lv2cRectangle imageBounds(0, 0,
+                               clientSize.Width(),
+                               clientSize.Height());
+    if (imageBounds.Empty())
+    {
+        return;
+    }
+    if (!surface)
+    {
+        // gray marker if no image.
+        dc.set_source(Lv2cColor(0.5, 0.5, 0.5, 0.25));
+        dc.rectangle(imageBounds);
+        dc.fill();
+        return;
+    }
+
+
+    Lv2cSize imageSize = surface.size();
+    if (imageSize.Width() <= 0 || imageSize.Height() <= 0)
+    {
+        return;
+    }
+
+
+    imageBounds = Lv2cRectangle(0, 0, clientSize.Width(), clientSize.Height());
+
+    double rotation = 0;
+
+    if (rotation != 0)
+    {
+        dc.save();
+        dc.translate(clientSize.Width() / 2, clientSize.Height() / 2);
+        dc.rotate(rotation * std::numbers::pi / 180.0);
+        ;
+        dc.translate(-clientSize.Width() / 2, -clientSize.Height() / 2);
+    }
+
+
+    auto savedOperator = dc.get_operator();
+    dc.save();
+    dc.round_corner_rectangle(Lv2cRectangle(0, 0, clientSize.Width(), clientSize.Height()), 
+        Style().RoundCorners().PixelValue());
+    dc.clip();
+
+    dc.set_operator(cairo_operator_t::CAIRO_OPERATOR_OVER);
+    dc.rectangle(imageBounds);
+    dc.translate(imageBounds.Left(), imageBounds.Top());
+    dc.scale(imageBounds.Width() / imageSize.Width(), imageBounds.Height() / imageSize.Height());
+    dc.set_source(surface, 0, 0);
+
+    dc.fill();
+    dc.set_operator(savedOperator);
+    dc.restore();
+    if (rotation != 0)
+    {
+        dc.restore();
+    }
+
 }

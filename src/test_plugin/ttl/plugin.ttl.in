@@ -74,7 +74,7 @@ Lv2Cairo test plugin
                 lv2:index  0;
                 lv2:symbol "level" ;
                 lv2:name "Level";
-                lv2:default 0 ;
+                lv2:default 0.0 ;
                 lv2:minimum -60.0;
                 lv2:maximum 30.0;
                 lv2:scalePoint [

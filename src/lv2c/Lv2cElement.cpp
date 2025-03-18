@@ -863,6 +863,25 @@ void Lv2cElement::ReleaseCapture()
     window->releaseCapture(this);
 }
 
+
+std::optional<Lv2cCursor> Lv2cElement::GetMouseCursor(Lv2cMouseEventArgs &event)
+{
+
+
+    if (clippedInLayout) {
+        return std::nullopt;
+    }
+    if (!window) return std::nullopt;
+    if (!this->screenBorderBounds.Contains(event.screenPoint))
+    {
+        return std::nullopt;
+    }
+    bool visible = (Style().Visibility() == Lv2cVisibility::Visible);
+    if (!visible) return std::nullopt;
+    return this->Style().Cursor();
+
+}
+
 void Lv2cElement::UpdateMouseOver(Lv2cPoint mousePosition)
 {
     if (clippedInLayout)

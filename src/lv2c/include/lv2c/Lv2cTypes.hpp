@@ -954,6 +954,16 @@ namespace lv2c
         Stretch
     };
 
+
+    enum class Lv2cCursor {
+        Arrow,
+        Hand,
+        Wait,
+        IBeam,
+        Pointer,
+    };
+
+
     enum class Lv2cEllipsizeMode
     {
         Disable,

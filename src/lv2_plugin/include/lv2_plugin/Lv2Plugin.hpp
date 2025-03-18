@@ -406,6 +406,7 @@ namespace lv2c
 				LV2_URID patch__Get;
 				LV2_URID patch__Set;
 				LV2_URID patch__property;
+				LV2_URID patch__accept;
 				LV2_URID patch__value;
 				LV2_URID atom__URID;
 				LV2_URID atom__Float;
@@ -425,6 +426,7 @@ namespace lv2c
 					patch__Get = map->map(map->handle, LV2_PATCH__Get);
 					patch__Set = map->map(map->handle, LV2_PATCH__Set);
 					patch__property = map->map(map->handle, LV2_PATCH__property);
+					patch__accept = map->map(map->handle, LV2_PATCH__accept);
 					patch__value = map->map(map->handle, LV2_PATCH__value);
 					atom__URID = map->map(map->handle, LV2_ATOM__URID);
 					atom__Float = map->map(map->handle, LV2_ATOM__Float);

@@ -210,21 +210,19 @@ namespace lv2c::ui
 
     void Lv2PortViewController::OnRightPortValueChanged(double value)
     {
-
     }
 
     void Lv2PortViewController::OnDropdownValueChanged(int64_t value)
     {
 
-        if (viewType == Lv2PortViewType::Dropdown )
+        if (viewType == Lv2PortViewType::Dropdown)
         {
-            if (value >= 0 && value < (int64_t)(this->portInfo.scale_points().size()) )
+            if (value >= 0 && value < (int64_t)(this->portInfo.scale_points().size()))
             {
                 this->PortValue(this->portInfo.scale_points()[value].value());
             }
         }
     }
-
 
     void Lv2PortViewController::OnPortValueChanged(double value_)
     {
@@ -261,7 +259,8 @@ namespace lv2c::ui
         {
             int64_t id = -1;
             int64_t dropdownId = 0;
-            for (auto&scale_point : this->portInfo.scale_points()) {
+            for (auto &scale_point : this->portInfo.scale_points())
+            {
                 if (value == scale_point.value())
                 {
                     id = dropdownId;
@@ -338,6 +337,18 @@ namespace lv2c::ui
         std::stringstream s;
         s << (octave - 1) << Semitone(semitone);
         return s.str();
+    }
+
+    const Lv2ScalePoint *Lv2PortViewController::GetScalePoint(float value) const
+    {
+        for (auto &scalePoint : portInfo.scale_points())
+        {
+            if (scalePoint.value() == value)
+            {
+                return &scalePoint;
+            }
+        }
+        return nullptr;
     }
 
     void Lv2PortViewController::UpdateDisplayValue(float value)
@@ -455,7 +466,6 @@ namespace lv2c::ui
         this->DisplayValue(text);
     }
 
-
     Lv2PortViewController::Lv2PortViewController(const Lv2PortInfo &portInfo)
         : portInfo(portInfo)
     {
@@ -481,8 +491,7 @@ namespace lv2c::ui
             [this](int64_t value)
             {
                 OnDropdownValueChanged(value);
-            }
-        );
+            });
         dialDraggingHandle = this->IsDraggingProperty.addObserver(
             [this](bool value)
             {
@@ -541,7 +550,8 @@ namespace lv2c::ui
 
     Lv2PortViewController &Lv2PortViewController::DropdownValue(int64_t value)
     {
-        DropdownValueProperty.set(value); return *this;
+        DropdownValueProperty.set(value);
+        return *this;
     }
     int64_t Lv2PortViewController::DropdownValue() const
     {
@@ -552,7 +562,6 @@ namespace lv2c::ui
     {
         return portInfo.units();
     }
-    
 
     bool Lv2PortViewController::IsInteger() const
     {
@@ -586,12 +595,58 @@ namespace lv2c::ui
     {
         return this->portInfo.is_input();
     }
-    
+
     bool Lv2PortViewController::IsEnumeration() const
     {
         return this->portInfo.enumeration_property();
     }
 
+    bool Lv2PortViewController::IsLabelledOutputControl() const
+    {
+        // can we display exclusively as an enumeration?
+        if (this->portInfo.is_output() && this->portInfo.is_control_port())
+        {
+            if (this->IsEnumeration())
+            {
+                return true;
+            }
+            if (this->IsInteger() && this->portInfo.scale_points().size() > 0)
+            {
+                for (int64_t i = this->portInfo.min_value(); i <= this->portInfo.max_value(); ++i)
+                {
+                    if (GetScalePoint(i) == nullptr)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            if (this->IsToggle())
+            {
+                if (this->GetScalePoint(portInfo.min_value()) == nullptr)
+                    return false;
+                if (this->GetScalePoint(portInfo.max_value()) == nullptr)
+                    return false;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool Lv2PortViewController::IsMomentary() const
+    {
+        return this->portInfo.mod_momentaryOffByDefault();
+    }
+
+    bool Lv2PortViewController::IsMomentaryOnByDefault() const
+    {
+        return this->portInfo.mod_momentaryOnByDefault();
+    }
+
+    bool Lv2PortViewController::IsTrigger() const
+    {
+        return this->portInfo.trigger();
+    }
     bool Lv2PortViewController::IsToggle() const
     {
         return this->portInfo.toggled_property();
@@ -607,13 +662,26 @@ namespace lv2c::ui
         return *this;
     }
 
-    Lv2PortViewType Lv2PortViewController::GetViewType() const {
+    Lv2PortViewType Lv2PortViewController::GetViewType() const
+    {
         return viewType;
     }
     Lv2PortViewType Lv2PortViewController::CalculateViewType()
     {
         if (this->IsInputControl())
         {
+            if (IsMomentary())
+            {
+                return Lv2PortViewType::Momentary;
+            }
+            if (IsMomentaryOnByDefault())
+            {
+                return Lv2PortViewType::MomentaryOnByDefault;
+            }
+            if (IsTrigger())
+            {
+                return Lv2PortViewType::Trigger;
+            }
             if (IsEnumeration())
             {
                 return Lv2PortViewType::Dropdown;
@@ -631,14 +699,15 @@ namespace lv2c::ui
         }
         else
         {
+            // output controls.
 
-            if (portInfo.units() == Lv2Units::midiNote  // use this
-                || portInfo.designation() == PIPEDAL_UI__tunerFrequency  // deprecated (not this)
-                )
+            if (portInfo.units() == Lv2Units::midiNote                  // use this
+                || portInfo.designation() == PIPEDAL_UI__tunerFrequency // deprecated (not this)
+            )
             {
                 return Lv2PortViewType::Tuner;
             }
-            if (IsEnumeration())
+            if (IsEnumeration() || IsLabelledOutputControl())
             {
                 return Lv2PortViewType::StatusOutputMessage;
             }
@@ -650,15 +719,49 @@ namespace lv2c::ui
             {
                 return Lv2PortViewType::StereoVuMeterRight;
             }
-            if (portInfo.max_value() == 1.0 && portInfo.min_value() == 0.0 && portInfo.integer_property())
-            {
-                return Lv2PortViewType::LED;
-            }
             if (IsToggle() && portInfo.min_value() == 0.0)
             {
                 return Lv2PortViewType::LED;
             }
-            return Lv2PortViewType::VuMeter;
+            switch (portInfo.units())
+            {
+            case Lv2Units::db:
+                return Lv2PortViewType::VuMeter;
+            case Lv2Units::midiNote:
+
+            case Lv2Units::none:
+            case Lv2Units::unknown:
+                if (portInfo.min_value() == 0 && portInfo.max_value() == 1.0f)
+                    return Lv2PortViewType::VuMeter;
+                return Lv2PortViewType::TextOutput;
+
+            case Lv2Units::pc:
+                return Lv2PortViewType::Progress;
+            case Lv2Units::bar:
+            case Lv2Units::beat:
+            case Lv2Units::bpm:
+            case Lv2Units::cent:
+            case Lv2Units::cm:
+            case Lv2Units::hz:
+            case Lv2Units::khz:
+            case Lv2Units::km:
+            case Lv2Units::m:
+            case Lv2Units::mhz:
+            case Lv2Units::min:
+            case Lv2Units::ms:
+            case Lv2Units::s:
+            case Lv2Units::custom:
+            case Lv2Units::degree:
+            case Lv2Units::coef:
+            case Lv2Units::frame:
+            case Lv2Units::inch:
+            case Lv2Units::mile:
+            case Lv2Units::mm:
+            case Lv2Units::oct:
+            case Lv2Units::semitone12TET:
+            default:
+                return Lv2PortViewType::TextOutput;
+            }
         }
     }
 

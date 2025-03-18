@@ -16,55 +16,54 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#pragma once
 
-#pragma once 
-#include "lv2c/Lv2cValueElement.hpp"
-#include <chrono>
+#include "Lv2cValueElement.hpp"
+#include "Lv2cBindingProperty.hpp"
 
 namespace lv2c
 {
-
-    class LampImage;
-
-
-    enum class Lv2cLampVariant {
-        // The lamp can take intermediate values.
-        Blended,
-        // The lamp is either on or off.
-        OnOff
-    };
-    class Lv2cLampElement: public Lv2cValueElement {
+    class Lv2cProgressElement : public Lv2cValueElement
+    {
     public:
-        Lv2cLampElement();
-
-        using self = Lv2cLampElement;
+        using self = Lv2cProgressElement;
         using super = Lv2cValueElement;
         using ptr = std::shared_ptr<self>;
+        virtual const char *Tag() const override { return "Lv2cProgressElement"; }
         static ptr Create() { return std::make_shared<self>(); }
 
-        BINDING_PROPERTY(Variant,Lv2cLampVariant,Lv2cLampVariant::OnOff);
+    public:
+        self&Value(double value) { ValueProperty.set(value); return *this; }
+        double Value() { return ValueProperty.get(); }
 
-        self&SetLampColor(const std::optional<Lv2cColor>&value) { lampColor = value; UpdateLampColor(); return *this; }
-        const std::optional<Lv2cColor>&GetLampColor() const { return lampColor; }
-
+        BINDING_PROPERTY(MaxValue, double, 1.0)
+        BINDING_PROPERTY(MinValue, double, 1.0)
     protected:
-        virtual bool WillDraw() const override { return true; }
-        virtual void OnVariantChanged(Lv2cLampVariant value);
         virtual void OnValueChanged(double value) override;
+        virtual void UpdateStyle();
+        virtual const Lv2cVuSettings &Settings() const;
         virtual void OnMount() override;
-        virtual void OnUnmount() override;
+        bool WillDraw() const override { return true; }
         virtual void OnDraw(Lv2cDrawingContext &dc) override;
-
     private:
-        double displayValue = 0.0;
+        friend class Lv2cStereoVuElement;
+        friend class Lv2cDbVuElement;
+        friend class Lv2cStereoDbVuElement;
+        
+        static double ValueToClient(double value, double minValue, double maxValue,const Lv2cRectangle &vuRectangle);
+        static void DrawVu(
+            Lv2cDrawingContext &dc, 
+            double value,
+            double minValue, 
+            double maxValue,
+            const Lv2cRectangle&vuRectangle,
+            const Lv2cVuSettings &settings);
 
-        std::shared_ptr<LampImage> offImage;
-        std::shared_ptr<LampImage> onImage;
-
-        void UpdateLampColor();
-
-        std::optional<Lv2cColor> lampColor;
-
+        virtual void Measure(Lv2cSize constraint, Lv2cSize maxAvailable, Lv2cDrawingContext &context) override
+        {
+            super::Measure(constraint,maxAvailable,context);
+        }
 
     };
+
 }

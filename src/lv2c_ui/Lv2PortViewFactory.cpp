@@ -14,7 +14,10 @@
 #include "lv2c/Lv2cDialElement.hpp"
 #include "lv2c/Lv2cWindow.hpp"
 #include "lv2c_ui/Lv2ControlConstants.hpp"
+#include "lv2c_ui/Lv2MomentaryButtonElement.hpp"
+#include "lv2c_ui/Lv2TextOutputElement.hpp"
 #include "lv2c/Lv2cVuElement.hpp"
+#include "lv2c/Lv2cProgressElement.hpp"
 #include "lv2c/Lv2cDbVuElement.hpp"
 #include "lv2c/Lv2cLampElement.hpp"
 #include "lv2c/Lv2cStatusTextElement.hpp"
@@ -99,7 +102,16 @@ Lv2cElement::ptr Lv2PortViewFactory::CreateCaption(Lv2PortViewController *viewCo
     {
         alignment = Lv2cAlignment::Start;
     }
-    return CreateCaption(viewController->Caption(),alignment);
+    switch (viewController->GetViewType())
+    {
+    case Lv2PortViewType::Trigger:
+    case Lv2PortViewType::Momentary:
+    case Lv2PortViewType::MomentaryOnByDefault:
+        return CreateCaption(" ",alignment);
+
+    default:
+        return CreateCaption(viewController->Caption(),alignment);
+    }
 }
 
 Lv2cElement::ptr Lv2PortViewFactory::CreateControl(Lv2PortViewController *viewController)
@@ -120,6 +132,13 @@ Lv2cElement::ptr Lv2PortViewFactory::CreateControl(Lv2PortViewController *viewCo
         }
         return CreateDropdown(viewController, items);
     }
+    case Lv2PortViewType::Trigger: 
+        return CreateMomentary(viewController);
+    case Lv2PortViewType::Momentary:
+        return CreateMomentary(viewController);
+    case Lv2PortViewType::MomentaryOnByDefault:
+        return CreateMomentary(viewController);
+
     case Lv2PortViewType::Tuner:
         return CreateTuner(viewController);
     case Lv2PortViewType::OnOff:
@@ -127,6 +146,8 @@ Lv2cElement::ptr Lv2PortViewFactory::CreateControl(Lv2PortViewController *viewCo
     case Lv2PortViewType::Toggle:
         return CreateToggle(viewController);
 
+    case Lv2PortViewType::Progress:
+        return CreateProgressBar(viewController);
     case Lv2PortViewType::VuMeter:
         return CreateVuMeter(viewController);
     case Lv2PortViewType::StereoVuMeter:
@@ -146,6 +167,10 @@ Lv2cElement::ptr Lv2PortViewFactory::CreateControl(Lv2PortViewController *viewCo
 
         return CreateStatusMessage(viewController, items);
     }
+    case Lv2PortViewType::TextOutput:
+    {
+        return CreateTextOutputMessage(viewController);
+    }   
     default:
         return Lv2cElement::Create();
     }
@@ -159,6 +184,44 @@ Lv2cElement::ptr Lv2PortViewFactory::CreateTuner(Lv2PortViewController *viewCont
         .VerticalAlignment(Lv2cAlignment::Center);
 
     element->ValueIsMidiNote(viewController->PortInfo().units() == Lv2Units::midiNote);
+    viewController->PortValueProperty.Bind(element->ValueProperty);
+
+    return element;
+}
+
+Lv2cElement::ptr Lv2PortViewFactory::CreateMomentary(
+    Lv2PortViewController *viewController)
+{
+    auto element = Lv2MomentaryButtonElement::Create();
+    auto viewType = viewController->GetViewType();
+
+    element->Style()
+        .HorizontalAlignment(Lv2cAlignment::Center)
+        .VerticalAlignment(Lv2cAlignment::Center);
+
+    element->MinValue(viewController->PortInfo().min_value());
+    element->MaxValue(viewController->PortInfo().max_value());
+    Lv2MomentaryButtonElement::ButtonType buttonType;
+    double defaultValue = viewController->PortInfo().min_value();
+    switch (viewType)
+    {   
+        case Lv2PortViewType::Momentary:
+        buttonType = Lv2MomentaryButtonElement::ButtonType::Momentary;
+        break;
+    case Lv2PortViewType::MomentaryOnByDefault:
+        buttonType = Lv2MomentaryButtonElement::ButtonType::MomentaryOnByDefault;
+        defaultValue = viewController->PortInfo().max_value();
+        break;
+    case Lv2PortViewType::Trigger:
+        buttonType = Lv2MomentaryButtonElement::ButtonType::Trigger;
+        break;
+    default:
+        throw std::runtime_error("Invalid momentary button type.");
+    }
+    element->SetButtonType(buttonType);
+    element->Value(defaultValue);
+    element->Text(viewController->Caption());
+
     viewController->PortValueProperty.Bind(element->ValueProperty);
 
     return element;
@@ -186,9 +249,23 @@ Lv2cElement::ptr Lv2PortViewFactory::CreateOnOff(Lv2PortViewController *viewCont
     return element;
 }
 
+Lv2cElement::ptr Lv2PortViewFactory::CreateProgressBar(Lv2PortViewController *viewController)
+{
+    auto element = Lv2cProgressElement::Create();
+    element->MaxValue(viewController->MaxValue());
+    element->MinValue(viewController->MinValue());
+    element->Style()
+        .VerticalAlignment(Lv2cAlignment::Center)
+        .HorizontalAlignment(Lv2cAlignment::Center)
+        .Margin({0, 8, 0, 8});
+
+    viewController->PortValueProperty.Bind(element->ValueProperty);
+
+    return element;
+}
+
 Lv2cElement::ptr Lv2PortViewFactory::CreateVuMeter(Lv2PortViewController *viewController)
 {
-
     if (viewController->Units() == Lv2Units::db)
     {
         auto element = Lv2cDbVuElement::Create();
@@ -270,6 +347,16 @@ Lv2cElement::ptr Lv2PortViewFactory::CreateDial(Lv2PortViewController *viewContr
     viewController->DialValueProperty.Bind(dial->ValueProperty);
     viewController->IsDraggingProperty.Bind(dial->IsDraggingProperty);
     return dial;
+}
+
+Lv2cElement::ptr Lv2PortViewFactory::CreateTextOutputMessage(Lv2PortViewController *viewController)
+{
+    auto element = Lv2TextOutputElement::Create(&viewController->PortInfo());
+    element->Style()
+        .HorizontalAlignment(Lv2cAlignment::Start)
+        .VerticalAlignment(Lv2cAlignment::Center);
+    viewController->DisplayValueProperty.Bind(element->DisplayValueProperty);
+    return element;
 }
 
 Lv2cElement::ptr Lv2PortViewFactory::CreateStatusMessage(Lv2PortViewController *viewController, const std::vector<Lv2cDropdownItem> &items)
@@ -585,6 +672,15 @@ Lv2cElement::ptr Lv2PortViewFactory::CreateLed(Lv2PortViewController *viewContro
         .HorizontalAlignment(Lv2cAlignment::Center)
         .VerticalAlignment(Lv2cAlignment::Center);
     viewController->PortValueProperty.Bind(element->ValueProperty);
+    auto ledColor = viewController->PortInfo().pipedal_ledColor();
+    if (ledColor.length() > 0)
+    {
+        if (ledColor == "red") {
+            element->SetLampColor(Lv2cColor(1.0f, 0.0f, 0.0f)); 
+        } else if (ledColor == "green") {
+            element->SetLampColor(Lv2cColor(0.0f, 1.0f, 0.0f)); 
+        }
+    }
     return element;
 }
 Lv2cContainerElement::ptr Lv2PortViewFactory::CreatePage()

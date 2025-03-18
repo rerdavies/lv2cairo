@@ -69,6 +69,7 @@ add_library(lv2c OBJECT
     ./include/lv2c/Lv2cLampElement.hpp
     ./include/lv2c/Lv2cDbVuElement.hpp
     ./include/lv2c/Lv2cVuElement.hpp
+    ./include/lv2c/Lv2cProgressElement.hpp
     ./include/lv2c/Lv2cSwitchElement.hpp
     ./include/lv2c/Lv2cOnOffSwitchElement.hpp
     ./include/lv2c/Lv2cPngStripElement.hpp
@@ -132,6 +133,7 @@ add_library(lv2c OBJECT
     ./Lv2cLampElement.cpp
     ./Lv2cDbVuElement.cpp
     ./Lv2cVuElement.cpp
+    ./Lv2cProgressElement.cpp
     ./Lv2cDialBaseElement.cpp
     ./Lv2cPngStripElement.cpp
     ./Lv2cValueElement.cpp

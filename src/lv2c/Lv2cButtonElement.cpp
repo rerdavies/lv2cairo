@@ -184,6 +184,15 @@ void Lv2cButtonElement::RebuildChildren()
         this->hoverColors = theme.invertedHoverBackgroundColors;
         this->Classes(theme.imageButtonSecondaryStyle);
         break;
+    case Lv2cButtonVariant::FilledButtonPrimary:
+        this->hoverColors = theme.invertedHoverBackgroundColors;
+        this->Classes(theme.filledButtonPrimaryStyle);
+        break;
+    case Lv2cButtonVariant::FilledButtonSecondary:
+        this->hoverColors = theme.invertedHoverBackgroundColors;
+        this->Classes(theme.filledButtonSecondaryStyle);
+        break;
+
     default:
         throw std::runtime_error("Invalid variant.");
     }

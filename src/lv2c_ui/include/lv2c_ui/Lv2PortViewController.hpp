@@ -33,12 +33,17 @@ namespace lv2c::ui {
         Dial,
         Dropdown,
         Toggle,
+        Trigger,
+        Momentary,
+        MomentaryOnByDefault,
         OnOff,
         VuMeter,
         StereoVuMeter,
         StereoVuMeterRight,
+        Progress,
         LED,
         StatusOutputMessage,
+        TextOutput,
         Tuner,
         Other
     };
@@ -80,11 +85,14 @@ namespace lv2c::ui {
         bool IsInputControl() const;
 
         bool IsEnumeration() const;
-
-
+        bool IsLabelledOutputControl() const;
         bool IsInteger() const;
 
         bool IsToggle() const;
+
+        bool IsTrigger() const;
+        bool IsMomentary() const;
+        bool IsMomentaryOnByDefault() const;
         
         Lv2cBindingProperty<std::string> CaptionProperty;
         Lv2PortViewController&Caption(const std::string&  value);
@@ -106,6 +114,8 @@ namespace lv2c::ui {
 
         const Lv2PortInfo&PortInfo() const;
         Lv2PortInfo&PortInfo();
+
+        const Lv2ScalePoint *GetScalePoint(float value) const;
     private:
         std::string GetDisplayString(double value) const;
         std::string AutoRangeValue(double value, const std::string suffix) const;

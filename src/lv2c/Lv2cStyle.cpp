@@ -964,6 +964,19 @@ std::optional<Lv2cMeasurement> Lv2cStyle::MaxWidth() const
     return result;
 }
 
+Lv2cStyle& Lv2cStyle::Cursor(const std::optional<Lv2cCursor> & value)
+{
+    this->cursor = value;
+    return *this;
+}
+std::optional<Lv2cCursor> Lv2cStyle::Cursor() const
+{
+    auto result =  FromSelfOrClasses<Lv2cCursor>(&Lv2cStyle::cursor);
+    return result;
+}
+
+
+
 Lv2cStyle &Lv2cStyle::CellPaddingLeft(const Lv2cMeasurement &value)
 {
     if (!cellPadding.has_value())

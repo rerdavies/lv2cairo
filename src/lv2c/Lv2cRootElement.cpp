@@ -75,6 +75,8 @@ void Lv2cRootElement::UpdateMouseOver(Lv2cPoint mousePosition)
 {
     Lv2cPoint currentMousePosition = mousePosition;
     Lv2cPoint noPoint{-10000, -1000};
+
+
     if (childInfos.size() != 0)
     {
         for (int64_t i = childInfos.size() - 1; i >= 0; --i)

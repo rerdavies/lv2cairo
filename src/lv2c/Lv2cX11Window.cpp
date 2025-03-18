@@ -21,6 +21,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <X11/cursorfont.h>
+
 #include <X11/extensions/Xrandr.h>
 #include <algorithm>
 
@@ -40,7 +42,6 @@ static constexpr bool DEBUG_INTERCEPT_X_ERROR_HANDLER = false;
 static constexpr int ANIMATION_RATE = 60;
 static constexpr std::chrono::steady_clock::duration ANIMATION_DELAY = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::microseconds(1000000 / ANIMATION_RATE));
 
-
 void Lv2cX11Window::logDebug(Window x11Window, const std::string &message)
 {
     std::stringstream s;
@@ -48,14 +49,12 @@ void Lv2cX11Window::logDebug(Window x11Window, const std::string &message)
     lv2c::LogDebug(s.str());
 }
 #if (DEBUG_ENABLE_EVENT_TRACING)
-#define LOG_TRACE(window,message) logDebug(window,message)
-#else 
-    #define LOG_TRACE(window,message) {}
+#define LOG_TRACE(window, message) logDebug(window, message)
+#else
+#define LOG_TRACE(window, message) \
+    {                              \
+    }
 #endif
-
-
-
-
 
 #define X_INIT_ATOM(name) \
     name = XInternAtom(display, "_" #name, False)
@@ -83,21 +82,20 @@ struct Lv2cX11Window::XAtoms
         NET_CLIENT_LIST;
 };
 
-static int(*old_handler)(Display*,XErrorEvent*) = nullptr;
+static int (*old_handler)(Display *, XErrorEvent *) = nullptr;
 
-
-static int Lv2c_ErrorHandler(Display*display, XErrorEvent*event)
+static int Lv2c_ErrorHandler(Display *display, XErrorEvent *event)
 {
 
     char buffer[1024];
-    ::XGetErrorText(display,event->error_code,buffer,sizeof(buffer));
+    ::XGetErrorText(display, event->error_code, buffer, sizeof(buffer));
 
-    std::cout << "X11Error*(" << std::hex << event->resourceid << std::dec << "): " <<  buffer << std::endl;
+    std::cout << "X11Error*(" << std::hex << event->resourceid << std::dec << "): " << buffer << std::endl;
     return 0;
 }
 
-
-void Lv2cX11Window::SetErrorHandler() {
+void Lv2cX11Window::SetErrorHandler()
+{
     if (DEBUG_INTERCEPT_X_ERROR_HANDLER)
     {
         if (old_handler == nullptr)
@@ -121,16 +119,16 @@ void Lv2cX11Window::ReleaseErrorHandler()
 
 inline int Lv2cX11Window::CheckX11Error(int retCode)
 {
-    if (retCode != Success) 
-    { 
-        std::cout << "X11 error: " << GetX11ErrorText(retCode) << std::endl; 
+    if (retCode != Success)
+    {
+        std::cout << "X11 error: " << GetX11ErrorText(retCode) << std::endl;
     }
-    return retCode;    
+    return retCode;
 }
 
-
-inline void Lv2cX11Window::Sync() {
-    XSync(x11Display,false);
+inline void Lv2cX11Window::Sync()
+{
+    XSync(x11Display, false);
 }
 
 template <typename T>
@@ -452,14 +450,12 @@ Lv2cX11Window::Lv2cX11Window(
 {
 }
 
-
 std::string Lv2cX11Window::GetX11ErrorText(int code)
 {
     char buffer[1024];
-    XGetErrorText(x11Display,code,buffer,sizeof(buffer));
+    XGetErrorText(x11Display, code, buffer, sizeof(buffer));
     return buffer;
 }
-
 
 void Lv2cX11Window::DestroyWindowAndSurface()
 {
@@ -578,7 +574,7 @@ Window Lv2cX11Window::GetTransientTarget(Window win)
     }
     return 0;
 }
-Window Lv2cX11Window::GetOwnerFrameWindow(Display *x11Display,Window win)
+Window Lv2cX11Window::GetOwnerFrameWindow(Display *x11Display, Window win)
 {
     Window transientFor = 0;
 
@@ -589,7 +585,7 @@ Window Lv2cX11Window::GetOwnerFrameWindow(Display *x11Display,Window win)
     {
         if (hasTopLevelWindows)
         {
-            for (auto topLevelWindow: topLevelWindows)
+            for (auto topLevelWindow : topLevelWindows)
             {
                 if (topLevelWindow == win)
                 {
@@ -599,7 +595,7 @@ Window Lv2cX11Window::GetOwnerFrameWindow(Display *x11Display,Window win)
         }
         // backstop in case the WM doesn't support GetTopLevelWindows.
         // Not entirely correct, since the host app may not use TransientFor.
-        
+
         auto status = XGetTransientForHint(x11Display, win, &transientFor);
         if (status != 0)
         {
@@ -670,7 +666,7 @@ void Lv2cX11Window::CreateWindow(
         {
             this->x11LogicalParentWindow = GetOwnerFrameWindow(
                 x11Display,
-                 (Window)(parameters.owner->nativeWindow->Handle().getHandle()));
+                (Window)(parameters.owner->nativeWindow->Handle().getHandle()));
 
             // this->x11LogicalParentWindow = GetTransientTarget(
             //     (Window)(parameters.owner->nativeWindow->Handle().getHandle()));
@@ -718,11 +714,10 @@ void Lv2cX11Window::CreateWindow(
     }
 
     this->x11Window = XCreateSimpleWindow(
-        x11Display,parentWindow,
+        x11Display, parentWindow,
         sizeHints->x, sizeHints->y,
         sizeHints->base_width, sizeHints->base_height,
-        0,backgroundPixel,borderPixel
-    );
+        0, backgroundPixel, borderPixel);
     auto event_mask =
         ExposureMask | KeyPressMask | KeyReleaseMask | VisibilityChangeMask | PointerMotionMask | EnterWindowMask |
         LeaveWindowMask | KeymapStateMask |
@@ -731,8 +726,6 @@ void Lv2cX11Window::CreateWindow(
     ;
 
     XSelectInput(x11Display, x11Window, event_mask);
-
-
 
     if (x11LogicalParentWindow != parentWindow || windowType == Lv2cWindowType::Dialog)
     {
@@ -746,7 +739,6 @@ void Lv2cX11Window::CreateWindow(
         wmDeleteWindow = XInternAtom(x11Display, "WM_DELETE_WINDOW", False);
         wmProtocols = XInternAtom(x11Display, "WM_PROTOCOLS", False);
         XSetWMProtocols(x11Display, x11Window, &wmDeleteWindow, 1);
-
 
         SetStringProperty("_GTK_APPLICATION_ID", parameters.gtkApplicationId);
 
@@ -966,12 +958,13 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
             {
                 window->MouseScrollWheel(
                     WindowHandle(xEvent.xbutton.window),
-                    (Lv2cScrollDirection)(xEvent.xbutton.button-4),
+                    (Lv2cScrollDirection)(xEvent.xbutton.button - 4),
                     xEvent.xbutton.x,
                     xEvent.xbutton.y,
                     makeModifierState(xEvent.xbutton.state));
-
-            } else {
+            }
+            else
+            {
                 window->MouseDown(
                     WindowHandle(xEvent.xbutton.window),
                     xEvent.xbutton.button,
@@ -1100,11 +1093,11 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
             Lv2cSize size{(double)xEvent.xconfigure.width, (double)xEvent.xconfigure.height};
 
             LOG_TRACE(xEvent.xconfigure.window, SS("ConfigureNotify ("
-                                                  << xEvent.xconfigure.x << "," << xEvent.xconfigure.y
-                                                  << "," << xEvent.xconfigure.width << "," << xEvent.xconfigure.height
-                                                  << ") ("
-                                                  << child->location.x << "," << child->location.y
-                                                  << "," << size.Width() << "," << size.Height() << ")"));
+                                                   << xEvent.xconfigure.x << "," << xEvent.xconfigure.y
+                                                   << "," << xEvent.xconfigure.width << "," << xEvent.xconfigure.height
+                                                   << ") ("
+                                                   << child->location.x << "," << child->location.y
+                                                   << "," << size.Width() << "," << size.Height() << ")"));
 
             if (child->size != size)
             {
@@ -1286,14 +1279,12 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
     }
 }
 
-
-
 bool Lv2cX11Window::GrabPointer()
 {
     int result = XGrabPointer(
         this->x11Display,
         this->x11Window,
-        False, 
+        False,
         ButtonPressMask | ButtonMotionMask | ButtonReleaseMask,
         GrabModeAsync,
         GrabModeAsync,
@@ -1792,7 +1783,6 @@ void Lv2cX11Window::Resize(int width, int height)
     XResizeWindow(x11Display, x11Window, width, height);
 }
 
-
 bool Lv2cX11Window::GetTopLevelWindows(std::vector<Window> &result)
 {
     if (!xAtoms->NET_CLIENT_LIST)
@@ -1800,9 +1790,65 @@ bool Lv2cX11Window::GetTopLevelWindows(std::vector<Window> &result)
         return false;
     }
     bool ret = GetX11ArrayProperty<Window>(
-            x11Display,
-            x11RootWindow,
-            xAtoms->NET_CLIENT_LIST,
-            &result);
+        x11Display,
+        x11RootWindow,
+        xAtoms->NET_CLIENT_LIST,
+        &result);
     return ret;
+}
+
+
+void Lv2cX11Window::SetMouseCursor(Lv2cCursor cursor)
+{
+    // if (cursor == Lv2cCursor::Arrow)
+    // {
+    //     XUndefineCursor(x11Display, x11Window);
+    // }
+    // else
+    {
+        XID x11Cursor = XC_left_ptr;
+        switch (cursor)
+        {
+        case Lv2cCursor::Arrow:
+            x11Cursor = XC_left_ptr;
+            break;
+        case Lv2cCursor::Pointer:
+            x11Cursor = XC_arrow;
+            break;
+        case Lv2cCursor::Hand:
+            x11Cursor = XC_hand2;
+            break;
+        case Lv2cCursor::IBeam:
+            x11Cursor = XC_xterm;
+            break;
+        case Lv2cCursor::Wait:
+            x11Cursor = XC_watch;
+            break;
+        // case Lv2cCursor::SizeWE:
+        //     x11Cursor = XC_sb_h_double_arrow;
+        //     break;
+        // case Lv2cCursor::SizeNS:
+        //     x11Cursor = XC_sb_v_double_arrow;
+        //     break;
+        // case Lv2cCursor::SizeNWSE:
+        //     x11Cursor = XC_bottom_right_corner;
+        //     break;
+        // case Lv2cCursor::SizeNESW:
+        //     x11Cursor = XC_bottom_left_corner;
+        //     break;
+        }
+        Cursor xidCursor;
+
+        if (x11CursorMap.contains(x11Cursor)) {
+            xidCursor = x11CursorMap[x11Cursor];
+        } else {
+            xidCursor = XCreateFontCursor(x11Display, x11Cursor);
+            x11CursorMap[x11Cursor] = xidCursor;
+        }
+        if (xidCursor != lastCursor)
+        {
+            XDefineCursor(x11Display, x11Window, xidCursor);
+            lastCursor = xidCursor;
+        }
+    }
 }

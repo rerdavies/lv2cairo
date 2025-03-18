@@ -216,6 +216,8 @@ namespace lv2c
         self&MaxWidth(const std::optional<Lv2cMeasurement>& value);
         std::optional<Lv2cMeasurement> MaxWidth() const;
 
+        self&Cursor(const std::optional<Lv2cCursor> & value);
+        std::optional<Lv2cCursor> Cursor() const; 
 
     private:
         std::optional<Lv2cTextAlign> TextAlignOptional() const;
@@ -305,6 +307,8 @@ namespace lv2c
         std::optional<Lv2cTextTransform> textTransform;
         std::optional<Lv2cMeasurement> minWidth;
         std::optional<Lv2cMeasurement> maxWidth;
+
+        std::optional<Lv2cCursor> cursor;
     };
 
     /////////

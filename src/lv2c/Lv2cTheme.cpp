@@ -31,22 +31,19 @@ Lv2cTheme::Lv2cTheme(const Lv2cThemeColors &themeColors)
     bodySize = Lv2cMeasurement::Point(10);
     captionSize = Lv2cMeasurement::Point(7);
 
-
-
     menuDropShadow.variant = Lv2cDropShadowVariant::DropShadow;
     menuDropShadow.opacity = 0.6;
     menuDropShadow.radius = 6;
     menuDropShadow.xOffset = 1;
     menuDropShadow.yOffset = 4;
 
-    dialDropShadow = Lv2cDropShadow {
+    dialDropShadow = Lv2cDropShadow{
         .variant = Lv2cDropShadowVariant::InnerDropShadow,
         .xOffset = 0.1f,
         .yOffset = 3.0f,
         .radius = 3.0f,
         .opacity = 0.60f,
-        .color = Lv2cColor(0,0,0)
-    };
+        .color = Lv2cColor(0, 0, 0)};
 
     toggleThumbDropShadow = Lv2cDropShadow{
         .variant = Lv2cDropShadowVariant::InnerDropShadow,
@@ -62,7 +59,7 @@ Lv2cTheme::Lv2cTheme(const Lv2cThemeColors &themeColors)
         .radius = 3.0,
         .opacity = 0.95,
     };
-    vuSettings.green = vuColor; 
+    vuSettings.green = vuColor;
     dbVuSettings.green = "#40C040";
     dbVuSettings.yellow = "#C0C040";
     dbVuSettings.red = "#C04040";
@@ -77,14 +74,14 @@ Lv2cTheme::Lv2cTheme(bool darkTheme)
 }
 
 Lv2cThemeColors::Lv2cThemeColors(bool darkTheme)
-:isDarkTheme(darkTheme)
+    : isDarkTheme(darkTheme)
 {
     if (darkTheme)
     {
         this->background = "#000000";
         this->paper = "#181818";
         this->dialogBackgroundColor = "#141414";
-        this->primaryColor = "#C8C8E0"; //"#8750C4";
+        this->primaryColor = "#8750C4"; // "#C8C8E0"; //"#8750C4";
         this->secondaryColor = "#E08080";
         this->primaryInvertedTextColor = "#F0F0F0";
         this->secondaryInvertedTextColor = "#F0F0F0";
@@ -105,10 +102,10 @@ Lv2cThemeColors::Lv2cThemeColors(bool darkTheme)
 
         vuBackground = "#000000";
         vuTickColor = "#A0A0A0"; //"#A0A0A0";
-        vuColor = "#6040C0"; //"#202040");
+        vuColor = "#6040C0";     //"#202040");
 
         lampOnColor = vuColor;
-        lampOffColor = "#000000";
+        lampOffColor = "#333";
         portGroupBorderColor = secondaryTextColor;
 
         plotBackground = vuBackground;
@@ -121,13 +118,12 @@ Lv2cThemeColors::Lv2cThemeColors(bool darkTheme)
         this->paper = "#E0e0E0";
         this->dialogBackgroundColor = "#F0F0F0";
 
-        this->primaryColor = "#6600CC"; // purple
+        this->primaryColor = "#6600CC";   // purple
         this->secondaryColor = "#AA3034"; // Pink
         this->primaryInvertedTextColor = "#F0F0F0";
         this->secondaryInvertedTextColor = "#F0F0F0";
 
         this->errorColor = "#800000";
-
 
         this->popupBackground = "#FFFFFF";
         this->dividerColor = "#808080";
@@ -137,7 +133,7 @@ Lv2cThemeColors::Lv2cThemeColors(bool darkTheme)
         this->textSelectionColor = primaryColor.PaletteColor(300);
         this->textCursorColor = secondaryTextColor;
 
-        this->dialColor = "#A0A0A0"; //primaryColor.PaletteColor(300);
+        this->dialColor = "#A0A0A0"; // primaryColor.PaletteColor(300);
         toggleTrackColor = paper;
         toggleThumbColor = primaryColor.PaletteColor(300);
 
@@ -153,15 +149,12 @@ Lv2cThemeColors::Lv2cThemeColors(bool darkTheme)
         plotBackground = vuBackground;
         plotTickColor = "#E0E0E0";
         plotColor = "#00C000C0";
-
     }
-
 }
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #pragma GCC optimize("no-var-tracking") // to speed up compilation
-
 
 void Lv2cTheme::BuildStyles()
 {
@@ -215,6 +208,7 @@ void Lv2cTheme::BuildStyles()
             .Opacity(0.7));
     buttonDialogStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(captionSize)
             .Color(secondaryTextColor)
@@ -228,6 +222,7 @@ void Lv2cTheme::BuildStyles()
     );
     buttonDialogPrimaryStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(captionSize)
             .TextTransform(Lv2cTextTransform::Capitalize)
@@ -242,6 +237,7 @@ void Lv2cTheme::BuildStyles()
     );
     buttonDialogSecondaryStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(captionSize)
             .TextTransform(Lv2cTextTransform::Capitalize)
@@ -256,6 +252,7 @@ void Lv2cTheme::BuildStyles()
 
     buttonBorderStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(bodySize)
             .FontVariant(Lv2cFontVariant::Normal)
@@ -272,6 +269,7 @@ void Lv2cTheme::BuildStyles()
 
     buttonBorderDefaultStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(bodySize)
             .FontVariant(Lv2cFontVariant::Normal)
@@ -288,6 +286,7 @@ void Lv2cTheme::BuildStyles()
 
     buttonBorderPrimaryStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(bodySize)
             .FontVariant(Lv2cFontVariant::Normal)
@@ -304,6 +303,7 @@ void Lv2cTheme::BuildStyles()
             .Color(this->primaryColor));
     buttonBorderSecondaryStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(bodySize)
             .FontVariant(Lv2cFontVariant::Normal)
@@ -320,6 +320,7 @@ void Lv2cTheme::BuildStyles()
 
     imageButtonStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(bodySize)
             .FontVariant(Lv2cFontVariant::Normal)
@@ -337,6 +338,8 @@ void Lv2cTheme::BuildStyles()
 
     imageButtonPrimaryStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(bodySize)
             .FontVariant(Lv2cFontVariant::Normal)
@@ -352,9 +355,28 @@ void Lv2cTheme::BuildStyles()
             .Color(primaryInvertedTextColor)
             .Background(imageButtonPrimaryColor));
 
+    filledButtonPrimaryStyle = std::make_shared<Lv2cStyle>(
+        Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
+            .FontFamily(fontFamily)
+            .FontSize(bodySize)
+            .FontVariant(Lv2cFontVariant::Normal)
+            .BorderWidth({0})
+            .Padding({4, 4, 4, 4})
+            .IconSize(24)
+            .RoundCorners({10})
+            .FontSize(this->bodySize)
+            .FontStyle(Lv2cFontStyle::Normal)
+            .SingleLine(true)
+            .Ellipsize(Lv2cEllipsizeMode::End)
+            .TintColor(primaryInvertedTextColor)
+            .Color(primaryInvertedTextColor)
+            .Background(primaryColor));
+
     auto imageButtonSecondaryColor = Lv2cColor::LinearBlend(0.75, paper, secondaryColor);
     imageButtonSecondaryStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .FontFamily(fontFamily)
             .FontSize(bodySize)
             .FontVariant(Lv2cFontVariant::Normal)
@@ -369,6 +391,24 @@ void Lv2cTheme::BuildStyles()
             .TintColor(secondaryInvertedTextColor)
             .Color(secondaryInvertedTextColor)
             .Background(imageButtonSecondaryColor));
+
+    filledButtonSecondaryStyle = std::make_shared<Lv2cStyle>(
+        Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
+            .FontFamily(fontFamily)
+            .FontSize(bodySize)
+            .FontVariant(Lv2cFontVariant::Normal)
+            .BorderWidth({0})
+            .Padding({4, 4, 4, 4})
+            .IconSize(24)
+            .RoundCorners({10})
+            .FontSize(this->bodySize)
+            .FontStyle(Lv2cFontStyle::Normal)
+            .SingleLine(true)
+            .Ellipsize(Lv2cEllipsizeMode::End)
+            .TintColor(secondaryInvertedTextColor)
+            .Color(secondaryInvertedTextColor)
+            .Background(secondaryColor));
 
     editBoxUnderlineStyle =
         std::make_shared<Lv2cStyle>(
@@ -385,11 +425,13 @@ void Lv2cTheme::BuildStyles()
     numericEditBoxStyle =
         std::make_shared<Lv2cStyle>(
             Lv2cStyle()
+                .Cursor(Lv2cCursor::IBeam)
                 .TextAlign(Lv2cTextAlign::Center));
 
     editBoxFrameStyle =
         std::make_shared<Lv2cStyle>(
             Lv2cStyle()
+                .Cursor(Lv2cCursor::IBeam)
                 .FontFamily(fontFamily)
                 .FontSize(bodySize)
                 .FontVariant(Lv2cFontVariant::Normal)
@@ -428,6 +470,7 @@ void Lv2cTheme::BuildStyles()
     dropdownItemStyle =
         std::make_shared<Lv2cStyle>(
             Lv2cStyle()
+                .Cursor(Lv2cCursor::Arrow)
                 .FontSize(bodySize)
                 .FontVariant(Lv2cFontVariant::Normal)
                 .Padding({16, 4, 16, 4})
@@ -437,6 +480,7 @@ void Lv2cTheme::BuildStyles()
     dialStyle =
         std::make_shared<Lv2cStyle>(
             Lv2cStyle()
+                .Cursor(Lv2cCursor::Arrow)
                 .Color(this->dialColor)
                 .TintColor(this->dialColor)
                 .Width(48)
@@ -444,6 +488,7 @@ void Lv2cTheme::BuildStyles()
                 .Margin(8));
     toggleButtonStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
+            .Cursor(Lv2cCursor::Arrow)
             .Color(this->primaryColor)
             .Width(54)
             .Height(48)
@@ -482,6 +527,17 @@ void Lv2cTheme::BuildStyles()
             .RoundCorners({2})
             .Height(52)
             .Margin(1));
+
+    constexpr double PROGRESS_WIDTH = 100;
+
+    progressStyle = std::make_shared<Lv2cStyle>(
+        Lv2cStyle()
+            .Background(vuBackground)
+            .Width(PROGRESS_WIDTH + 2 * vuSettings.padding)
+            .RoundCorners({2})
+            .Height(VU_BAR_WIDTH + 2 * vuSettings.padding)
+            .VerticalAlignment(Lv2cAlignment::Center)
+            .Margin(1));
     stereoVuStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
             .Background(vuBackground)
@@ -500,7 +556,7 @@ void Lv2cTheme::BuildStyles()
     dbVuStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
             .Background(vuBackground)
-            .RoundCorners({4,3,4,3})
+            .RoundCorners({4, 3, 4, 3})
             .Width(VU_BAR_WIDTH + dbVuSettings.tickWidth + 3 * dbVuSettings.padding)
             .Height(48)
             .Margin(1)
@@ -509,27 +565,31 @@ void Lv2cTheme::BuildStyles()
     stereoDbVuStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
             .Background(vuBackground)
-            .RoundCorners({4,3,4,3})
+            .RoundCorners({4, 3, 4, 3})
             .Width(VU_BAR_WIDTH * 2 + dbVuSettings.tickWidth + 4 * dbVuSettings.padding)
             .Height(48)
             .Margin(1)
 
     );
 
-
     lampStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
-            .Width(26)
-            .Height(26)
+            .HorizontalAlignment(Lv2cAlignment::Center)
+            .VerticalAlignment(Lv2cAlignment::Center)
+            .RoundCorners({5})
+            .Height(16)
+            .Width(16)
+            .Margin({6,6,6,6})
     );
+    
+
 
     plotStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
             .Background(plotBackground)
             .Width(80)
             .RoundCorners({8})
-            .Height(52)
-    );
+            .Height(52));
 
     statusTextStyle = std::make_shared<Lv2cStyle>(
         Lv2cStyle()
@@ -593,7 +653,7 @@ void Lv2cTheme::BuildStyles()
 
 void Lv2cTheme::BuildHoverColors()
 {
-    this->dialHoverOpacity = Lv2cHoverOpacity(0.85,0.92,0.92,1.0);
+    this->dialHoverOpacity = Lv2cHoverOpacity(0.85, 0.92, 0.92, 1.0);
 
     this->hoverBackgroundColors = Lv2cHoverColors(this->primaryTextColor);
     this->invertedHoverBackgroundColors = Lv2cHoverColors(this->paper, 0.2);

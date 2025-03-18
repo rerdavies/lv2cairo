@@ -30,6 +30,7 @@
 #include "Lv2cDamageList.hpp"
 // #include "Lv2cSvg.hpp"
 
+#include <map>
 #include <functional>
 #include <filesystem>
 #include <cstddef>
@@ -297,6 +298,9 @@ namespace lv2c
         static void SetResourceDirectories(const std::vector<std::filesystem::path> &paths);
         static std::filesystem::path findResourceFile(const std::filesystem::path &path);
 
+        std::shared_ptr<Lv2cObject> GetMemoObject(const std::string&name);
+        void SetMemoObject(const std::string &name, std::shared_ptr<Lv2cObject> obj);
+
         void SendAnimationFrameMessage();
         void SendControlChangedMessage(int32_t control, float value);
 
@@ -348,6 +352,11 @@ namespace lv2c
         virtual void OnLayoutComplete();
 
     private:
+
+
+        std::map<std::string,std::weak_ptr<Lv2cObject>> memoObjects;
+
+
         Lv2cDrawingContext CreateDrawingContext();
         void Idle();
         void Size(const Lv2cSize &size);
@@ -359,6 +368,7 @@ namespace lv2c
         virtual void MouseMove(WindowHandle h, int64_t x, int64_t y, ModifierState state);
         virtual void MouseUp(WindowHandle h, uint64_t button, int64_t x, int64_t y, ModifierState state);
         virtual void MouseLeave(WindowHandle h);
+        virtual void UpdateMouseCursor(WindowHandle h, int64_t x, int64_t y, ModifierState state);
 
         /// @brief Notification of a raw X11 keysim down event.
         /// @param eventArgs Keyboard event arguments.

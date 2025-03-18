@@ -126,6 +126,9 @@ namespace lv2c {
         Lv2cStyle::ptr imageButtonPrimaryStyle;
         Lv2cStyle::ptr imageButtonSecondaryStyle;
 
+        Lv2cStyle::ptr filledButtonPrimaryStyle;
+        Lv2cStyle::ptr filledButtonSecondaryStyle;
+
         Lv2cStyle::ptr buttonDisableStyle;
 
 
@@ -156,6 +159,7 @@ namespace lv2c {
         Lv2cStyle::ptr stereoVuStyle;
         Lv2cStyle::ptr dbVuStyle;
         Lv2cStyle::ptr stereoDbVuStyle;
+        Lv2cStyle::ptr progressStyle;
         
         Lv2cVuSettings vuSettings;
         Lv2cVuSettings dbVuSettings;

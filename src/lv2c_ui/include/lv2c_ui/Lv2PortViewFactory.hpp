@@ -63,14 +63,17 @@ namespace lv2c::ui
         virtual Lv2cElement::ptr CreateDial(Lv2PortViewController *viewController);
         virtual Lv2cElement::ptr CreateDropdown(Lv2PortViewController *viewController, const std::vector<Lv2cDropdownItem> &items);
         virtual Lv2cElement::ptr CreateToggle(Lv2PortViewController *viewController);
+        virtual Lv2cElement::ptr CreateMomentary(Lv2PortViewController *viewController);
         virtual Lv2cElement::ptr CreateOnOff(Lv2PortViewController *viewController);
         virtual Lv2cElement::ptr CreateVuMeter(Lv2PortViewController *viewController);
         virtual Lv2cElement::ptr CreateStereoVuMeter(Lv2PortViewController *viewController);
         virtual Lv2cElement::ptr CreateEditArea(Lv2PortViewController *viewController);
         virtual Lv2cElement::ptr CreateLed(Lv2PortViewController *viewController);
         virtual Lv2cElement::ptr CreateStatusMessage(Lv2PortViewController *viewController,const std::vector<Lv2cDropdownItem> &items);
+        virtual Lv2cElement::ptr CreateTextOutputMessage(Lv2PortViewController *viewController);
         virtual Lv2cElement::ptr CreateTuner(Lv2PortViewController *viewController);
-
+        virtual Lv2cElement::ptr CreateProgressBar(Lv2PortViewController *viewController);
+        
 
         enum class ValueControlStyle
         {
