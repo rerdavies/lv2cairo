@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
     paths-ignore:
       - "website/**"
+      - ".github/workflows/website-build.yml"
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
