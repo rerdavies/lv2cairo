@@ -1,8 +1,8 @@
-# Simple workflow for deploying static content to GitHub Pages
+# Workflow for deploying static content to GitHub Pages
 name: Deploy github.io website
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes to the webites/ directory in the default branch
   push:
     paths:
       - 'website/**'
@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true
  
 jobs:
-  # Single deploy job since we're just deploying
+  # Two job deployment. Build first; deploy afterward.
   build:
     environment:
       name: github-pages
@@ -46,7 +46,7 @@ jobs:
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload dist repository
+          # Upload built dist directory
           path: './website/dist'
   # Deployment job
   deploy:
