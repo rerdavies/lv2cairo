@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - 'website/**'
+      - '.github/workflows/website-build.yml'
     branches: ['main']
 
   # Allows you to run this workflow manually from the Actions tab
