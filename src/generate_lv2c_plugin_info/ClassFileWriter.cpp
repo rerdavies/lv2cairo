@@ -587,7 +587,7 @@ void ClassFileWriter::WritePluginBase(const std::string&nameSpace,const std::str
         }
         Unindent();
 
-        s << Tab() << "protected:" << endl;
+        s << Tab() << "public:" << endl;
         Indent();
         {
             for (const auto &fileProperty: pluginInfo->piPedalUI().fileProperties())
@@ -617,6 +617,11 @@ void ClassFileWriter::WritePluginBase(const std::string&nameSpace,const std::str
             s << Tab() << "};" << endl;
             s << endl;
 
+            Unindent();
+
+            s << Tab() << "protected:" << endl;
+            Indent();
+    
             ////// port declarations. 
             for (const auto& port : pluginInfo->ports())
             {

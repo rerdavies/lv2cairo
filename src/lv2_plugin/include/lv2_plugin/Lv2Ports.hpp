@@ -262,6 +262,15 @@ namespace lv2c::lv2_plugin
 			}
 			return lastValue;
 		}
+		float GetDbNoLimit()
+		{
+			if (HasChanged())
+			{
+				lastValue = ClampedValue();
+				lastAfValue = Db2Af(lastValue,-192);
+			}
+			return lastValue;
+		}
 
 		float GetAf()
 		{
@@ -269,6 +278,15 @@ namespace lv2c::lv2_plugin
 			{
 				lastValue = ClampedValue();
 				lastAfValue = Db2Af(lastValue,minValue);
+			}
+			return lastAfValue;
+		}
+		float GetAfNoLimit()
+		{
+			if (HasChanged())
+			{
+				lastValue = ClampedValue();
+				lastAfValue = Db2Af(lastValue,-192);
 			}
 			return lastAfValue;
 		}
@@ -446,8 +464,9 @@ namespace lv2c::lv2_plugin
 		{
 			lastValue = value;
 			*pOut = lastValue;
-			sampleCount = updateRateHz;
+			sampleCount = 0;
 		}
+
 		// Sets value, throttles update. 
 		void SetValue(
 			float value, 
@@ -458,7 +477,7 @@ namespace lv2c::lv2_plugin
 			sampleCount += n_values;
 			if (sampleCount >= updateRate)
 			{
-				sampleCount -= updateRate;
+				sampleCount = 0;
 				if (pOut)
 				{
 					*pOut = lastValue;
