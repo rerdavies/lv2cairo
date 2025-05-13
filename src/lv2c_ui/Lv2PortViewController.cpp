@@ -728,12 +728,14 @@ namespace lv2c::ui
             case Lv2Units::db:
                 return Lv2PortViewType::VuMeter;
             case Lv2Units::midiNote:
+                return Lv2PortViewType::TextOutput;
 
             case Lv2Units::none:
             case Lv2Units::unknown:
-                if (portInfo.min_value() == 0 && portInfo.max_value() == 1.0f)
-                    return Lv2PortViewType::VuMeter;
-                return Lv2PortViewType::TextOutput;
+                return Lv2PortViewType::VuMeter;
+                // if (portInfo.min_value() == 0 && portInfo.max_value() == 1.0f)
+                //     return Lv2PortViewType::VuMeter;
+                // return Lv2PortViewType::TextOutput;
 
             case Lv2Units::pc:
                 return Lv2PortViewType::Progress;
