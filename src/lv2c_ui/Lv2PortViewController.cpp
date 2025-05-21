@@ -642,6 +642,10 @@ namespace lv2c::ui
     {
         return this->portInfo.mod_momentaryOnByDefault();
     }
+    bool Lv2PortViewController::IsGraphicEq() const
+    {
+        return this->portInfo.pipedal_graphicEq();
+    }
 
     bool Lv2PortViewController::IsTrigger() const
     {

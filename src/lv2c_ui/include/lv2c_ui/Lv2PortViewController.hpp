@@ -93,6 +93,7 @@ namespace lv2c::ui {
         bool IsTrigger() const;
         bool IsMomentary() const;
         bool IsMomentaryOnByDefault() const;
+        bool IsGraphicEq() const;
         
         Lv2cBindingProperty<std::string> CaptionProperty;
         Lv2PortViewController&Caption(const std::string&  value);

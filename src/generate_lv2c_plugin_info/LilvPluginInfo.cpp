@@ -197,6 +197,9 @@ LilvPortInfo::LilvPortInfo(LilvWorld *pWorld, const LilvPlugin *plugin, const Li
     AutoLilvNode mod_momentaryOnByDefault_uri = lilv_new_uri(pWorld, MOD_PREFIX "preferMomentaryOnByDefault");
     this->mod_momentaryOnByDefault_ = lilv_port_has_property(plugin, pPort, mod_momentaryOnByDefault_uri);
 
+    AutoLilvNode pipedal_graphicEq_uri = lilv_new_uri(pWorld, PIPEDAL_UI_PREFIX "preferMomentaryOnByDefault");
+    this->pipedal_graphicEq_ = lilv_port_has_property(plugin, pPort, pipedal_graphicEq_uri);
+
 
 
     AutoLilvNode enumeration_property_uri = lilv_new_uri(pWorld, LV2_CORE__enumeration);
