@@ -26,6 +26,7 @@
 #include <limits>
 #include <cstdint>
 #include <cmath>
+#include "lv2/atom/atom.h"
 
 
 
@@ -125,7 +126,11 @@ namespace lv2c::lv2_plugin
 	private:
 		const float *pData = nullptr;
 		bool lastValue = false;
+        float defaultValue;
 	public:
+        TriggerInputPort(float defaultValue)
+        : defaultValue(defaultValue) {
+        }
 		void SetData(void *data) {
 			this->pData = (const float*)data;
 		}
@@ -135,7 +140,7 @@ namespace lv2c::lv2_plugin
 			bool newValue = (*pData != 0);
 			bool changed = newValue != lastValue;
 			lastValue = newValue;
-			return changed && newValue; // rising edge only.
+			return changed && newValue != defaultValue; // rising edge only.
 		}
 	};
 
@@ -368,7 +373,7 @@ namespace lv2c::lv2_plugin
 		{
 			this->pData = (void*)pData;
 		}
-		void*Get() const { return pData; }
+		LV2_Atom_Sequence*Get() const { return (LV2_Atom_Sequence*)pData; }
 	private:
 	void *pData = nullptr;
 	};
@@ -379,7 +384,7 @@ namespace lv2c::lv2_plugin
 		{
 			this->pData = ( void*)pData;
 		}
-		void*Get() const { return pData; }
+		LV2_Atom_Sequence*Get() const { return (LV2_Atom_Sequence*)pData; }
 	private:
 	void *pData = nullptr;
 	};
@@ -392,7 +397,7 @@ namespace lv2c::lv2_plugin
 		float defaultValue;
 
 	public:
-		OutputPort(float defaultValue = 0)
+		explicit OutputPort(float defaultValue = 0)
 		{
 			this->defaultValue = defaultValue;
 		}
@@ -432,7 +437,7 @@ namespace lv2c::lv2_plugin
 		float lastValue = 0;
 
 	public:
-		RateLimitedOutputPort(float defaultValue = 0,float updateRateHz = 30.0f)
+		RateLimitedOutputPort(float defaultValue = 0,float updateRateHz = 15.0f)
 			: updateRateHz(updateRateHz)
 		{
 			lastValue = defaultValue;

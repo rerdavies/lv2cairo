@@ -637,7 +637,7 @@ void ClassFileWriter::WritePluginBase(const std::string&nameSpace,const std::str
                         {
                             if (port.trigger())
                             {
-                                s << "TriggerInputPort " << portName << "{"  "};" << endl;
+                                s << "TriggerInputPort " << portName << "{" << port.default_value() << "};" << endl;
 
                             } else {
                                 s << "ToggledInputPort " << portName << "{"  "};" << endl;
