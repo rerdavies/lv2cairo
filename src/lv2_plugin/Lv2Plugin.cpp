@@ -33,6 +33,7 @@
 #include "lv2/atom/atom.h"
 #include "lv2/atom/forge.h"
 #include <iostream>
+#include <memory>
 
 using namespace lv2c::lv2_plugin;
 
@@ -645,6 +646,7 @@ Lv2Plugin::instantiate(const LV2_Descriptor *descriptor,
 }
 
 std::vector<LV2_Descriptor*> gDescriptors;
+std::vector<std::unique_ptr<LV2_Descriptor>> gDescriptorsDeallocator; // deallocates gDescriptors contents to get a clean valgrind report.
 
 LV2_Descriptor **Lv2Plugin::GetLv2GetDescriptors()
 {
@@ -653,8 +655,8 @@ LV2_Descriptor **Lv2Plugin::GetLv2GetDescriptors()
         for (size_t i = 0; i < gRegistrationCount; ++i)
         {
             auto registration = gRegistrations[i];
-            gDescriptors.push_back(
-                new LV2_Descriptor{
+            std::unique_ptr<LV2_Descriptor> descriptor = 
+                std::make_unique<LV2_Descriptor>(
                     registration->getPluginuri().c_str(),
                     Lv2Plugin::instantiate,
                     Lv2Plugin::connect_port,
@@ -663,8 +665,9 @@ LV2_Descriptor **Lv2Plugin::GetLv2GetDescriptors()
                     Lv2Plugin::deactivate,
                     Lv2Plugin::cleanup,
                     registration->hasState() ? Lv2Plugin::extension_data_with_state: Lv2Plugin::extension_data
-                    }
-            );
+                );
+            gDescriptors.push_back(descriptor.get());
+            gDescriptorsDeallocator.push_back(std::move(descriptor)); // to get clean valgrind report.
         }
     }
     return &(gDescriptors[0]);
