@@ -333,3 +333,12 @@ Lv2cRootElement::Lv2cRootElement()
     .HorizontalAlignment(Lv2cAlignment::Stretch)
     .VerticalAlignment(Lv2cAlignment::Stretch);
 }
+
+void Lv2cRootElement::FireEnter()
+{
+    OnEnter();
+}
+void Lv2cRootElement::FireLeave()
+{
+    OnLeave();
+}

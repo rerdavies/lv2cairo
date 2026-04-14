@@ -20,8 +20,8 @@
 #include <cairo/cairo.h>
 #include <memory.h>
 #include <string>
-#include "pango/pango.h"
-#include "pango/pangocairo.h"
+#include <pango/pango.h>
+#include <pango/pangocairo.h>
 #include "lv2c/Lv2cLog.hpp"
 #include "lv2c/Lv2cWindow.hpp"
 #include "keysym_names.hpp"
@@ -90,6 +90,7 @@ namespace lv2c
 
         void WindowTitle(const std::string &title);
         void SetWindowType(Lv2cWindowType windowType);
+        void SetTransientFor(Window dialogWindow, Window parentWindow);
 
         template <typename T>
         void SetProperty(

@@ -223,15 +223,15 @@ void Lv2cElement::OnUnmount()
 }
 void Lv2cElement::OnMount(Lv2cWindow *window)
 {
-    OnMount();
+    OnMount();    
     OnMounted.Fire(window);
+    Entered(window->Entered());
 }
 void Lv2cElement::OnUnmount(Lv2cWindow *window)
 {
+    OnLeave();
     OnUnmounted.Fire(window);
     OnUnmount();
-
-
 }
 
 void Lv2cElement::Draw(Lv2cDrawingContext &dc, const Lv2cRectangle &clipBounds)
@@ -706,7 +706,6 @@ bool Lv2cElement::OnScrollWheel(Lv2cScrollWheelEventArgs &event)
     return false;
 }
 
-
 bool Lv2cElement::OnMouseUp(Lv2cMouseEventArgs &event)
 {
     if (MouseUp.Fire(event))
@@ -801,7 +800,6 @@ bool Lv2cElement::FireScrollWheel(Lv2cScrollWheelEventArgs &event)
     return false;
 }
 
-
 bool Lv2cElement::FireMouseDown(Lv2cMouseEventArgs &event)
 {
     if (Style().Visibility() == Lv2cVisibility::Visible)
@@ -863,23 +861,23 @@ void Lv2cElement::ReleaseCapture()
     window->releaseCapture(this);
 }
 
-
 std::optional<Lv2cCursor> Lv2cElement::GetMouseCursor(Lv2cMouseEventArgs &event)
 {
 
-
-    if (clippedInLayout) {
+    if (clippedInLayout)
+    {
         return std::nullopt;
     }
-    if (!window) return std::nullopt;
+    if (!window)
+        return std::nullopt;
     if (!this->screenBorderBounds.Contains(event.screenPoint))
     {
         return std::nullopt;
     }
     bool visible = (Style().Visibility() == Lv2cVisibility::Visible);
-    if (!visible) return std::nullopt;
+    if (!visible)
+        return std::nullopt;
     return this->Style().Cursor();
-
 }
 
 void Lv2cElement::UpdateMouseOver(Lv2cPoint mousePosition)
@@ -1258,10 +1256,37 @@ Lv2cRectangle Lv2cElement::ClientMarginRectangle() const
 
 void Lv2cElement::OnLayoutComplete()
 {
-    
 }
 
-bool Lv2cElement::LayoutValid() const {
+bool Lv2cElement::LayoutValid() const
+{
     return this->layoutValid;
+}
+
+void Lv2cElement::OnEnter()
+{
+    entered = true;
+}
+
+void Lv2cElement::OnLeave()
+{
+    entered = false;
+}
+
+void Lv2cElement::Entered(bool value) 
+{
+    if (entered != value) {
+        entered = value;
+        if (entered)
+        {
+            OnEnter();
+        } else {
+            OnLeave();
+        }
+    }
+}
+bool Lv2cElement::Entered() const
+{
+    return entered;
 }
 

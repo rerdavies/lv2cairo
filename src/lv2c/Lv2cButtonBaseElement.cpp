@@ -171,7 +171,7 @@ bool Lv2cButtonBaseElement::OnClick(Lv2cMouseEventArgs &event)
 
 bool Lv2cButtonBaseElement::OnMouseUp(Lv2cMouseEventArgs &event)
 {
-    if (Hascapture())
+    if (Hascapture())    
     {
         this->HoverState(HoverState() - Lv2cHoverState::Pressed);
         this->ReleaseCapture();
@@ -287,6 +287,7 @@ bool Lv2cButtonBaseElement::OnLostFocus(const Lv2cFocusEventArgs &eventArgs)
 
 void Lv2cButtonBaseElement::OnMount()
 {
+    super::OnMount();
     animationValue = 0;
     if (Enabled())
     {
@@ -308,6 +309,7 @@ void Lv2cButtonBaseElement::OnUnmount()
     }
     CancelAnimation();
     animationValue = 0;
+    super::OnUnmount();
 }
 void Lv2cButtonBaseElement::OnEnabledChanged(bool enable)
 {

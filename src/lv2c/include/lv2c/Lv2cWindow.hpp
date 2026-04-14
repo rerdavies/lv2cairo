@@ -312,6 +312,7 @@ namespace lv2c
 
         Lv2cCreateWindowParameters& WindowParameters() { return windowParameters; }
 
+        bool Entered() const;
 
     protected:
         virtual void OnClosing();
@@ -350,10 +351,12 @@ namespace lv2c
     protected:
         virtual bool OnKeyDown(Lv2cKeyboardEventArgs &eventArgs);
         virtual void OnLayoutComplete();
+        void Entered(bool value); 
+
 
     private:
-
-
+        bool entered = false;
+        
         std::map<std::string,std::weak_ptr<Lv2cObject>> memoObjects;
 
 
@@ -367,6 +370,7 @@ namespace lv2c
         virtual void MouseScrollWheel(WindowHandle h, Lv2cScrollDirection direction, int64_t x, int64_t y, ModifierState state);
         virtual void MouseMove(WindowHandle h, int64_t x, int64_t y, ModifierState state);
         virtual void MouseUp(WindowHandle h, uint64_t button, int64_t x, int64_t y, ModifierState state);
+        virtual void MouseEnter(WindowHandle h);
         virtual void MouseLeave(WindowHandle h);
         virtual void UpdateMouseCursor(WindowHandle h, int64_t x, int64_t y, ModifierState state);
 
@@ -388,6 +392,8 @@ namespace lv2c
 
         void NavigateFocus(FocusNavigationSelector &selector);
 
+        void FireEnter();
+        void FireLeave();
     private:
         double windowScale = 1.0;
         Lv2cRectangle lastFocusRectangle;

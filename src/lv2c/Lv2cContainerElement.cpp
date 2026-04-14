@@ -491,6 +491,25 @@ std::optional<Lv2cCursor> Lv2cContainerElement::GetMouseCursor(Lv2cMouseEventArg
 }
 
 
+bool Lv2cContainerElement::Entered() const
+{
+    return super::Entered();
+}
+
+
+void Lv2cContainerElement::Entered(bool value) 
+{
+    if (value != Entered())
+    {
+        super::Entered(value);
+        for (auto &child: children)
+        {
+            child->Entered(value);
+        }
+
+    }
+
+}
 
 
 

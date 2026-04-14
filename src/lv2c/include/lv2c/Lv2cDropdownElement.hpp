@@ -122,6 +122,8 @@ namespace lv2c
 
         virtual bool OnFocus(const Lv2cFocusEventArgs &eventArgs) override;
         virtual bool OnLostFocus(const Lv2cFocusEventArgs &eventArgs) override;
+        virtual void OnEnter() override;
+        virtual void OnLeave() override;
 
         virtual void OnMount() override;
         virtual void OnUnmount() override;

@@ -88,3 +88,14 @@ bool Lv2cDropdownItemElement::ShowPressedState() const
 {
     return true;
 }
+
+
+bool Lv2cDropdownItemElement::OnMouseDown(Lv2cMouseEventArgs &event)
+{
+    return super::OnMouseDown(event);
+}
+
+bool Lv2cDropdownItemElement::OnMouseUp(Lv2cMouseEventArgs &event)
+{
+    return super::OnMouseUp(event);
+}

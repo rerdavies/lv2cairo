@@ -34,6 +34,8 @@ void Lv2cDialBaseElement::OnHoverOpacityChanged(const std::optional<Lv2cHoverOpa
 
 void Lv2cDialBaseElement::OnMount()
 {
+    super::OnMount();
+
     OnHoverStateChanged(this->HoverState());
 }
 

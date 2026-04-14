@@ -64,10 +64,7 @@ void Lv2UI::SetCreateWindowDefaults()
 {
     Lv2cCreateWindowParameters &params = this->createWindowParameters;
     params.positioning = Lv2cWindowPositioning::ChildWindow;
-    if (params.positioning == Lv2cWindowPositioning::NotSet)
-    {
-        params.positioning = Lv2cWindowPositioning::ChildWindow;
-    }
+    
     if (params.size == Lv2cSize::Zero)
     {
         params.size = Lv2cSize(800, 600);

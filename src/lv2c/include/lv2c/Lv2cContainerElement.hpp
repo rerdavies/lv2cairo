@@ -118,6 +118,8 @@ namespace lv2c {
         virtual Lv2cSize MeasureClient(Lv2cSize clientConstraint, Lv2cSize clientAvailable,Lv2cDrawingContext&context) override;
 
         virtual bool isContainer() const override { return true; }
+        virtual void Entered(bool value) override;
+        virtual bool Entered() const;
 
 
     public: 

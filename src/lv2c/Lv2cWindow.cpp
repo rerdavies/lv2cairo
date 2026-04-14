@@ -415,12 +415,54 @@ void Lv2cWindow::UpdateMouseCursor(WindowHandle h, int64_t x, int64_t y, Modifie
 }
 
 
+bool Lv2cWindow::Entered() const
+{
+    return entered;    
+}
+
+void Lv2cWindow::Entered(bool value) {
+    if (value != entered)
+    {
+        if (rootElement != nullptr)
+        {
+            rootElement->Entered(value);
+        }
+    }
+}
+
+void Lv2cWindow::FireEnter() 
+{
+    if (this->GetRootElement() != nullptr)
+    {
+        GetRootElement()->Entered(true);
+    }
+
+}
+
+void Lv2cWindow::FireLeave()
+{
+    if (this->GetRootElement() != nullptr)
+    {
+        GetRootElement()->Entered(false);
+    }
+
+}
+
 void Lv2cWindow::MouseLeave(WindowHandle h)
 {
     if (this->GetRootElement() != nullptr)
     {
         GetRootElement()->UpdateMouseOver(Lv2cPoint(-1000,-1000));
     }
+    FireEnter();
+}
+void Lv2cWindow::MouseEnter(WindowHandle h)
+{
+    if (this->GetRootElement() != nullptr)
+    {
+        GetRootElement()->UpdateMouseOver(Lv2cPoint(-1000,-1000));
+    }
+    FireLeave();
 }
 
 void Lv2cWindow::PostQuit()

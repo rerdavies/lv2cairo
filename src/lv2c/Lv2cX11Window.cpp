@@ -25,17 +25,20 @@
 
 #include <X11/extensions/Xrandr.h>
 #include <algorithm>
+#include "lv2c/Lv2cLog.hpp"
 
 #include <cairo/cairo-xlib.h>
 #include <iomanip>
 #include <cassert>
 #include <limits>
+#include <thread>
+#include <chrono>
 
 #include "ss.hpp"
 
 using namespace lv2c;
 
-#define DEBUG_ENABLE_EVENT_TRACING false
+#define DEBUG_ENABLE_EVENT_TRACING true
 
 static constexpr bool DEBUG_INTERCEPT_X_ERROR_HANDLER = false;
 
@@ -367,6 +370,11 @@ static const char *Lv2cToXWindowType(Lv2cWindowType windowType)
         }
     }
     throw std::runtime_error("Invalid value.");
+}
+
+void Lv2cX11Window::SetTransientFor(Window dialogWindow, Window parentWindow)
+{
+    XSetTransientForHint(this->x11Display, dialogWindow, parentWindow);
 }
 void Lv2cX11Window::SetWindowType(Lv2cWindowType windowType)
 {
@@ -713,6 +721,10 @@ void Lv2cX11Window::CreateWindow(
         backgroundPixel = color.pixel;
     }
 
+    // Race condition on X11-wayland between parent window, and window being created?
+    Sync();
+
+
     this->x11Window = XCreateSimpleWindow(
         x11Display, parentWindow,
         sizeHints->x, sizeHints->y,
@@ -724,6 +736,21 @@ void Lv2cX11Window::CreateWindow(
         ButtonPressMask | ButtonMotionMask | ButtonReleaseMask |
         FocusChangeMask | StructureNotifyMask | PropertyChangeMask;
     ;
+
+        // Set bit gravity.
+    {
+        XSetWindowAttributes attrs;
+        attrs.bit_gravity = NorthWestGravity; 
+        attrs.win_gravity = NorthWestGravity;
+        unsigned long mask = CWBitGravity | CWWinGravity;
+        int rc = XChangeWindowAttributes(x11Display, this->x11Window, mask, &attrs);    
+        if (rc != 0) 
+        {
+            std::cout << "XChangeWindowAttributes returned " << rc << std::endl;
+        }
+    }
+
+
 
     XSelectInput(x11Display, x11Window, event_mask);
 
@@ -758,6 +785,10 @@ void Lv2cX11Window::CreateWindow(
 
     SetWindowType(parameters.windowType);
     WindowTitle(parameters.title);
+    if (x11ParentWindow != 0)
+    {
+        SetTransientFor(x11Window,parentWindow);
+    }
 
     XMapWindow(x11Display, x11Window);
 
@@ -770,7 +801,6 @@ void Lv2cX11Window::CreateWindow(
     cairoWindow->OnX11SizeChanged(this->size);
 
     RegisterControllerMessages();
-    Sync();
 }
 
 void Lv2cX11Window::CreateSurface(int w, int h)
@@ -899,6 +929,7 @@ bool Lv2cX11Window::DeleteDeadChildren()
 
         if (childWindow->Quitting())
         {
+            LOG_TRACE(-1, "Delete dead child");
             childWindow->DeleteAllChildren();
             childWindows.erase(childWindows.begin() + i);
             --i;
@@ -950,6 +981,8 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
     {
     case ButtonPress:
     {
+        LOG_TRACE(xEvent.xbutton.window, SS("ButtonPress " << xEvent.xbutton.button << " state: " << xEvent.xbutton.state));
+
         Lv2cWindow::ptr window = GetLv2cWindow(xEvent.xbutton.window);
 
         if (window && !window->ModalDisable())
@@ -973,10 +1006,23 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
                     makeModifierState(xEvent.xbutton.state));
             }
         }
+        else
+        {
+            if (!window)
+            {
+                LOG_TRACE(xEvent.xbutton.window, "Window not found.");
+            }
+            if (window->ModalDisable())
+            {
+                LOG_TRACE(xEvent.xbutton.window, "Window modally disabled.");
+            }
+        }
         break;
     }
     case ButtonRelease:
     {
+        LOG_TRACE(xEvent.xbutton.window, SS("ButtonRelease " << xEvent.xbutton.button << " state: " << xEvent.xbutton.state));
+
         Lv2cWindow::ptr window = GetLv2cWindow(xEvent.xbutton.window);
         if (window)
         {
@@ -1010,6 +1056,8 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
     case VisibilityNotify:
     {
         Lv2cWindow::ptr window = GetLv2cWindow(xEvent.xvisibility.window);
+        LOG_TRACE(xEvent.xbutton.window, SS("VisibilityNotify " << xEvent.xvisibility.window));
+
         if (window)
         {
             if (xEvent.xvisibility.type != VisibilityFullyObscured)
@@ -1025,12 +1073,13 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
         {
             if (xEvent.xclient.data.l[0] == (long int)wmDeleteWindow)
             {
-                LOG_TRACE(xEvent.xclient.window, "wmDeleteWindow");
+                LOG_TRACE(xEvent.xclient.window, "ClientMessage wmDeleteWindow");
                 EraseChild(xEvent.xclient.window);
             }
         }
         else if (xEvent.xclient.message_type == animateMessage)
         {
+            LOG_TRACE(xEvent.xclient.window, "ClientMessage animateMessage");
         }
         else if (xEvent.xclient.message_type == controlMessage)
         {
@@ -1042,13 +1091,13 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
         Lv2cWindow::ptr window = GetLv2cWindow(xEvent.xexpose.window);
         if (window)
         {
+            LOG_TRACE(xEvent.xexpose.window, "Expose");
             window->OnExpose(
                 WindowHandle(xEvent.xexpose.window),
                 xEvent.xexpose.x,
                 xEvent.xexpose.y,
                 xEvent.xexpose.width,
                 xEvent.xexpose.height);
-            LOG_TRACE(xEvent.xexpose.window, "Expose");
         }
         break;
     }
@@ -1057,6 +1106,7 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
         Lv2cWindow::ptr window = GetLv2cWindow(xEvent.xfocus.window);
         if (window)
         {
+            LOG_TRACE(xEvent.xfocus.window, "FocusIn");
             window->FireFocusIn();
             if (window->ModalDisable())
             {
@@ -1068,6 +1118,7 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
     case FocusOut:
     {
         Lv2cWindow::ptr window = GetLv2cWindow(xEvent.xfocus.window);
+        LOG_TRACE(xEvent.xfocus.window, "FocusOut");
         if (window)
         {
             window->FireFocusOut();
@@ -1131,8 +1182,16 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
         LOG_TRACE(xEvent.xkeymap.window, "KeymapNotify");
         break;
     case EnterNotify:
+    {
         LOG_TRACE(xEvent.xcrossing.window, "EnterNotify");
-        break;
+        Lv2cWindow::ptr window = GetLv2cWindow(xEvent.xcrossing.window);
+
+        if (window)
+        {
+            window->MouseEnter(WindowHandle(xEvent.xcrossing.window));
+        }
+    }
+    break;
     case LeaveNotify:
     {
         LOG_TRACE(xEvent.xcrossing.window, "LeaveNotify");
@@ -1797,7 +1856,6 @@ bool Lv2cX11Window::GetTopLevelWindows(std::vector<Window> &result)
     return ret;
 }
 
-
 void Lv2cX11Window::SetMouseCursor(Lv2cCursor cursor)
 {
     // if (cursor == Lv2cCursor::Arrow)
@@ -1824,24 +1882,27 @@ void Lv2cX11Window::SetMouseCursor(Lv2cCursor cursor)
         case Lv2cCursor::Wait:
             x11Cursor = XC_watch;
             break;
-        // case Lv2cCursor::SizeWE:
-        //     x11Cursor = XC_sb_h_double_arrow;
-        //     break;
-        // case Lv2cCursor::SizeNS:
-        //     x11Cursor = XC_sb_v_double_arrow;
-        //     break;
-        // case Lv2cCursor::SizeNWSE:
-        //     x11Cursor = XC_bottom_right_corner;
-        //     break;
-        // case Lv2cCursor::SizeNESW:
-        //     x11Cursor = XC_bottom_left_corner;
-        //     break;
+            // case Lv2cCursor::SizeWE:
+            //     x11Cursor = XC_sb_h_double_arrow;
+            //     break;
+            // case Lv2cCursor::SizeNS:
+            //     x11Cursor = XC_sb_v_double_arrow;
+            //     break;
+            // case Lv2cCursor::SizeNWSE:
+            //     x11Cursor = XC_bottom_right_corner;
+            //     break;
+            // case Lv2cCursor::SizeNESW:
+            //     x11Cursor = XC_bottom_left_corner;
+            //     break;
         }
         Cursor xidCursor;
 
-        if (x11CursorMap.contains(x11Cursor)) {
+        if (x11CursorMap.contains(x11Cursor))
+        {
             xidCursor = x11CursorMap[x11Cursor];
-        } else {
+        }
+        else
+        {
             xidCursor = XCreateFontCursor(x11Display, x11Cursor);
             x11CursorMap[x11Cursor] = xidCursor;
         }

@@ -129,6 +129,7 @@ namespace lv2c
         const Lv2cRectangle & ScreenBorderRect() const;
         const Lv2cRectangle & ScreenClientBounds() const;
 
+        bool Entered() const;
     protected:
         virtual bool ClipChildren() const;
         
@@ -141,6 +142,9 @@ namespace lv2c
         virtual bool OnMouseMove(Lv2cMouseEventArgs &event);
         virtual bool OnMouseOver(Lv2cMouseOverEventArgs &event);
         virtual bool OnMouseOut(Lv2cMouseOverEventArgs &event);
+
+        virtual void OnEnter();
+        virtual void OnLeave();
 
         virtual std::optional<Lv2cCursor> GetMouseCursor(Lv2cMouseEventArgs &event);
 
@@ -396,7 +400,10 @@ namespace lv2c
         Lv2cRectangle borderBounds;
         Lv2cRectangle paddingBounds;
         Lv2cRectangle clientBounds;
+
+        virtual void Entered(bool value);
     private:
+        bool entered = false;
         bool clippedInLayout = false;
         std::vector<Lv2cStyle::ptr> classes;
         Lv2cRectangle savedLayoutClipRect;

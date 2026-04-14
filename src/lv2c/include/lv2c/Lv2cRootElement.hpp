@@ -52,6 +52,7 @@ namespace lv2c
         /// @throws std::range_error if the index is invalid.
         virtual void RemoveChild(size_t index) override;
 
+        
     protected:
         virtual Lv2cSize Arrange(Lv2cSize available,Lv2cDrawingContext &context) override;
 
@@ -61,6 +62,10 @@ namespace lv2c
         virtual bool HandlePopupKeys(Lv2cElement::ptr child, const Lv2cKeyboardEventArgs&event);
         virtual void DrawPostOpacity(Lv2cDrawingContext &dc, const Lv2cRectangle &clipBounds) override;
     private:
+
+        void FireEnter();
+        void FireLeave();
+        
         Lv2cRectangle GetChildBorder(Lv2cElement*element);
         Lv2cRectangle GetAnchorRect(Lv2cSize available, Lv2cRectangle rc,Lv2cElement *anchor);
 

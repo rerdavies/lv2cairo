@@ -25,6 +25,8 @@ namespace lv2c
 {
     class Lv2cDropdownItemElement: public Lv2cButtonBaseElement {
     public:
+        virtual const char* Tag() const override { return "Lv2cDropdownItemElement";}
+
         using self = Lv2cDropdownItemElement;
         using super = Lv2cButtonBaseElement;
         using ptr = std::shared_ptr<self>;
@@ -49,6 +51,8 @@ namespace lv2c
         virtual void OnMount() override;
         virtual void OnHoverStateChanged(Lv2cHoverState hoverState) override;
         virtual bool ShowPressedState() const override;
+        virtual bool OnMouseDown(Lv2cMouseEventArgs &event) override;
+        virtual bool OnMouseUp(Lv2cMouseEventArgs &event) override;
 
     private:
         selection_id_t selectionId;

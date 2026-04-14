@@ -62,9 +62,12 @@ namespace lv2c::implementation
         static constexpr int ANIMATION_DURATION = 200;
         // static constexpr int ANIMATION_DURATION = 2000;
     public:
+
         using self = AnimatedDropdownElement;
         using super = Lv2cContainerElement;
         using ptr = std::shared_ptr<self>;
+
+        virtual const char* Tag() const override { return "AnimatedDropdownElement";}
 
         static ptr Create(
             const Lv2cTheme &theme,
@@ -100,11 +103,13 @@ namespace lv2c::implementation
         BINDING_PROPERTY(SelectedId, selection_id_t, -1)
         // BINDING_PROPERTY(SelectionColor,Lv2cColor,Lv2cColor(1,0.5,0.5))
     protected:
+
         bool wrapElements = false;
         virtual void OnMount() override
         {
             super::OnMount();
         }
+
 
     private:
         Lv2cSlideInOutAnimationElement::ptr slideElement;
@@ -347,6 +352,15 @@ bool Lv2cDropdownElement::WantsFocus() const
     return true;
 }
 
+void Lv2cDropdownElement::OnEnter()
+{
+    super::OnEnter();
+}
+
+void Lv2cDropdownElement::OnLeave()
+{
+    super::OnLeave();
+}
 bool Lv2cDropdownElement::OnFocus(const Lv2cFocusEventArgs &eventArgs)
 {
     super::OnFocus(eventArgs);
@@ -354,7 +368,10 @@ bool Lv2cDropdownElement::OnFocus(const Lv2cFocusEventArgs &eventArgs)
 }
 bool Lv2cDropdownElement::OnLostFocus(const Lv2cFocusEventArgs &eventArgs)
 {
-    CloseDropdown();
+    if (!Entered())
+    {
+        CloseDropdown();
+    }
     super::OnLostFocus(eventArgs);
     return false;
 }

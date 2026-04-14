@@ -132,6 +132,8 @@ void CreateWindow()
     memset(&windowAttributes, 0, sizeof(windowAttributes));
 
     windowAttributes.override_redirect = false;
+    windowAttributes.bit_gravity = NorthWestGravity;
+    windowAttributes.win_gravity = NorthWestGravity;
     windowAttributes.background_pixel = BlackPixel(x11Display, DefaultScreen(x11Display));
     windowAttributes.event_mask =
         ExposureMask | KeyPressMask | KeyReleaseMask | VisibilityChangeMask | PointerMotionMask | EnterWindowMask |

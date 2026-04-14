@@ -23,11 +23,13 @@ using namespace lv2c;
 
 void Lv2cVuElement::OnMount()
 {
+    super::OnMount();
     UpdateStyle();
 }
 void Lv2cStereoVuElement::OnMount()
 {
     UpdateStyle();
+    super::OnUnmount();
 }
 void Lv2cVuElement::UpdateStyle()
 {
