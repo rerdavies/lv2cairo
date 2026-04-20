@@ -51,6 +51,7 @@ namespace lv2c::implementation
     protected:
         virtual Lv2cSize MeasureClient(Lv2cSize clientConstraint, Lv2cSize clientAvailable, Lv2cDrawingContext &context) override;
         virtual Lv2cSize Arrange(Lv2cSize available, Lv2cDrawingContext &context) override;
+
     private:
         std::vector<double> columnWidths;
         std::vector<size_t> columnCounts;
@@ -62,12 +63,11 @@ namespace lv2c::implementation
         static constexpr int ANIMATION_DURATION = 200;
         // static constexpr int ANIMATION_DURATION = 2000;
     public:
-
         using self = AnimatedDropdownElement;
         using super = Lv2cContainerElement;
         using ptr = std::shared_ptr<self>;
 
-        virtual const char* Tag() const override { return "AnimatedDropdownElement";}
+        virtual const char *Tag() const override { return "AnimatedDropdownElement"; }
 
         static ptr Create(
             const Lv2cTheme &theme,
@@ -103,13 +103,11 @@ namespace lv2c::implementation
         BINDING_PROPERTY(SelectedId, selection_id_t, -1)
         // BINDING_PROPERTY(SelectionColor,Lv2cColor,Lv2cColor(1,0.5,0.5))
     protected:
-
         bool wrapElements = false;
         virtual void OnMount() override
         {
             super::OnMount();
         }
-
 
     private:
         Lv2cSlideInOutAnimationElement::ptr slideElement;
@@ -171,12 +169,13 @@ Lv2cSize DropdownItemLayoutElement::MeasureClient(Lv2cSize clientConstraint, Lv2
     double width = 0;
     double height = 0;
 
-    double x = 0; double y = 0;
+    double x = 0;
+    double y = 0;
     double columnWidth = 0;
     size_t columnCount = 0;
-    for (auto & child: Children())
+    for (auto &child : Children())
     {
-        child->Measure(clientConstraint,clientAvailable,context);
+        child->Measure(clientConstraint, clientAvailable, context);
         Lv2cSize childSize = child->MeasuredSize();
         if (y + childSize.Height() >= clientAvailable.Height() && columnCount != 0)
         {
@@ -202,11 +201,12 @@ Lv2cSize DropdownItemLayoutElement::MeasureClient(Lv2cSize clientConstraint, Lv2
     {
         columnCounts.push_back(columnCount);
         columnWidths.push_back(columnWidth);
-        if (y > height) height = y;
+        if (y > height)
+            height = y;
         x += columnWidth;
     }
     width = x;
-    return Lv2cSize(width,height);
+    return Lv2cSize(width, height);
 }
 Lv2cSize DropdownItemLayoutElement::Arrange(Lv2cSize available, Lv2cDrawingContext &context)
 {
@@ -221,8 +221,8 @@ Lv2cSize DropdownItemLayoutElement::Arrange(Lv2cSize available, Lv2cDrawingConte
             Lv2cElement::ptr child = Child(childIx++);
             Lv2cSize size = child->MeasuredSize();
             size.Width(columnWidth);
-            child->Arrange(size,context);
-            Lv2cRectangle rc { x,y,size.Width(),size.Height()};
+            child->Arrange(size, context);
+            Lv2cRectangle rc{x, y, size.Width(), size.Height()};
             child->Layout(rc);
             y += size.Height();
         }
@@ -333,7 +333,7 @@ void Lv2cDropdownElement::OnUnmount()
 void Lv2cDropdownElement::OnMount()
 {
     auto &theme = Theme();
-    
+
     this->ClearClasses();
     super::OnMount();
 
@@ -368,10 +368,6 @@ bool Lv2cDropdownElement::OnFocus(const Lv2cFocusEventArgs &eventArgs)
 }
 bool Lv2cDropdownElement::OnLostFocus(const Lv2cFocusEventArgs &eventArgs)
 {
-    if (!Entered())
-    {
-        CloseDropdown();
-    }
     super::OnLostFocus(eventArgs);
     return false;
 }
@@ -545,6 +541,18 @@ void Lv2cDropdownElement::OpenDropdown()
         dropdown, this, [this]()
         { this->ReleaseDropdownElements(); });
     dropdown->SetAnchor(this);
+}
+
+void Lv2cDropdownElement::OnLostAppFocus()
+{
+    super::OnLostAppFocus();
+    if (this->dropdownElement)
+    {
+        Window()->PostDelayed(
+            0,
+            [this]()
+            { CloseDropdown(); });
+    }
 }
 bool Lv2cDropdownElement::DropdownOpen() const
 {

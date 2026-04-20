@@ -119,6 +119,7 @@ bool Lv2cRootElement::FireMouseDown(Lv2cMouseEventArgs &event)
         case ChildType::ModalDialog:
             return false;
         case ChildType::Dialog:
+            return true;
             break;
         case ChildType::Popup:
             RemoveChild(i);

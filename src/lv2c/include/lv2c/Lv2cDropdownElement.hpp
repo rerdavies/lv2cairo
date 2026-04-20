@@ -112,6 +112,7 @@ namespace lv2c
 
     protected:
 
+        virtual void OnLostAppFocus() override;
         virtual bool WantsFocus() const override;
         virtual bool OnKeyDown(const Lv2cKeyboardEventArgs&event) override;
         virtual void OnUnselectedTextChanged(const std::string&value);

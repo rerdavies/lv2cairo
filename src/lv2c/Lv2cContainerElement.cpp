@@ -155,7 +155,7 @@ bool Lv2cContainerElement::FireMouseDown(Lv2cMouseEventArgs &event)
     if (Style().Visibility() == Lv2cVisibility::Visible)
     {
 
-        if (this->screenBorderBounds.Contains(event.screenPoint))
+        if (this->HitTest(event.screenPoint))
         {
             for (int64_t i = children.size() - 1; i >= 0; --i)
             {
@@ -512,4 +512,11 @@ void Lv2cContainerElement::Entered(bool value)
 }
 
 
+void Lv2cContainerElement::OnLostAppFocus() 
+{
+    for (auto &child: this->children)
+    {
+        child->OnLostAppFocus();
+    }
+}
 

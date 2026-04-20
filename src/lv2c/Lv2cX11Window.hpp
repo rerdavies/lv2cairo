@@ -147,6 +147,8 @@ namespace lv2c
         static void SetErrorHandler();
         static void ReleaseErrorHandler();
 
+        void Sync();
+
 
     private:
 
@@ -154,7 +156,6 @@ namespace lv2c
 
         int CheckX11Error(int code);
 
-        void Sync();
 
         bool GetTopLevelWindows(std::vector<Window> &result);
         Window GetOwnerFrameWindow(Display *x11Display,Window win);

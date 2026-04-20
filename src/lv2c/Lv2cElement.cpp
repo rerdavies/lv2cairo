@@ -1290,3 +1290,14 @@ bool Lv2cElement::Entered() const
     return entered;
 }
 
+bool Lv2cElement::HitTest(const Lv2cPoint &screenPoint)
+{
+    return this->screenBorderBounds.Contains(screenPoint);
+}
+
+
+
+void Lv2cElement::OnLostAppFocus()
+{
+
+}

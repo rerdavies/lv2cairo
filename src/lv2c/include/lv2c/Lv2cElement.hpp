@@ -106,6 +106,8 @@ namespace lv2c
         bool Hascapture() const;
         void ReleaseCapture();
 
+        virtual bool HitTest(const Lv2cPoint&screenPoint);
+
         using MouseEvent = Lv2cEvent<Lv2cMouseEventArgs>;
 
         MouseEvent MouseDown;
@@ -360,6 +362,7 @@ namespace lv2c
     protected:
         virtual bool OnFocus(const Lv2cFocusEventArgs &eventArgs);
         virtual bool OnLostFocus(const Lv2cFocusEventArgs &eventArgs);
+        virtual void OnLostAppFocus();
         virtual void Mount(Lv2cWindow *window);
         virtual void Unmount(Lv2cWindow *window);
         virtual void OnLayoutComplete();

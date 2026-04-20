@@ -129,7 +129,7 @@ inline int Lv2cX11Window::CheckX11Error(int retCode)
     return retCode;
 }
 
-inline void Lv2cX11Window::Sync()
+void Lv2cX11Window::Sync()
 {
     XSync(x11Display, false);
 }
@@ -724,7 +724,6 @@ void Lv2cX11Window::CreateWindow(
     // Race condition on X11-wayland between parent window, and window being created?
     Sync();
 
-
     this->x11Window = XCreateSimpleWindow(
         x11Display, parentWindow,
         sizeHints->x, sizeHints->y,
@@ -737,26 +736,29 @@ void Lv2cX11Window::CreateWindow(
         FocusChangeMask | StructureNotifyMask | PropertyChangeMask;
     ;
 
-        // Set bit gravity.
+    // Set bit gravity.
     {
         XSetWindowAttributes attrs;
-        attrs.bit_gravity = NorthWestGravity; 
+        attrs.bit_gravity = NorthWestGravity;
         attrs.win_gravity = NorthWestGravity;
         unsigned long mask = CWBitGravity | CWWinGravity;
-        int rc = XChangeWindowAttributes(x11Display, this->x11Window, mask, &attrs);    
-        if (rc != 0) 
+        int rc = XChangeWindowAttributes(x11Display, this->x11Window, mask, &attrs);
+        if (rc != 0)
         {
             std::cout << "XChangeWindowAttributes returned " << rc << std::endl;
         }
     }
-
-
 
     XSelectInput(x11Display, x11Window, event_mask);
 
     if (x11LogicalParentWindow != parentWindow || windowType == Lv2cWindowType::Dialog)
     {
         XSetTransientForHint(x11Display, x11Window, x11LogicalParentWindow);
+    } else {
+        if (x11ParentWindow != 0)
+        {
+            SetTransientFor(x11Window, parentWindow);
+        }
     }
     SetNormalHints(sizeHints);
 
@@ -785,14 +787,8 @@ void Lv2cX11Window::CreateWindow(
 
     SetWindowType(parameters.windowType);
     WindowTitle(parameters.title);
-    if (x11ParentWindow != 0)
-    {
-        SetTransientFor(x11Window,parentWindow);
-    }
 
-    XMapWindow(x11Display, x11Window);
-
-    // XRaiseWindow(x11Display, x11Window);
+    XMapRaised(x11Display, x11Window);
     XClearWindow(x11Display, x11Window);
 
     this->size = parameters.size;
@@ -801,6 +797,15 @@ void Lv2cX11Window::CreateWindow(
     cairoWindow->OnX11SizeChanged(this->size);
 
     RegisterControllerMessages();
+
+      /* Flush before returning for two reasons: so that hints are available to the
+     view's parent via the X server during embedding, and so that the X server
+     has a chance to create the window (and make its actual position and size
+     known) before any children are created.  Potential bugs aside, this
+     increases the chances that an application will be cleanly configured once
+     on startup with the correct position and size. */
+    XFlush(x11Display);
+
 }
 
 void Lv2cX11Window::CreateSurface(int w, int h)
@@ -1106,7 +1111,14 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
         Lv2cWindow::ptr window = GetLv2cWindow(xEvent.xfocus.window);
         if (window)
         {
-            LOG_TRACE(xEvent.xfocus.window, "FocusIn");
+            LOG_TRACE(
+                xEvent.xfocus.window,
+                SS(
+                    "FocusIn mode: " << xEvent.xfocus.mode
+                                     << " detail: " << xEvent.xfocus.detail));
+
+            NotifyAncestor;
+
             window->FireFocusIn();
             if (window->ModalDisable())
             {
@@ -1118,10 +1130,22 @@ void Lv2cX11Window::ProcessEvent(XEvent &xEvent)
     case FocusOut:
     {
         Lv2cWindow::ptr window = GetLv2cWindow(xEvent.xfocus.window);
-        LOG_TRACE(xEvent.xfocus.window, "FocusOut");
+        LOG_TRACE(
+            xEvent.xfocus.window,
+            SS(
+                "FocusOut mode: " << xEvent.xfocus.mode
+                                  << " detail: " << xEvent.xfocus.detail));
         if (window)
         {
             window->FireFocusOut();
+            switch (xEvent.xfocus.detail)
+            {
+            case NotifyNonlinear:
+            case NotifyNonlinearVirtual:
+            case NotifyDetailNone:
+                window->FireAppFocusOut();
+                break;
+            }
         }
         break;
     }
@@ -1514,7 +1538,8 @@ void *Lv2cX11Window::GenerateNormalHints(Lv2cCreateWindowParameters &parameters_
         parameters.maxSize.Width((double)parameters.size.Width());
     }
 
-    sizeHints->flags = (PPosition | PMinSize | PMaxSize | PBaseSize);
+    sizeHints->flags = (PPosition | PMinSize | PMaxSize | PBaseSize | PWinGravity
+    );
 
     sizeHints->x = (int)parameters.location.x;
     sizeHints->y = (int)parameters.location.y;

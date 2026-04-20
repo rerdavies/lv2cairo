@@ -91,11 +91,11 @@ void Lv2cWindow::Invalidate()
 void Lv2cWindow::Invalidate(const Lv2cRectangle &bounds)
 {
     Lv2cRectangle rc = Lv2cRectangle(
-        bounds.Left () * windowScale,
+        bounds.Left() * windowScale,
         bounds.Top() * windowScale,
         bounds.Width() * windowScale,
         bounds.Height() * windowScale);
-        damageList.Invalidate(rc);
+    damageList.Invalidate(rc);
 }
 
 void Lv2cWindow::OnExpose(WindowHandle h, int64_t x, int64_t y, int64_t width, int64_t height)
@@ -202,8 +202,8 @@ void Lv2cWindow::CloseRootWindow()
         auto t = this->nativeWindow;
         this->nativeWindow = nullptr;
         delete t; // also deletes this!
-        
-        return;   // this may no longer be valid.
+
+        return; // this may no longer be valid.
     }
 }
 void Lv2cWindow::OnClosing()
@@ -216,7 +216,7 @@ void Lv2cWindow::CreateChildWindow(
     Lv2cElement::ptr element)
 {
     this->rootElement->AddChild(element);
-    
+
     this->windowScale = parent->windowScale;
     this->windowParameters = parameters;
     this->windowParameters.settingsObject = parent->Settings();
@@ -253,12 +253,21 @@ void Lv2cWindow::CreateWindow(
     this->windowParameters.positioning = scaledParameters.positioning;
     this->windowParameters.location = scaledParameters.location / windowScale;
 
+    this->nativeWindow->Sync();
+    while (this->nativeWindow->ProcessEvents())
+    {
+
+    }
+
     if (this->rootElement)
     {
         rootElement->Mount(this);
     }
     // pump messages once.
-    this->nativeWindow->ProcessEvents();
+    while (this->nativeWindow->ProcessEvents())
+    {
+
+    }
 }
 
 void Lv2cWindow::CreateWindow(
@@ -311,7 +320,6 @@ bool Lv2cWindow::OnScrollWheel(Lv2cScrollWheelEventArgs &event)
         }
     }
     return false;
-
 }
 
 bool Lv2cWindow::OnMouseDown(Lv2cMouseEventArgs &event)
@@ -349,7 +357,6 @@ bool Lv2cWindow::OnMouseUp(Lv2cMouseEventArgs &event)
     return false;
 }
 
-
 bool Lv2cWindow::OnMouseMove(Lv2cMouseEventArgs &event)
 {
     this->mousePosition = event.point;
@@ -357,7 +364,6 @@ bool Lv2cWindow::OnMouseMove(Lv2cMouseEventArgs &event)
     {
         GetRootElement()->UpdateMouseOver(event.screenPoint);
     }
-
 
     // only send mouse move if captured.
     if (this->Capture() != nullptr)
@@ -374,14 +380,11 @@ bool Lv2cWindow::OnMouseMove(Lv2cMouseEventArgs &event)
     return false;
 }
 
-
 void Lv2cWindow::MouseScrollWheel(WindowHandle h, Lv2cScrollDirection direction, int64_t x, int64_t y, ModifierState state)
 {
     Lv2cScrollWheelEventArgs event{h, direction, x / windowScale, y / windowScale, state};
     OnScrollWheel(event);
-
 }
-
 
 void Lv2cWindow::MouseDown(WindowHandle h, uint64_t button, int64_t x, int64_t y, ModifierState state)
 {
@@ -400,27 +403,30 @@ void Lv2cWindow::MouseMove(WindowHandle h, int64_t x, int64_t y, ModifierState s
     Lv2cMouseEventArgs event{h, (uint64_t)-1, x / windowScale, y / windowScale, state};
     this->lastMouseEventArgs = event;
     OnMouseMove(event);
-    UpdateMouseCursor(h,x,y,state);
+    UpdateMouseCursor(h, x, y, state);
 }
 
 void Lv2cWindow::UpdateMouseCursor(WindowHandle h, int64_t x, int64_t y, ModifierState state)
 {
     Lv2cMouseEventArgs event{h, (uint64_t)-1, x / windowScale, y / windowScale, state};
     std::optional<Lv2cCursor> cursor = this->rootElement->GetMouseCursor(event);
-    if (cursor) {
+    if (cursor)
+    {
         nativeWindow->SetMouseCursor(*cursor);
-    } else {
+    }
+    else
+    {
         nativeWindow->SetMouseCursor(Lv2cCursor::Arrow);
     }
 }
 
-
 bool Lv2cWindow::Entered() const
 {
-    return entered;    
+    return entered;
 }
 
-void Lv2cWindow::Entered(bool value) {
+void Lv2cWindow::Entered(bool value)
+{
     if (value != entered)
     {
         if (rootElement != nullptr)
@@ -430,13 +436,12 @@ void Lv2cWindow::Entered(bool value) {
     }
 }
 
-void Lv2cWindow::FireEnter() 
+void Lv2cWindow::FireEnter()
 {
     if (this->GetRootElement() != nullptr)
     {
         GetRootElement()->Entered(true);
     }
-
 }
 
 void Lv2cWindow::FireLeave()
@@ -445,14 +450,13 @@ void Lv2cWindow::FireLeave()
     {
         GetRootElement()->Entered(false);
     }
-
 }
 
 void Lv2cWindow::MouseLeave(WindowHandle h)
 {
     if (this->GetRootElement() != nullptr)
     {
-        GetRootElement()->UpdateMouseOver(Lv2cPoint(-1000,-1000));
+        GetRootElement()->UpdateMouseOver(Lv2cPoint(-1000, -1000));
     }
     FireEnter();
 }
@@ -460,7 +464,7 @@ void Lv2cWindow::MouseEnter(WindowHandle h)
 {
     if (this->GetRootElement() != nullptr)
     {
-        GetRootElement()->UpdateMouseOver(Lv2cPoint(-1000,-1000));
+        GetRootElement()->UpdateMouseOver(Lv2cPoint(-1000, -1000));
     }
     FireLeave();
 }
@@ -956,12 +960,19 @@ void Lv2cWindow::FireFocusIn()
     }
     savedFocusElement = nullptr;
 }
+
+void Lv2cWindow::FireAppFocusOut()
+{
+    if (GetRootElement() != nullptr)
+    {
+        GetRootElement()->OnLostAppFocus();
+    }
+}
 void Lv2cWindow::FireFocusOut()
 {
     savedFocusElement = FocusedElement();
     Focus(nullptr);
 }
-
 class TabNavigationSelector : public FocusNavigationSelector
 {
 private:
@@ -1488,8 +1499,7 @@ WindowHandle Lv2cWindow::Handle() const
     return WindowHandle();
 }
 
-
-std::shared_ptr<Lv2cObject> Lv2cWindow::GetMemoObject(const std::string&name)
+std::shared_ptr<Lv2cObject> Lv2cWindow::GetMemoObject(const std::string &name)
 {
     if (this->memoObjects.contains(name))
     {
@@ -1501,6 +1511,3 @@ void Lv2cWindow::SetMemoObject(const std::string &name, std::shared_ptr<Lv2cObje
 {
     this->memoObjects[name] = std::weak_ptr<Lv2cObject>(obj);
 }
-
-
-

@@ -137,6 +137,7 @@ namespace lv2c {
         virtual void Mount(Lv2cWindow *window) override;
         virtual void Unmount(Lv2cWindow *window) override;
         virtual void DrawPostOpacity(Lv2cDrawingContext &dc, const Lv2cRectangle &parentBounds) override;
+        virtual void OnLostAppFocus() override;
 
         std::vector<std::shared_ptr<Lv2cElement>> children;
         struct  ChildInfo{

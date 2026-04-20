@@ -343,6 +343,7 @@ namespace lv2c
 
         void FireFocusIn();
         void FireFocusOut();
+        void FireAppFocusOut();
         void Draw();
         void Layout();
 
