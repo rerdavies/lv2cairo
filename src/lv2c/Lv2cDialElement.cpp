@@ -65,5 +65,15 @@ void Lv2cDialElement::OnDialOpacityChanged(double opacity)
     this->dropShadow->Invalidate();
 }
 
+bool Lv2cDialElement::OnMouseDoubleClick(Lv2cMouseEventArgs &event) {
+    std::optional<double> defaultVal = this->DefaultValue();
+    if (defaultVal.has_value())
+    {
+        Value(defaultVal.value());
+    }
+    return true;
+}
+
+
 
 

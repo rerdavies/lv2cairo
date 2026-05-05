@@ -53,6 +53,8 @@ namespace lv2c
         virtual bool OnMouseDown(Lv2cMouseEventArgs &event) override;
         virtual bool OnMouseUp(Lv2cMouseEventArgs &event) override;
         virtual bool OnMouseMove(Lv2cMouseEventArgs &event) override;
+        virtual bool OnMouseDoubleClick(Lv2cMouseEventArgs &event) { return false; }
+
 
         virtual void OnMount() override;
 
@@ -64,6 +66,11 @@ namespace lv2c
 
         void OnValueChanged(double value) override;
     private:
+        using clock_t = std::chrono::steady_clock;
+
+        bool canDoubleClick = false;
+        Lv2cPoint lastMouseDownPosition = Lv2cPoint(-1,-1);
+        clock_t::time_point lastMouseClickTime;
         virtual void OnDialOpacityChanged(double opacity);
         void UpdateMousePoint(Lv2cMouseEventArgs &event);
         Lv2cPoint lastMousePoint;

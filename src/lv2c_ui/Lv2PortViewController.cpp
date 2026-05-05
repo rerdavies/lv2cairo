@@ -224,6 +224,34 @@ namespace lv2c::ui
         }
     }
 
+
+    double Lv2PortViewController::PortValueToDialValue(double value) const {
+        double dialValue;
+        if (Logarithmic())
+        {
+            // beware of invalid state during setup.
+            // don't update dependents if the value is bad.
+            if (value <= 0)
+                return NAN;
+            double logMin = std::log(MinValue());
+            double logMax = std::log(MaxValue());
+            double logValue = std::log(value);
+
+            dialValue = (logValue - logMin) / (logMax - logMin);
+        }
+        else
+        {
+            dialValue = (value - MinValue()) / (MaxValue() - MinValue());
+        }
+        return dialValue;
+    }
+
+    double Lv2PortViewController::DefaultDialValue()
+    {
+        double defaultDialValue = PortValueToDialValue(this->DefaultValue());
+        return defaultDialValue;
+    }
+
     void Lv2PortViewController::OnPortValueChanged(double value_)
     {
         double value = value_;
@@ -231,25 +259,12 @@ namespace lv2c::ui
         {
             value = dragPortValue;
         }
-        double dialValue;
-        if (Logarithmic())
-        {
-            // beware of invalid state during setup.
-            // don't update dependents if the value is bad.
-            if (value <= 0)
-                return;
-            double logMin = std::log(MinValue());
-            double logMax = std::log(MaxValue());
-            double logValue = std::log(value);
+        double dialValue = PortValueToDialValue(value_);
 
-            dialValue = (logValue - logMin) / (logMax - logMin);
-            if (std::isnan(dialValue))
-                return; // break circular updates now!
-        }
-        else
-        {
-            dialValue = (value - MinValue()) / (MaxValue() - MinValue());
-        }
+        // guard against infinite-recursive updates.
+        if (std::isnan(dialValue))
+            return;  
+
         if (!FloatEqual(dialValue, DialValueProperty.get()))
         {
             DialValueProperty.set(dialValue);

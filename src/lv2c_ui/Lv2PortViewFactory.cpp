@@ -346,6 +346,7 @@ Lv2cElement::ptr Lv2PortViewFactory::CreateDial(Lv2PortViewController *viewContr
     // connect the value.
     viewController->DialValueProperty.Bind(dial->ValueProperty);
     viewController->IsDraggingProperty.Bind(dial->IsDraggingProperty);
+    dial->DefaultValue(viewController->DefaultDialValue());
     return dial;
 }
 

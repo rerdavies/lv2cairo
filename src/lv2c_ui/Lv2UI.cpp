@@ -301,11 +301,11 @@ bool Lv2UI::instantiate(
     }
 
     // request initial value of properties we're interested in.
-    // for (auto&frequencyPlot: this->pluginInfo->piPedalUI().frequencyPlots())
-    // {
-    //     LV2_URID urid = GetUrid(frequencyPlot.patchProperty().c_str());
-    //     this->RequestPatchProperty(urid);
-    // }
+    for (auto&frequencyPlot: this->pluginInfo->piPedalUI().frequencyPlots())
+    {
+        LV2_URID urid = GetUrid(frequencyPlot.patchProperty().c_str());
+        this->RequestPatchProperty(urid);
+    }
 
     for (auto&fileProperty: this->pluginInfo->piPedalUI().fileProperties())
     {

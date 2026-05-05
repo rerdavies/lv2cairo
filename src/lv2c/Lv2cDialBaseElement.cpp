@@ -46,6 +46,24 @@ void Lv2cDialBaseElement::OnValueChanged(double value)
 
 bool Lv2cDialBaseElement::OnMouseDown(Lv2cMouseEventArgs &event)
 {
+    auto now = clock_t::now();
+
+    if (this->canDoubleClick)
+    {
+        std::chrono::milliseconds msSinceLast = std::chrono::duration_cast<std::chrono::milliseconds>(now-lastMouseClickTime);
+        auto elapsed = msSinceLast.count();
+        if (elapsed > 0 && elapsed < 300)
+        {
+            // Double-click detected
+            this->canDoubleClick = false;
+            OnMouseDoubleClick(event);
+            return true;
+        }
+    }
+    lastMouseClickTime = now;
+    this->canDoubleClick = true;
+    lastMouseDownPosition = event.point;
+
     HoverState(HoverState() + Lv2cHoverState::Pressed);
 
     lastMousePoint = event.point;
@@ -79,6 +97,12 @@ bool Lv2cDialBaseElement::OnMouseMove(Lv2cMouseEventArgs &event)
 void Lv2cDialBaseElement::UpdateMousePoint(Lv2cMouseEventArgs &event)
 {
     Lv2cPoint point = event.point;
+
+    // Invalidate potential double click if the mouse has moved.
+    auto dragDistance = Lv2cPoint::Distance(point,this->lastMouseDownPosition);
+    if (dragDistance > 3) {
+        this->canDoubleClick = false;
+    }
 
     double dx = - (point.y-lastMousePoint.y); // (point.x-lastMousePoint.x)- (point.y-lastMousePoint.y);
 

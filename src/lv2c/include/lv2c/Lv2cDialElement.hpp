@@ -25,6 +25,7 @@
 #include "Lv2cDropShadowElement.hpp"
 #include "Lv2cBindingProperty.hpp"
 
+
 namespace lv2c
 {
 
@@ -58,12 +59,23 @@ namespace lv2c
 
         BINDING_PROPERTY(TintImage,bool,true)
 
+
         Lv2cDialElement& Value(double value) { 
             ValueProperty.set(value); 
             return *this;
         }
         double Value() const {
             return ValueProperty.get();
+        }
+
+        Lv2cBindingProperty<std::optional<double>> DefaultValueProperty;
+
+        Lv2cDialElement& DefaultValue(std::optional<double> value) { 
+            DefaultValueProperty.set(value); 
+            return *this;
+        }
+        std::optional<double> DefaultValue() const {
+            return DefaultValueProperty.get();
         }
     protected:
         virtual void OnDialOpacityChanged(double opacity) override;
@@ -75,6 +87,8 @@ namespace lv2c
 
 
         virtual void OnValueChanged(double value) override;
+        virtual bool OnMouseDoubleClick(Lv2cMouseEventArgs &event) override;
+
     private:
         Lv2cDropShadowElement::ptr dropShadow;
         Lv2cSvgElement::ptr image;

@@ -78,6 +78,8 @@ namespace lv2c::ui {
         int64_t DropdownValue() const;
 
 
+        double DefaultDialValue();
+
         Lv2cBindingProperty<bool> IsDraggingProperty;
         bool IsDragging() const;
         Lv2PortViewController&IsDragging(bool value);
@@ -118,6 +120,8 @@ namespace lv2c::ui {
 
         const Lv2ScalePoint *GetScalePoint(float value) const;
     private:
+        double PortValueToDialValue(double) const;
+
         std::string GetDisplayString(double value) const;
         std::string AutoRangeValue(double value, const std::string suffix) const;
         std::string GetIntegerDisplayString(double value) const;
