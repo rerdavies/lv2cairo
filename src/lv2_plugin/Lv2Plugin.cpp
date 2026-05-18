@@ -48,6 +48,7 @@ void Lv2Plugin::connect_port(LV2_Handle instance, uint32_t port, void *data)
 void Lv2Plugin::activate(LV2_Handle instance)
 {
     Lv2Plugin *plugin = (Lv2Plugin *)instance;
+    plugin->CheckValid();
     plugin->Activate();
 }
 
@@ -60,6 +61,8 @@ void Lv2Plugin::run(LV2_Handle instance, uint32_t n_samples)
 void Lv2Plugin::deactivate(LV2_Handle instance)
 {
     Lv2Plugin *plugin = (Lv2Plugin *)instance;
+    plugin->CheckValid();
+
     plugin->Deactivate();
 }
 void Lv2Plugin::cleanup(LV2_Handle instance)
@@ -134,9 +137,10 @@ const void *Lv2Plugin::extension_data(const char *uri)
 }
 
 Lv2Plugin::Lv2Plugin(double rate, const char *_bundle_path, const LV2_Feature *const *features, bool hasState)
-    : rate(rate), bundle_path(_bundle_path), hasState(hasState)
+    : magicValue(MAGIC_VALUE),rate(rate), bundle_path(_bundle_path), hasState(hasState)
 {
 
+    CheckValid();
     this->logger.log = nullptr;
     this->map = nullptr;
     this->unmap = nullptr;
@@ -154,7 +158,6 @@ Lv2Plugin::Lv2Plugin(double rate, const char *_bundle_path, const LV2_Feature *c
         nullptr);
 
     lv2_log_logger_set_map(&this->logger, this->map);
-
 
 
     if (missing) {

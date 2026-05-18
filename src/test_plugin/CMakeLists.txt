@@ -46,8 +46,6 @@ add_custom_command(
 add_library(lv2tk_test SHARED
 
     SamplePlugin.cpp SamplePlugin.hpp
-    Lv2Plugin.cpp
-    Lv2Plugin.hpp
 )
 set_target_properties(lv2tk_test PROPERTIES OUTPUT_NAME "${LV2_SO_NAME}")
 set_target_properties(lv2tk_test PROPERTIES PREFIX "")
@@ -64,6 +62,7 @@ target_include_directories(
 target_link_directories(
     lv2tk_test PRIVATE
 )
+target_link_libraries(lv2tk_test PRIVATE lv2_plugin)
 
 add_library(lv2tk_test_ui SHARED
     $<TARGET_OBJECTS:lv2c> $<TARGET_OBJECTS:lv2c_ui>

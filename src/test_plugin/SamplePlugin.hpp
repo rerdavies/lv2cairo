@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "Lv2Plugin.hpp"
+#include "lv2_plugin/Lv2Plugin.hpp"
 
-using namespace lv2;
+using namespace lv2c::lv2_plugin;
 
 class SamplePlugin : public Lv2Plugin
 {

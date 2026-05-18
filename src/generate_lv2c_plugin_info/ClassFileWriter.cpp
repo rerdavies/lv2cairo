@@ -601,8 +601,8 @@ void ClassFileWriter::WritePluginBase(const std::string&nameSpace,const std::str
             {
                 // indicate that the following methods need to be implemented.
 
-			    s << Tab() << "virtual bool OnPatchPathSet(LV2_URID propertyUrid,const char*value) = 0;" << endl;
-                s << Tab() << "virtual const char* OnGetPatchPropertyValue(LV2_URID propertyUrid) = 0;" << endl;
+			    s << Tab() << "virtual bool OnPatchPathSet(LV2_URID propertyUrid,const char*value) override = 0;" << endl;
+                s << Tab() << "virtual const char* OnGetPatchPropertyValue(LV2_URID propertyUrid) override = 0;" << endl;
                 s << endl;
             }
 

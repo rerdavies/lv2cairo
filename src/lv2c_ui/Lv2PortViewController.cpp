@@ -31,6 +31,7 @@ namespace lv2c::ui
     std::string Lv2PortViewController::GetDisplayString(double value) const
     {
         double v = value;
+#ifndef DISABLE_DENORMALS
         if (std::isinf(v))
         {
             return "INF";
@@ -39,6 +40,7 @@ namespace lv2c::ui
         {
             return "NaN";
         }
+#endif
         std::stringstream s;
         if (IsInteger())
         {
@@ -224,15 +226,15 @@ namespace lv2c::ui
         }
     }
 
-
-    double Lv2PortViewController::PortValueToDialValue(double value) const {
+    double Lv2PortViewController::PortValueToDialValue(double value) const
+    {
         double dialValue;
         if (Logarithmic())
         {
             // beware of invalid state during setup.
             // don't update dependents if the value is bad.
             if (value <= 0)
-                return NAN;
+                return 0;
             double logMin = std::log(MinValue());
             double logMax = std::log(MaxValue());
             double logValue = std::log(value);
@@ -263,7 +265,7 @@ namespace lv2c::ui
 
         // guard against infinite-recursive updates.
         if (std::isnan(dialValue))
-            return;  
+            return;
 
         if (!FloatEqual(dialValue, DialValueProperty.get()))
         {
