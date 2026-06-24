@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2022 Robin E. R. Davies
+ *   Copyright (c) Robin E. R. Davies
  *   All rights reserved.
 
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,6 +22,9 @@
  */
 
 #pragma once
+
+#ifndef LV2CAIRO_LV2_PORTS_H
+#define LV2CAIRO_LV2_PORTS_H
 
 #include <limits>
 #include <cstdint>
@@ -585,3 +588,4 @@ namespace lv2c::lv2_plugin
 	};	
 }
 
+#endif // LV2CAIRO_LV2_PORTS_H
